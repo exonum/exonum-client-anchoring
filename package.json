@@ -1,0 +1,67 @@
+{
+  "name": "exonum-anchoring",
+  "version": "0.0.0",
+  "description": "Exonum anchoring check library",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_PATH=./ NODE_ENV=test mocha -r babel-register \"test/**/*.js\"",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "eslint --ignore-path .gitignore . --fix",
+    "compile": "cross-env NODE_ENV=rollup rollup -c ./rollup.config.js",
+    "prepare": "npm run compile",
+    "coveralls": "cross-env NODE_ENV=test NODE_PATH=./ nyc mocha --recursive && cat ./coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qvantor/exonum-anchoring.git"
+  },
+  "author": "Exonum Team <exonum@bitfury.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/qvantor/exonum-anchoring/issues"
+  },
+  "homepage": "https://github.com/qvantor/exonum-anchoring#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-istanbul": "^4.1.5",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "coveralls": "^3.0.0",
+    "cross-env": "^5.1.0",
+    "eslint": "^4.9.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^4.0.1",
+    "nock": "^9.0.24",
+    "nyc": "^11.3.0",
+    "rollup": "^0.50.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-cleanup": "^1.0.1",
+    "rollup-plugin-eslint": "^4.0.0",
+    "rollup-plugin-local-resolve": "^1.0.7",
+    "rollup-plugin-uglify": "^2.0.1"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "exonum-client": "^0.2.3"
+  },
+  "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "reporter": [
+      "lcov"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  }
+}
