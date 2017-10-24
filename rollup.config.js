@@ -13,7 +13,7 @@ export default {
   sourceMap: false,
   name: 'exonum-anchoring',
 
-  external: ['axios', 'exonum-client'],
+  external: ['axios', 'exonum-client', 'bitcoinjs-lib'],
 
   input: path.join(SRC, 'index.js'),
   output: {
@@ -23,7 +23,8 @@ export default {
 
     globals: {
       'axios': 'axios',
-      'exonum-client': 'exonum-client'
+      'exonum-client': 'exonum-client',
+      'bitcoinjs-lib': 'bitcoinjs-lib'
     }
   },
 

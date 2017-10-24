@@ -1,7 +1,7 @@
-import Provider from './provider'
+import Driver from './Driver'
 import axios from 'axios'
 
-export default class Blocktrail extends Provider {
+export default class Blocktrail extends Driver {
   constructor (params) {
     super()
 

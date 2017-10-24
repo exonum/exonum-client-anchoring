@@ -1,4 +1,4 @@
 import Anchoring from './Anchoring'
-import providers from './providers/'
+import drivers from './drivers/'
 
-export { Anchoring, providers }
+export { Anchoring, drivers }

@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "bitcoinjs-lib": "^3.2.1",
     "exonum-client": "^0.2.3"
   },
   "nyc": {

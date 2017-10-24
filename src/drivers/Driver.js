@@ -1,6 +1,6 @@
-import { to } from '../common'
+import { to } from '../common/'
 
-export default class Provider {
+export default class Driver {
   async getAddressTransactions (address) {
     let transactions = []
     let attemptsCount = 1

@@ -10,7 +10,10 @@ chai.should()
 
 describe('Anchoring', function () {
   const anchoring = new exonumAnchoring.Anchoring({
-    url: 'http://192.168.221.129:8000/'
+    provider: {
+      nodes: ['http://192.168.221.129']
+    },
+    network: 'testnet'
   })
   console.log(anchoring)
 })

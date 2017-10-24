@@ -1,28 +1,15 @@
-import axios from 'axios'
+import Provider from './Provider'
+import { _ } from './common/'
 
-// private data
-const map = new WeakMap()
-const _ = key => {
-  if (!map.has(key)) {
-    map.set(key, {})
-  }
-  return map.get(key)
-}
-// private methods
 const loadAnchorChain = Symbol('loadAnchorChain')
 
 export default class Anchoring {
   constructor (params) {
-    const { url, prefix, version, anchorStep } = Object.assign({}, {
-      url: 'http://localhost:8000/',
-      version: 'v1',
-      prefix: 'api',
-      anchorStep: 1000
+    const { provider, network } = Object.assign({}, {
+      network: 'bitcoin'
     }, params)
 
-    _(this).anchoringPath = `${url}${prefix}/services/btc_anchoring/${version}`
-    _(this).explorerPath = `${url}${prefix}/services/btc_anchoring/${version}`
-    _(this).anchorStep = anchorStep
+    this.provider = new Provider(Object.assign({}, provider, { network }))
 
     _(this).exonumPrefix = '45584f4e554d'
     _(this).blocksLimit = 1000
@@ -30,12 +17,9 @@ export default class Anchoring {
     this[loadAnchorChain]()
   }
 
-  getActualAddress () {
-    return axios.get(`${_(this).anchoringPath}/address/actual`).then(({ data }) => data)
-  }
-
   async [loadAnchorChain] () {
-    _(this).address = await this.getActualAddress()
-    console.log(_(this).address)
+    _(this).actualAddress = await this.provider.getActualAddress()
+    _(this).configsCommited = await this.provider.getConfigsCommited()
+    console.log(_(this).configsCommited)
   }
 }
