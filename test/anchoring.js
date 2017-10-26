@@ -10,10 +10,16 @@ chai.should()
 
 describe('Anchoring', function () {
   const anchoring = new exonumAnchoring.Anchoring({
+    driver: new exonumAnchoring.drivers.Blocktrail({
+      token: '4bbd8b0dc28c3cf1c2d14b3291b0d75003d46372',
+      network: 'tBTC'
+    }),
     provider: {
       nodes: ['http://192.168.221.129']
-    },
-    network: 'testnet'
+    }
   })
-  console.log(anchoring)
+
+  it('hi', () => {
+    console.log(anchoring)
+  })
 })

@@ -17,10 +17,10 @@ export default class Blocktrail extends Driver {
   }
 
   getOpReturnFromTx (tx) {
-    return tx.outputs[1].script_hex
+    return tx.outputs[1] && tx.outputs[1].script_hex
   }
 
-  async _getAddressTransactions ({ address, limit, page }) {
+  getAddressTransactions ({ address, limit, page }) {
     return axios.get(`${this.api}/address/${address}/transactions`, {
       params: Object.assign({}, this.params, {
         limit,
