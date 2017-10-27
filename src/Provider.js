@@ -1,6 +1,5 @@
-import axios from 'axios'
 import { script, networks, address, crypto } from 'bitcoinjs-lib'
-import { _, to, _private, blockHash } from './common/'
+import { _, to, _private, blockHash, http } from './common/'
 import { Buffer } from 'buffer'
 
 export default class Provider {
@@ -21,7 +20,7 @@ export default class Provider {
   }
 
   async getConfigsCommited () {
-    const configsCommited = await this[_private.request]({ url: `${_(this).path.configuration}/configs/committed` })
+    const configsCommited = await http.get({ url: `${_(this).path.configuration}/configs/committed` })
     return configsCommited.map(({ config }) => ({
       actualFrom: config.actual_from,
       frequency: config.services.btc_anchoring.frequency,
@@ -32,12 +31,11 @@ export default class Provider {
   async getBlocks (from, to, nextCheck) {
     let count = (to + 1) - from
     const reqCount = Math.ceil(count / _(this).blocksLoadLimit)
-
     let blocks = []
     let lastLoaded = from
     for (let i = 1; i <= reqCount; i++) {
       const needCount = count > _(this).blocksLoadLimit ? _(this).blocksLoadLimit : count
-      const result = await this[_private.request]({
+      const result = await http.get({
         url: `${_(this).path.explorer}/blocks`,
         params: { count: needCount, latest: lastLoaded + needCount }
       })
@@ -70,12 +68,6 @@ export default class Provider {
       valid: errors.length === 0,
       errors
     }
-  }
-
-  async [_private.request] ({ url, params }) {
-    const [res, err] = await to(axios.get(url, { params }).then(({ data }) => data))
-    // @todo add error handling and trying count
-    return res
   }
 
   [_private.parseConfigAddress] ({ services }) {

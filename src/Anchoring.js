@@ -37,7 +37,6 @@ export default class Anchoring {
         if (anchorHeight !== tx.blockHeight) {
           this.handleError({ message: `Missed anchor on heigth:${tx.blockHeight}, should be: ${anchorHeight}`, tx })
         }
-
         const { blocks, errors, nextCheck, valid } = await this.provider.getBlocks(lastBlock, tx.blockHeight, nextCheck)
         if (!valid) this.handleError(errors)
         lastBlock = tx.blockHeight

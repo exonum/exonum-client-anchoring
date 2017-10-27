@@ -1,5 +1,5 @@
 import Driver from './Driver'
-import axios from 'axios'
+import { http } from '../common/'
 
 export default class Blocktrail extends Driver {
   constructor (params) {
@@ -21,12 +21,13 @@ export default class Blocktrail extends Driver {
   }
 
   getAddressTransactions ({ address, limit, page }) {
-    return axios.get(`${this.api}/address/${address}/transactions`, {
+    return http.get({
+      url: `${this.api}/address/${address}/transactions`,
       params: Object.assign({}, this.params, {
         limit,
         page,
         sort_dir: 'asc'
       })
-    }).then(({ data }) => data.data)
+    }).then((data) => data.data)
   }
 }
