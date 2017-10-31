@@ -19,7 +19,4 @@ describe('Anchoring', function () {
     }
   })
 
-  it('hi', () => {
-    console.log(anchoring)
-  })
 })

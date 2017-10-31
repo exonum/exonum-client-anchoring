@@ -8,8 +8,8 @@ const getWithTimeout = ({ url, params, timeout = 200 }) =>
   new Promise((res, rej) => setTimeout(() => getReq({ url, params }).then(res).catch(rej), timeout))
 
 const get = async ({ url, params, tries = 5, }) => {
-  console.log(url, params)
   let errors = []
+  const date = new Date()
   const [res, err] = await to(getReq({ url, params }))
 
   if (err) {
@@ -24,9 +24,8 @@ const get = async ({ url, params, tries = 5, }) => {
     throw new Error(errors)
   }
 
+  console.log((new Date() - date) + 'ms', url, params)
   return res
 }
 
-export default {
-  get
-}
+export default { get }

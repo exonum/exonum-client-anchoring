@@ -16,6 +16,8 @@ export default class Provider {
       configuration: `${nodes[0]}:${port}/api/services/configuration/${version}`
     }
     _(this).nodes = nodes
+    _(this).version = version
+    _(this).port = port
     _(this).blocksLoadLimit = 1000
   }
 
@@ -29,10 +31,10 @@ export default class Provider {
   }
 
   async getBlocks (from, to, nextCheck) {
-    let count = (to + 1) - from
+    let count = to - from
     const reqCount = Math.ceil(count / _(this).blocksLoadLimit)
     let blocks = []
-    let lastLoaded = from
+    let lastLoaded = from + 1
     for (let i = 1; i <= reqCount; i++) {
       const needCount = count > _(this).blocksLoadLimit ? _(this).blocksLoadLimit : count
       const result = await http.get({
@@ -52,7 +54,7 @@ export default class Provider {
     for (let i = 0; i < blocks.length; i++) {
       if (i === 0) {
         if (!nextCheck) continue
-        if (nextCheck !== blockHash(blocks[i])) {
+        if (nextCheck !== blocks[i].prev_hash) {
           errors = [...errors, { message: `Chain broken on height ${blocks[i].height}`, block: blocks[i] }]
         }
         continue
@@ -77,5 +79,10 @@ export default class Provider {
     const redeemScript = script.multisig.output.encode(signCount, pubKeys)
     const scriptPubKey = script.scriptHash.output.encode(crypto.hash160(redeemScript))
     return address.fromOutputScript(scriptPubKey, networks[services.btc_anchoring.network])
+  }
+
+  getState () {
+    const { nodes, version, port } = _(this)
+    return { nodes, version, port }
   }
 }

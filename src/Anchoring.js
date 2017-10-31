@@ -1,45 +1,52 @@
 import Provider from './Provider'
-import { _, _private, blockHash } from './common/'
+import * as store from './store/'
+import { _, _private, blockHash, to } from './common/'
 
-const fs = require('fs')
+let defaultIteration = {
+  page: 1,
+  txNumber: 0
+}
 
 export default class Anchoring {
   constructor (params) {
-    const { provider, driver } = Object.assign({}, {}, params)
+    store.load()
+      .then(data => {
+        const { provider, driver } = Object.assign({}, {}, params)
 
-    this.provider = new Provider(provider)
-    this.driver = driver
+        this.provider = new Provider(provider)
+        this.driver = driver
 
-    _(this).blocksLimit = 1000
-    _(this).errorsList = []
+        _(this).blocksLimit = 1000
+        _(this).errorsList = data.errorsList || []
 
-    this[_private.loadAnchorChain]()
+        console.log(data)
+        const page = Math.floor(data.txProcessed / this.driver.txLoadLimit)
+        const txNumber = data.txProcessed - (page * this.driver.txLoadLimit)
+
+        this[_private.loadAnchorChain](data.lastTx || {})
+      })
   }
 
-  async [_private.loadAnchorChain] () {
-    let nextCheck
-    let lastBlock = 0
-    let anchorHeight = 0
+  async [_private.loadAnchorChain] ({ iteration = defaultIteration, blockHeight = 0, nextCheck }) {
+    _(this).lastTx = { blockHeight }
 
-    let { config, next } = await this.getConfigForBlock(lastBlock)
+    for (iteration.page; ; iteration.page++) {
+      let { config } = await this.getConfigForBlock(_(this).lastTx.blockHeight)
+      const { txs, hasMore } = await this.driver[_private.getAddressTransactions](config.address, iteration.page)
 
-    for (let i = 1; ; i++) {
-      const { txs, hasMore } = await this.driver[_private.getAddressTransactions](config.address, i)
-      for (let j = 0; j < txs.length; j++) {
-        const tx = txs[j]
-        anchorHeight += config.frequency
-
-        if (next && next.actualFrom <= tx.blockHeight) {
-          const { config, next } = await this.getConfigForBlock(lastBlock)
-          console.log(config, next)
-        }
-
-        if (anchorHeight !== tx.blockHeight) {
-          this.handleError({ message: `Missed anchor on heigth:${tx.blockHeight}, should be: ${anchorHeight}`, tx })
-        }
-        const { blocks, errors, nextCheck, valid } = await this.provider.getBlocks(lastBlock, tx.blockHeight, nextCheck)
+      for (iteration.txNumber; iteration.txNumber < txs.length; iteration.txNumber++) {
+        this.safeState()
+        const tx = txs[iteration.txNumber]
+        // anchorHeight += config.frequency
+        // if (anchorHeight !== tx.blockHeight) {
+        //   this.handleError({ message: `Missed anchor on heigth:${tx.blockHeight}, should be: ${anchorHeight}`, tx })
+        // }
+        const checkedBlocks = await this.provider.getBlocks(_(this).lastTx.blockHeight, tx.blockHeight, nextCheck)
+        const { blocks, errors, valid } = checkedBlocks
+        nextCheck = checkedBlocks.nextCheck
+        _(this).lastTx = Object.assign({}, tx, { iteration, nextCheck })
+        // _(this).txProcessed = (iteration.page - 1) * this.driver.txLoadLimit + iteration.txNumber
         if (!valid) this.handleError(errors)
-        lastBlock = tx.blockHeight
 
         // check Anchoring
         const anchorBlock = blocks.find(item => Number(item.height) === tx.blockHeight)
@@ -49,14 +56,12 @@ export default class Anchoring {
           })
         }
       }
+      iteration.txNumber = 0
 
       if (!hasMore) break
     }
 
     console.log(_(this).errorsList, _(this).errorsList.length)
-
-    // fs.writeFile('data.json', JSON.stringify(data))
-
   }
 
   // @todo make it private
@@ -75,4 +80,24 @@ export default class Anchoring {
     }
     _(this).errorsList = [..._(this).errorsList, err]
   }
+
+  getState () {
+    const { errorsList, txProcessed, lastTx, nextCheck } = _(this)
+
+    return {
+      errorsList,
+      txProcessed,
+      nextCheck,
+      lastTx,
+      provider: this.provider.getState()
+    }
+  }
+
+  // @todo make it private
+  async safeState () {
+    const [save, err] = await to(store.save(this.getState()))
+    if (err) throw err
+    return save
+  }
+
 }

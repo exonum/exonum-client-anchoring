@@ -1,8 +1,8 @@
 import { newType, Uint16, Uint32, Uint64, Hash, hash } from 'exonum-client'
 
-export const to = (promise) => promise.then(data => [data, null]).catch(err => [null, err])
+export const to = promise => promise.then(data => [data, null]).catch(err => [null, err])
 
-export const byteArrayToInt = (byteArray) => {
+export const byteArrayToInt = byteArray => {
   let value = 0
   for (let i = byteArray.length - 1; i >= 0; i--) {
     value = (value * 256) + byteArray[i]
@@ -24,6 +24,15 @@ const Block = newType({
   }
 })
 
-export const blockHash = (block) => {
+export const blockHash = block => {
   return hash(Block.serialize(block))
+}
+
+export const getEnv = () => {
+  if (Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]') {
+    return 'node'
+  } else if (typeof window === 'object') {
+    return 'browser'
+  }
+  return 'unknown'
 }

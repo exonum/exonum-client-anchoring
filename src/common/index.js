@@ -1,4 +1,4 @@
-import { to, byteArrayToInt, blockHash } from './common'
+import { to, byteArrayToInt, blockHash, getEnv } from './common'
 import http from './http'
 import _ from './private'
 import * as _private from './privateMethods'
@@ -9,5 +9,6 @@ export {
   http,
   to,
   byteArrayToInt,
-  blockHash
+  blockHash,
+  getEnv
 }
