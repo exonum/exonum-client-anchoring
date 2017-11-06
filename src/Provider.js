@@ -80,6 +80,12 @@ export default class Provider {
     }
   }
 
+  // @todo make it private
+  async getConfigForBlock (block) {
+    const configs = await this.getConfigsCommited()
+    return configs.find(item => Number(block) >= item.actualFrom)
+  }
+
   [_private.parseConfigAddress] ({ services }) {
     const pubKeys = services.btc_anchoring.anchoring_keys.map((hex) => Buffer.from(hex, 'hex'))
     const pubKeysLen = services.btc_anchoring.anchoring_keys.length

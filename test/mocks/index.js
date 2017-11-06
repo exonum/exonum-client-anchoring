@@ -3,7 +3,6 @@ const btTx2 = require('./blocktrail/transactions-2.json')
 const btTx3 = require('./blocktrail/transactions-3.json')
 const btTx4 = require('./blocktrail/transactions-4.json')
 const btTx5 = require('./blocktrail/transactions-5.json')
-export const btTx = require('./blocktrail/transactions.json')
 
 export const cfg1 = require('./configs-1.json')
 const blocks = require('./blocks.json')
@@ -14,4 +13,3 @@ export const getBlocks = (from, count) => {
 }
 
 export const btTxPages = [btTx1, btTx2, btTx3, btTx4, btTx5]
-

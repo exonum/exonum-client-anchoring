@@ -19,5 +19,6 @@ describe('Anchoring', function () {
     }
   })
 
-  anchoring.blockStatus(2867420).then(data => console.log(data))
+  anchoring.blockStatus(2876617).then(data => console.log(data))
+
 })

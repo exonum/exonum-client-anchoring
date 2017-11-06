@@ -10,29 +10,45 @@ export default class Anchoring {
     this.provider = new Provider(provider)
     this.driver = driver
 
-    _(this).anchorTx = []
-    _(this).anchorHeight = 0
+    store.load().then(data => {
+      _(this).anchorTx = data.anchorTx || []
+      _(this).anchorHeight = data.anchorHeight || 0
+      _(this).address = data.address || 0
+      _(this).page = data.page || 1
+      _(this).anchorsLoaded = false
 
-    this.getAllAnchorTransaction()
+      this.syncAnchorTransaction()
+    })
+  }
+
+  async syncAnchorTransaction () {
+    await this.getAllAnchorTransaction()
+    setTimeout(() => this.syncAnchorTransaction(), 120000)
   }
 
   async getAllAnchorTransaction () {
     const configsCommited = await this.provider.getConfigsCommited()
-    const configsAddresses = Object.keys(configsCommited
+    const addresses = Object.keys(configsCommited
       .reduce((sum, item) => Object.assign({}, sum, { [item.address]: item.actualFrom }), {}))
 
-    for (let address of configsAddresses) {
-      for (let i = 1; ; i++) {
-        const { txs, hasMore } = await this.driver[_private.getAddressTransactions](address, i)
-        _(this).anchorTx = [..._(this).anchorTx, ...txs]
-        _(this).anchorHeight = Number(txs[txs.length - 1].blockHeight)
+    for (_(this).address; _(this).address < addresses.length; _(this).address++) {
+      const address = addresses[_(this).address]
+      for (_(this).page; ; _(this).page++) {
+        const { txs, hasMore } = await this.driver[_private.getAddressTransactions](address, _(this).page)
+        const filteredTxs = txs.filter(item => Number(item.blockHeight) > _(this).anchorHeight)
+        _(this).anchorTx = [..._(this).anchorTx, ...filteredTxs]
 
+        if (filteredTxs.length > 0)
+          _(this).anchorHeight = Number(filteredTxs[filteredTxs.length - 1].blockHeight)
+
+        this.safeState()
         if (!hasMore) {
           _(this).anchorsLoaded = new Date()
           break
         }
       }
     }
+    _(this).address--
   }
 
   getAnchorTx (height) {
@@ -62,7 +78,7 @@ export default class Anchoring {
   }
 
   async blockStatus (height) {
-    const { validatorKeys, frequency } = await this.getConfigForBlock(height)
+    const { validatorKeys, frequency } = await this.provider.getConfigForBlock(height)
     const block = await this.provider.getBlock(height)
     if (block === null) return status(0)
 
@@ -88,28 +104,9 @@ export default class Anchoring {
     return status(11, proof)
   }
 
-  // @todo make it private
-  async getConfigForBlock (block) {
-    _(this).configsCommited = await this.provider.getConfigsCommited()
-    return _(this).configsCommited.find(item => Number(block) >= item.actualFrom)
-  }
-
-  // @todo make it private
-  handleError (err) {
-    // console.log(err)
-    if (Array.isArray(err)) {
-      err.forEach(item => this.handleError(item))
-      return
-    }
-    _(this).errorsList = [..._(this).errorsList, err]
-  }
-
   getState () {
-    const {} = _(this)
-
-    return {
-      provider: this.provider.getState()
-    }
+    const { address, page, anchorTx, anchorHeight } = _(this)
+    return { address, page, anchorHeight, anchorTx, provider: this.provider.getState() }
   }
 
   // @todo make it private
