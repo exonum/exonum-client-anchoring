@@ -24,6 +24,21 @@ export default class Driver {
     }
   }
 
+  async getNTx ({ address, limit, page }) {
+    const txs = await this.getAddressTransactions({ address, limit, page })
+    let parsedTx = []
+    for (let tx of txs) {
+      const opReturn = this.getOpReturnFromTx(tx)
+      if (!this.checkOpReturn(opReturn)) continue
+      parsedTx.push(Object.assign({}, {
+          anchor: { hash: tx.hash }
+        },
+        this.parseOpReturn(opReturn)
+      ))
+    }
+    return parsedTx
+  }
+
   // @todo make it private
   parseOpReturn (opReturn) {
     const anchor = opReturn.split(_(this).exonumPrefix)[1]

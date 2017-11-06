@@ -26,8 +26,9 @@ export default class Provider {
     return configsCommited.map(({ config }) => ({
       actualFrom: config.actual_from,
       frequency: config.services.btc_anchoring.frequency,
-      address: this[_private.parseConfigAddress](config)
-    })).sort((a, b) => a.actualFrom < b.actualFrom)
+      address: this[_private.parseConfigAddress](config),
+      validatorKeys: config.validator_keys.map(item => item.consensus_key)
+    })).sort((a, b) => a.actualFrom > b.actualFrom)
   }
 
   async getBlocks (from, to, nextCheck) {
@@ -37,16 +38,23 @@ export default class Provider {
     let lastLoaded = from + 1
     for (let i = 1; i <= reqCount; i++) {
       const needCount = count > _(this).blocksLoadLimit ? _(this).blocksLoadLimit : count
+      const latest = lastLoaded + needCount
       const result = await http.get({
         url: `${_(this).path.explorer}/blocks`,
-        params: { count: needCount, latest: lastLoaded + needCount }
+        params: { count: needCount, latest }
       })
       result.sort((a, b) => Number(a.height) - Number(b.height))
       count = count - result.length
       lastLoaded = lastLoaded + result.length
       blocks = [...blocks, ...result]
     }
+    if (Number(blocks[0].height) < from) blocks = blocks.filter(item => Number(item.height) > from)
+
     return Object.assign({ blocks }, this.checkBlocksChain(blocks, nextCheck))
+  }
+
+  getBlock (height) {
+    return http.get({ url: `${_(this).path.explorer}/blocks/${height}` })
   }
 
   checkBlocksChain (blocks, nextCheck) {
@@ -67,7 +75,7 @@ export default class Provider {
     }
     return {
       nextCheck: blockHash(blocks[blocks.length - 1]),
-      valid: errors.length === 0,
+      chainValid: errors.length === 0,
       errors
     }
   }

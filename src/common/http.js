@@ -24,7 +24,7 @@ const get = async ({ url, params, tries = 5, }) => {
     throw new Error(errors)
   }
 
-  console.log((new Date() - date) + 'ms', url, params)
+  console.log((new Date() - date) + 'ms', url, JSON.stringify(params))
   return res
 }
 
