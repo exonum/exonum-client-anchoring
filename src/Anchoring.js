@@ -1,74 +1,97 @@
 import Provider from './Provider'
 import * as store from './store/'
-import { _, _private, blockHash, to } from './common/'
-
-let defaultIteration = {
-  page: 1,
-  txNumber: 0
-}
+import { _, _private, blockHash, to, status } from './common/'
+import { verifyBlock } from 'exonum-client'
 
 export default class Anchoring {
   constructor (params) {
-    store.load()
-      .then(data => {
-        const { provider, driver } = Object.assign({}, {}, params)
+    const { provider, driver } = Object.assign({}, {}, params)
 
-        this.provider = new Provider(provider)
-        this.driver = driver
+    this.provider = new Provider(provider)
+    this.driver = driver
 
-        _(this).blocksLimit = 1000
-        _(this).errorsList = data.errorsList || []
+    _(this).anchorTx = []
+    _(this).anchorHeight = 0
 
-        console.log(data)
-        const page = Math.floor(data.txProcessed / this.driver.txLoadLimit)
-        const txNumber = data.txProcessed - (page * this.driver.txLoadLimit)
-
-        this[_private.loadAnchorChain](data.lastTx || {})
-      })
+    this.getAllAnchorTransaction()
   }
 
-  async [_private.loadAnchorChain] ({ iteration = defaultIteration, blockHeight = 0, nextCheck }) {
-    _(this).lastTx = { blockHeight }
+  async getAllAnchorTransaction () {
+    const configsCommited = await this.provider.getConfigsCommited()
+    const configsAddresses = Object.keys(configsCommited
+      .reduce((sum, item) => Object.assign({}, sum, { [item.address]: item.actualFrom }), {}))
 
-    for (iteration.page; ; iteration.page++) {
-      let { config } = await this.getConfigForBlock(_(this).lastTx.blockHeight)
-      const { txs, hasMore } = await this.driver[_private.getAddressTransactions](config.address, iteration.page)
+    for (let address of configsAddresses) {
+      for (let i = 1; ; i++) {
+        const { txs, hasMore } = await this.driver[_private.getAddressTransactions](address, i)
+        _(this).anchorTx = [..._(this).anchorTx, ...txs]
+        _(this).anchorHeight = Number(txs[txs.length - 1].blockHeight)
 
-      for (iteration.txNumber; iteration.txNumber < txs.length; iteration.txNumber++) {
-        this.safeState()
-        const tx = txs[iteration.txNumber]
-        // anchorHeight += config.frequency
-        // if (anchorHeight !== tx.blockHeight) {
-        //   this.handleError({ message: `Missed anchor on heigth:${tx.blockHeight}, should be: ${anchorHeight}`, tx })
-        // }
-        const checkedBlocks = await this.provider.getBlocks(_(this).lastTx.blockHeight, tx.blockHeight, nextCheck)
-        const { blocks, errors, valid } = checkedBlocks
-        nextCheck = checkedBlocks.nextCheck
-        _(this).lastTx = Object.assign({}, tx, { iteration, nextCheck })
-        // _(this).txProcessed = (iteration.page - 1) * this.driver.txLoadLimit + iteration.txNumber
-        if (!valid) this.handleError(errors)
-
-        // check Anchoring
-        const anchorBlock = blocks.find(item => Number(item.height) === tx.blockHeight)
-        if (blockHash(anchorBlock) !== tx.blockHash) {
-          this.handleError({
-            message: `Block hash not equal to anchor hash on height: ${tx.blockHeight}`, block: anchorBlock, tx
-          })
+        if (!hasMore) {
+          _(this).anchorsLoaded = new Date()
+          break
         }
       }
-      iteration.txNumber = 0
+    }
+  }
 
-      if (!hasMore) break
+  getAnchorTx (height) {
+    if (_(this).anchorHeight >= height) {
+      return _(this).anchorTx.find(item => item.blockHeight >= height)
+    }
+  }
+
+  getAnchorTxAsync (height) {
+    return new Promise(resolve => {
+      const anchor = this.getAnchorTx(height)
+      if (anchor) resolve(anchor)
+
+      //@todo here should be loadTX event listener
+      const interval = setInterval(() => {
+        const anchor = this.getAnchorTx(height)
+        if (_(this).anchorsLoaded && !anchor) {
+          clearInterval(interval)
+          resolve(false)
+        }
+        if (anchor) {
+          clearInterval(interval)
+          resolve(anchor)
+        }
+      }, 300)
+    })
+  }
+
+  async blockStatus (height) {
+    const { validatorKeys, frequency } = await this.getConfigForBlock(height)
+    const block = await this.provider.getBlock(height)
+    if (block === null) return status(0)
+
+    const blockValid = verifyBlock(block, validatorKeys, block.precommits[0].network_id)
+    if (!blockValid) return status(1, { block })
+
+    const anchorTx = await this.getAnchorTxAsync(height)
+    if (anchorTx.blockHeight === height) {
+      const proof = { anchorTx, block }
+      if (anchorTx.blockHash !== blockHash(block.block)) return status(4, proof)
+      return status(11, proof)
     }
 
-    console.log(_(this).errorsList, _(this).errorsList.length)
+    const { blocks, errors, chainValid } = await this.provider
+      .getBlocks(height, anchorTx ? anchorTx.blockHeight : height + frequency, blockHash(block.block))
+
+    const proof = { errors, block, blocks, anchorTx }
+    if (!anchorTx) return chainValid ? status(10, proof) : status(2, proof)
+
+    if (anchorTx.blockHash !== blockHash(blocks[blocks.length - 1]))
+      return chainValid ? status(4, proof) : status(3, proof)
+
+    return status(11, proof)
   }
 
   // @todo make it private
   async getConfigForBlock (block) {
     _(this).configsCommited = await this.provider.getConfigsCommited()
-    const i = _(this).configsCommited.findIndex(item => Number(block) >= item.actualFrom)
-    return { config: _(this).configsCommited[i], next: _(this).configsCommited[i - 1] }
+    return _(this).configsCommited.find(item => Number(block) >= item.actualFrom)
   }
 
   // @todo make it private
@@ -82,13 +105,9 @@ export default class Anchoring {
   }
 
   getState () {
-    const { errorsList, txProcessed, lastTx, nextCheck } = _(this)
+    const {} = _(this)
 
     return {
-      errorsList,
-      txProcessed,
-      nextCheck,
-      lastTx,
       provider: this.provider.getState()
     }
   }
@@ -99,5 +118,4 @@ export default class Anchoring {
     if (err) throw err
     return save
   }
-
 }
