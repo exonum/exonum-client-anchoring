@@ -1,32 +1,37 @@
 import Provider from './Provider'
+import Events from './Events'
 import * as store from './store/'
 import { _, _private, blockHash, to, status } from './common/'
 import { verifyBlock } from 'exonum-client'
 
-export default class Anchoring {
+const LOADED = 'loaded'
+const SYNCHRONIZED = 'synchronized'
+
+export default class Anchoring extends Events {
   constructor (params) {
+    super()
     const { provider, driver } = Object.assign({}, {}, params)
 
     this.provider = new Provider(provider)
     this.driver = driver
 
     store.load().then(data => {
-      _(this).anchorTx = data.anchorTx || []
+      _(this).anchorTxs = data.anchorTxs || []
       _(this).anchorHeight = data.anchorHeight || 0
       _(this).address = data.address || 0
       _(this).page = data.page || 1
       _(this).anchorsLoaded = false
 
-      this.syncAnchorTransaction()
+      this[_private.syncAnchorTransaction]()
     })
   }
 
-  async syncAnchorTransaction () {
-    await this.getAllAnchorTransaction()
-    setTimeout(() => this.syncAnchorTransaction(), 120000)
+  async [_private.syncAnchorTransaction] () {
+    await this[_private.getAllAnchorTransaction]()
+    setTimeout(() => this[_private.syncAnchorTransaction](), 120000)
   }
 
-  async getAllAnchorTransaction () {
+  async [_private.getAllAnchorTransaction] () {
     const configsCommited = await this.provider.getConfigsCommited()
     const addresses = Object.keys(configsCommited
       .reduce((sum, item) => Object.assign({}, sum, { [item.address]: item.actualFrom }), {}))
@@ -35,45 +40,51 @@ export default class Anchoring {
       const address = addresses[_(this).address]
       for (_(this).page; ; _(this).page++) {
         const { txs, hasMore } = await this.driver[_private.getAddressTransactions](address, _(this).page)
-        const filteredTxs = txs.filter(item => Number(item.blockHeight) > _(this).anchorHeight)
-        _(this).anchorTx = [..._(this).anchorTx, ...filteredTxs]
+        const filteredTxs = txs.filter(item => Number(item[3]) > _(this).anchorHeight)
+        _(this).anchorTxs = [..._(this).anchorTxs, ...filteredTxs]
 
-        if (filteredTxs.length > 0)
-          _(this).anchorHeight = Number(filteredTxs[filteredTxs.length - 1].blockHeight)
-
-        this.safeState()
-        if (!hasMore) {
-          _(this).anchorsLoaded = new Date()
-          break
+        if (filteredTxs.length > 0) {
+          _(this).anchorHeight = Number(filteredTxs[filteredTxs.length - 1][3])
+          this[_private.dispatch](LOADED, _(this).anchorHeight)
         }
+
+        this[_private.safeState]()
+        if (!hasMore) break
       }
     }
+    this[_private.dispatch](SYNCHRONIZED, _(this).anchorHeight)
+    _(this).anchorsLoaded = new Date()
     _(this).address--
   }
 
-  getAnchorTx (height) {
+  [_private.getAnchorTx] (height) {
     if (_(this).anchorHeight >= height) {
-      return _(this).anchorTx.find(item => item.blockHeight >= height)
+      return _(this).anchorTxs.find(item => item[3] >= height)
     }
   }
 
-  getAnchorTxAsync (height) {
+  [_private.getAnchorTxAsync] (height) {
     return new Promise(resolve => {
-      const anchor = this.getAnchorTx(height)
+      const anchor = this[_private.getAnchorTx](height)
       if (anchor) resolve(anchor)
 
-      //@todo here should be loadTX event listener
-      const interval = setInterval(() => {
-        const anchor = this.getAnchorTx(height)
-        if (_(this).anchorsLoaded && !anchor) {
-          clearInterval(interval)
-          resolve(false)
-        }
+      const onLoaded = () => {
+        const anchor = this[_private.getAnchorTx](height)
         if (anchor) {
-          clearInterval(interval)
+          this.off(LOADED, onLoaded)
+          this.off(SYNCHRONIZED, onSync)
           resolve(anchor)
         }
-      }, 300)
+      }
+      this.on(LOADED, onLoaded)
+
+      const onSync = () => {
+        const anchor = this[_private.getAnchorTx](height)
+        this.off(LOADED, onLoaded)
+        this.off(SYNCHRONIZED, onSync)
+        anchor ? resolve(anchor) : resolve(null)
+      }
+      this.on(SYNCHRONIZED, onSync)
     })
   }
 
@@ -85,33 +96,32 @@ export default class Anchoring {
     const blockValid = verifyBlock(block, validatorKeys, block.precommits[0].network_id)
     if (!blockValid) return status(1, { block })
 
-    const anchorTx = await this.getAnchorTxAsync(height)
-    if (anchorTx.blockHeight === height) {
+    const anchorTx = await this[_private.getAnchorTxAsync](height)
+    if (anchorTx && anchorTx[3] === height) {
       const proof = { anchorTx, block }
-      if (anchorTx.blockHash !== blockHash(block.block)) return status(4, proof)
+      if (anchorTx[4] !== blockHash(block.block)) return status(4, proof)
       return status(11, proof)
     }
 
     const { blocks, errors, chainValid } = await this.provider
-      .getBlocks(height, anchorTx ? anchorTx.blockHeight : height + frequency, blockHash(block.block))
+      .getBlocks(height, anchorTx ? anchorTx[3] : height + frequency, blockHash(block.block))
 
     const proof = { errors, block, blocks, anchorTx }
     if (!anchorTx) return chainValid ? status(10, proof) : status(2, proof)
 
-    if (anchorTx.blockHash !== blockHash(blocks[blocks.length - 1]))
+    if (anchorTx[4] !== blockHash(blocks[blocks.length - 1]))
       return chainValid ? status(4, proof) : status(3, proof)
 
     return status(11, proof)
   }
 
-  getState () {
-    const { address, page, anchorTx, anchorHeight } = _(this)
-    return { address, page, anchorHeight, anchorTx, provider: this.provider.getState() }
+  [_private.getState] () {
+    const { address, page, anchorTxs, anchorHeight } = _(this)
+    return { address, page, anchorHeight, anchorTxs, provider: this.provider.getState() }
   }
 
-  // @todo make it private
-  async safeState () {
-    const [save, err] = await to(store.save(this.getState()))
+  async [_private.safeState] () {
+    const [save, err] = await to(store.save(this[_private.getState]()))
     if (err) throw err
     return save
   }

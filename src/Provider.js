@@ -2,6 +2,7 @@ import { script, networks, address, crypto } from 'bitcoinjs-lib'
 import { _, to, _private, blockHash, http } from './common/'
 import { Buffer } from 'buffer'
 
+// @todo implement node change on error response
 export default class Provider {
   constructor (params) {
     const { nodes, version, port } = Object.assign({}, {
