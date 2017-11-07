@@ -14,8 +14,11 @@ export const save = (str, name) => {
 export const load = name => {
   return new Promise((resolve, reject) => {
     fs.readFile(name + fileName, (err, data) => {
-      if (data) resolve(JSON.parse(data))
-      resolve({})
+      try {
+        resolve(JSON.parse(data))
+      } catch (e) {
+        resolve({})
+      }
     })
   })
 }

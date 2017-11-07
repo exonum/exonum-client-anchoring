@@ -30,9 +30,9 @@ export default {
 
   plugins: [
     localResolve(),
-    eslint(),
+    // eslint(),
     babel(),
     cleanup(),
-    uglify()
+    // uglify()
   ]
 }

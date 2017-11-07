@@ -18,6 +18,6 @@ describe('Anchoring', function () {
       nodes: ['http://192.168.221.129']
     }
   })
-
-  anchoring.blockStatus(2867420).then(data => console.log(data))
+  anchoring.on('loaded', e => console.log('loaded', e))
+  anchoring.on('synchronized', e => console.log('synchronized', e))
 })

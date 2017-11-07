@@ -2,6 +2,7 @@ import { script, networks, address, crypto } from 'bitcoinjs-lib'
 import { _, to, _private, blockHash, http } from './common/'
 import { Buffer } from 'buffer'
 
+// @todo implement node change on error response
 export default class Provider {
   constructor (params) {
     const { nodes, version, port } = Object.assign({}, {
@@ -78,6 +79,12 @@ export default class Provider {
       chainValid: errors.length === 0,
       errors
     }
+  }
+
+  // @todo make it private
+  async getConfigForBlock (block) {
+    const configs = await this.getConfigsCommited()
+    return configs.find(item => Number(block) >= item.actualFrom)
   }
 
   [_private.parseConfigAddress] ({ services }) {
