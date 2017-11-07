@@ -7,6 +7,7 @@ import { verifyBlock } from 'exonum-client'
 const LOADED = 'loaded'
 const SYNCHRONIZED = 'synchronized'
 
+// @todo add genesis block in load/save
 export default class Anchoring extends Events {
   constructor (params) {
     super()
