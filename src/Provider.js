@@ -14,7 +14,8 @@ export default class Provider {
     _(this).path = {
       anchoring: `${nodes[0]}:${port}/api/services/btc_anchoring/${version}`,
       explorer: `${nodes[0]}:${port}/api/explorer/${version}`,
-      configuration: `${nodes[0]}:${port}/api/services/configuration/${version}`
+      configuration: `${nodes[0]}:${port}/api/services/configuration/${version}`,
+      system: `${nodes[0]}:${port}/api/system/${version}`
     }
     _(this).nodes = nodes
     _(this).version = version
@@ -56,6 +57,10 @@ export default class Provider {
 
   getBlock (height) {
     return http.get({ url: `${_(this).path.explorer}/blocks/${height}` })
+  }
+
+  getTx (txHash) {
+    return http.get({ url: `${_(this).path.system}/transactions/${txHash}` })
   }
 
   checkBlocksChain (blocks, nextCheck) {

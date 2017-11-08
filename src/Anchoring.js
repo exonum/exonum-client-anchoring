@@ -92,33 +92,51 @@ export default class Anchoring extends Events {
   }
 
   async blockStatus (height) {
+    height = Number(height)
     const { validatorKeys, frequency } = await this.provider.getConfigForBlock(height)
     const block = await this.provider.getBlock(height)
-    if (block === null) return status(0)
+    if (block === null) return status.block(0)
 
     const blockValid = verifyBlock(block, validatorKeys, block.precommits[0].network_id)
-    if (!blockValid) return status(1, { block })
+    if (!blockValid) return status.block(1, { block })
 
     const anchorTx = await this[_private.getAnchorTxAsync](height)
     if (anchorTx && anchorTx[3] === height) {
       const proof = { anchorTx, block }
-      if (anchorTx[4] !== blockHash(block.block)) return status(4, proof)
-      return status(11, proof)
+      if (anchorTx[4] !== blockHash(block.block)) return status.block(4, proof)
+      return status.block(11, proof)
     }
 
     const { blocks, errors, chainValid } = await this.provider
       .getBlocks(height, anchorTx ? anchorTx[3] : height + frequency, blockHash(block.block))
 
     const proof = { errors, block, blocks, anchorTx }
-    if (!anchorTx) return chainValid ? status(10, proof) : status(2, proof)
+    if (!anchorTx) return chainValid ? status.block(10, proof) : status.block(2, proof)
 
-    if (anchorTx[4] !== blockHash(blocks[blocks.length - 1])) { return chainValid ? status(4, proof) : status(3, proof) }
+    if (anchorTx[4] !== blockHash(blocks[blocks.length - 1])) {
+      return chainValid ? status.block(4, proof) : status.block(3, proof)
+    }
 
-    return status(11, proof)
+    return status.block(11, proof)
   }
 
-  async transactionStatus (txHash) {
+  async txStatus (txHash) {
+    const tx = await this.provider.getTx(txHash)
+    if (tx.type === 'MemPool') return status.transaction(9, { tx })
+    //@todo check here transaction proof_to_block_merkle_root
 
+    const block = await this.blockStatus(tx.location.block_height)
+    const proof = { block, tx }
+    // if(here check merkle tree valid){
+    if (block.status === 0) return status.transaction(0, proof)
+    if (block.status === 1) return status.transaction(1, proof)
+    if (block.status === 2) return status.transaction(2, proof)
+    if (block.status === 3) return status.transaction(3, proof)
+    if (block.status === 4) return status.transaction(4, proof)
+    if (block.status === 10) return status.transaction(10, proof)
+    if (block.status === 11) return status.transaction(11, proof)
+    // }
+    // return status.transaction(5, proof)
   }
 
   [_private.getState] () {

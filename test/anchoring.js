@@ -20,4 +20,7 @@ describe('Anchoring', function () {
   })
   anchoring.on('loaded', e => console.log('loaded', e))
   anchoring.on('synchronized', e => console.log('synchronized', e))
+
+  anchoring.txStatus('4e13d9246365c1cf1dafafc308e7e7ac0f303d81a10cec9beab022419a035cd3')
+    .then(data => console.log(data))
 })
