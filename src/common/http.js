@@ -5,9 +5,9 @@ import { to } from './common'
 const getReq = ({ url, params }) => axios.get(url, { params }).then(({ data }) => data)
 
 const getWithTimeout = ({ url, params, timeout = 200 }) =>
-  new Promise((res, rej) => setTimeout(() => getReq({ url, params }).then(res).catch(rej), timeout))
+  new Promise((resolve, reject) => setTimeout(() => getReq({ url, params }).then(resolve).catch(reject), timeout))
 
-const get = async ({ url, params, tries = 5, }) => {
+const get = async ({ url, params, tries = 5 }) => {
   let errors = []
   const date = new Date()
   const [res, err] = await to(getReq({ url, params }))

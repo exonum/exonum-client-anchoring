@@ -1,7 +1,7 @@
 import Provider from './Provider'
 import Events from './Events'
 import * as store from './store/'
-import { _, _private, blockHash, to, status } from './common/'
+import { _, _private, blockHash, to, status, configToHash } from './common/'
 import { verifyBlock } from 'exonum-client'
 
 const LOADED = 'loaded'
@@ -11,12 +11,14 @@ const SYNCHRONIZED = 'synchronized'
 export default class Anchoring extends Events {
   constructor (params) {
     super()
-    const { provider, driver } = Object.assign({}, {}, params)
+    const config = Object.assign({}, {}, params)
+    _(this).hash = configToHash(config)
+    const { provider, driver } = config
 
     this.provider = new Provider(provider)
     this.driver = driver
 
-    store.load().then(data => {
+    store.load(_(this).hash).then(data => {
       _(this).anchorTxs = data.anchorTxs || []
       _(this).anchorHeight = data.anchorHeight || 0
       _(this).address = data.address || 0
@@ -110,10 +112,13 @@ export default class Anchoring extends Events {
     const proof = { errors, block, blocks, anchorTx }
     if (!anchorTx) return chainValid ? status(10, proof) : status(2, proof)
 
-    if (anchorTx[4] !== blockHash(blocks[blocks.length - 1]))
-      return chainValid ? status(4, proof) : status(3, proof)
+    if (anchorTx[4] !== blockHash(blocks[blocks.length - 1])) { return chainValid ? status(4, proof) : status(3, proof) }
 
     return status(11, proof)
+  }
+
+  async transactionStatus (txHash) {
+
   }
 
   [_private.getState] () {
@@ -122,7 +127,7 @@ export default class Anchoring extends Events {
   }
 
   async [_private.safeState] () {
-    const [save, err] = await to(store.save(this[_private.getState]()))
+    const [save, err] = await to(store.save(this[_private.getState](), _(this).hash))
     if (err) throw err
     return save
   }

@@ -1,5 +1,5 @@
 import { script, networks, address, crypto } from 'bitcoinjs-lib'
-import { _, to, _private, blockHash, http } from './common/'
+import { _, _private, blockHash, http } from './common/'
 import { Buffer } from 'buffer'
 
 // @todo implement node change on error response

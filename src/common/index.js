@@ -1,4 +1,4 @@
-import { to, byteArrayToInt, blockHash, getEnv } from './common'
+import { to, byteArrayToInt, blockHash, getEnv, configToHash } from './common'
 import http from './http'
 import _ from './private'
 import status from './status'
@@ -12,5 +12,6 @@ export {
   byteArrayToInt,
   blockHash,
   getEnv,
-  status
+  status,
+  configToHash
 }
