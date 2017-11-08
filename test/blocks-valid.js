@@ -17,7 +17,7 @@ const network = 'BTC'
 const provider = 'http://node.com'
 const provWithPort = `${provider}:8000`
 const blockTrailAPI = 'https://api.blocktrail.com'
-const path = './cache/37bc686b77a3468237affe5775ea58330ddfbd16d65f8ac92bd37157445e3d73'
+const path = './.cache/37bc686b77a3468237affe5775ea58330ddfbd16d65f8ac92bd37157445e3d73'
 
 const cleanFile = () => fs.existsSync(path) && fs.unlinkSync(path)
 
