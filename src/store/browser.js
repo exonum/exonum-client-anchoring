@@ -1,8 +1,8 @@
+/* eslint-env browser */
 export const save = async (str, name) => {
   try {
     localStorage.setItem(name, JSON.stringify(str))
-  }
-  catch (err) {
+  } catch (err) {
     throw err
   }
 }
@@ -10,8 +10,7 @@ export const save = async (str, name) => {
 export const load = async name => {
   try {
     return JSON.parse(localStorage.getItem(name))
-  }
-  catch (err) {
+  } catch (err) {
     throw err
   }
 }

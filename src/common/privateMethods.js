@@ -14,5 +14,5 @@ export const getAddressTransactions = Symbol('getAddressTransactions')
 export const request = Symbol('request')
 export const parseConfigAddress = Symbol('parseConfigAddress')
 
-//Events
+// Events
 export const dispatch = Symbol('dispatch')

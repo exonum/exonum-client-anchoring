@@ -1,0 +1,75 @@
+[
+  {
+    "config": {
+      "actual_from": 0,
+      "consensus": {
+        "peers_timeout": 10000,
+        "round_timeout": 3000,
+        "status_timeout": 5000,
+        "timeout_adjuster": {
+          "timeout": 500,
+          "type": "Constant"
+        },
+        "txs_block_limit": 1000
+      },
+      "previous_cfg_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "services": {
+        "btc_anchoring": {
+          "anchoring_keys": [
+            "02473e862a0e90d86a1c97bc838b23b60ad39bf13706a6a88166331f194b87f04a"
+          ],
+          "fee": 10000,
+          "frequency": 1000,
+          "funding_tx": "0200000001f6940f9ef82504b7241545e2c524492f0ee0679875228912e065a0fc2fbc708f010000006a47304402207d31984c79043aeeadd38781a412a4734613acc332bbeb57dfc8f216b2b4869f022067b7087ae2413c1b3082830bac8d44292a288e86ad629aa1a8d4c6b205f83510012103d2836f975a46f1171af19bc2a0b17f9a205e0bf822e7da85c1355b74045d951ffeffffff0292ba2303000000001976a914fb6e8bca4416bb179d24b375e457bb920d9d25b088ac00e1f5050000000017a914d769dd9a7816a92829461ccf828a2626db2468028742781200",
+          "network": "testnet",
+          "utxo_confirmations": 1
+        },
+        "configuration": null
+      },
+      "validator_keys": [
+        {
+          "consensus_key": "c46c9cd61abac5354df726bb38793e6620e0bd849f8fb34bab52c715d2532dd9",
+          "service_key": "afae38fc201b27f1a0a60f0a81f9cd158d75eef316effa030784901e15f38f82"
+        }
+      ]
+    },
+    "hash": "d27ec3bb766c2fcda88832f5e84ac9559d10a2ae702c3dc08871f04a8c5eabe6"
+  },
+  {
+    "config": {
+      "actual_from": 98000,
+      "consensus": {
+        "peers_timeout": 10000,
+        "round_timeout": 3000,
+        "status_timeout": 5000,
+        "timeout_adjuster": {
+          "timeout": 500,
+          "type": "Constant"
+        },
+        "txs_block_limit": 1000
+      },
+      "previous_cfg_hash": "d27ec3bb766c2fcda88832f5e84ac9559d10a2ae702c3dc08871f04a8c5eabe6",
+      "services": {
+        "btc_anchoring": {
+          "anchoring_keys": [
+            "03d728ad6757d4784effea04d47baafa216cf474866c2d4dc99b1e8e3eb936e730",
+            "02d83bba35a8022c247b645eed6f81ac41b7c1580de550e7e82c75ad63ee9ac2fd"
+          ],
+          "fee": 10000,
+          "frequency": 1000,
+          "funding_tx": "0200000001f6940f9ef82504b7241545e2c524492f0ee0679875228912e065a0fc2fbc708f010000006a47304402207d31984c79043aeeadd38781a412a4734613acc332bbeb57dfc8f216b2b4869f022067b7087ae2413c1b3082830bac8d44292a288e86ad629aa1a8d4c6b205f83510012103d2836f975a46f1171af19bc2a0b17f9a205e0bf822e7da85c1355b74045d951ffeffffff0292ba2303000000001976a914fb6e8bca4416bb179d24b375e457bb920d9d25b088ac00e1f5050000000017a914d769dd9a7816a92829461ccf828a2626db2468028742781200",
+          "network": "testnet",
+          "utxo_confirmations": 1
+        },
+        "configuration": null
+      },
+      "validator_keys": [
+        {
+          "consensus_key": "c46c9cd61abac5354df726bb38793e6620e0bd849f8fb34bab52c715d2532dd9",
+          "service_key": "afae38fc201b27f1a0a60f0a81f9cd158d75eef316effa030784901e15f38f82"
+        }
+      ]
+    },
+    "hash": "b1cd4b50bfee44010b4016b2adce9b500fa2d9541da9a7eca2ddf81edde66afd"
+  }
+]

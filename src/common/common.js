@@ -1,4 +1,4 @@
-import { newType, Uint16, Uint32, Uint64, Hash, hash } from 'exonum-client'
+import { newType, Uint16, Uint32, Uint64, Hash, hash, stringToUint8Array } from 'exonum-client'
 
 export const to = promise => promise.then(data => [data, null]).catch(err => [null, err])
 
@@ -35,4 +35,12 @@ export const getEnv = () => {
     return 'browser'
   }
   return 'unknown'
+}
+
+export const configToHash = config => {
+  let buffer = []
+  for (let node of config.provider.nodes) {
+    buffer = [...buffer, ...stringToUint8Array(node)]
+  }
+  return hash(buffer)
 }

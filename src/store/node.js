@@ -1,10 +1,12 @@
 import fs from 'fs'
 
-const fileName = '-storage'
+const folder = './.cache/'
 
 export const save = (str, name) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile(name + fileName, JSON.stringify(str), err => {
+    if (!fs.existsSync(folder)) fs.mkdirSync(folder)
+
+    fs.writeFile(folder + name, JSON.stringify(str), err => {
       if (err) reject(err)
       resolve(true)
     })
@@ -13,7 +15,8 @@ export const save = (str, name) => {
 
 export const load = name => {
   return new Promise((resolve, reject) => {
-    fs.readFile(name + fileName, (err, data) => {
+    fs.readFile(folder + name, (err, data) => {
+      if (err) resolve({})
       try {
         resolve(JSON.parse(data))
       } catch (e) {
