@@ -1,7 +1,6 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const fs = require('fs')
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const exonumAnchoring = require('src')
@@ -17,14 +16,14 @@ const network = 'BTC'
 const provider = 'http://node.com'
 const provWithPort = `${provider}:8000`
 const blockTrailAPI = 'https://api.blocktrail.com'
-const path = './.cache/37bc686b77a3468237affe5775ea58330ddfbd16d65f8ac92bd37157445e3d73'
-
-const cleanFile = () => fs.existsSync(path) && fs.unlinkSync(path)
+const config = {
+  cache: false,
+  driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
+  provider: { nodes: [provider] }
+}
 
 describe('Check anchor block', function () {
   beforeEach(() => {
-    cleanFile()
-
     for (let i = 0; i < 2; i++) {
       nock(provWithPort)
         .get(`/api/services/configuration/v1/configs/committed`)
@@ -33,10 +32,7 @@ describe('Check anchor block', function () {
   })
 
   it('when anchor block height provided', d => {
-    const anchoring = new exonumAnchoring.Anchoring({
-      driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
-      provider: { nodes: [provider] }
-    })
+    const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 1000
 
     nock(blockTrailAPI)
@@ -57,10 +53,7 @@ describe('Check anchor block', function () {
   })
 
   it('when provided block height that in chain, and anchored', d => {
-    const anchoring = new exonumAnchoring.Anchoring({
-      driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
-      provider: { nodes: [provider] }
-    })
+    const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 9001
 
     nock(blockTrailAPI)
@@ -86,10 +79,7 @@ describe('Check anchor block', function () {
   })
 
   it('when provided block that in chain, but not anchored', d => {
-    const anchoring = new exonumAnchoring.Anchoring({
-      driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
-      provider: { nodes: [provider] }
-    })
+    const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 29876
 
     nock(blockTrailAPI)
@@ -113,6 +103,4 @@ describe('Check anchor block', function () {
       .equal(10)
       .notify(d)
   })
-
-  cleanFile()
 })

@@ -6,6 +6,8 @@ export const getAnchorTx = Symbol('getAnchorTx')
 export const getAnchorTxAsync = Symbol('getAnchorTxAsync')
 export const getState = Symbol('getState')
 export const safeState = Symbol('safeState')
+export const initSync = Symbol('initSync')
+export const configToHash = Symbol('configToHash')
 
 // Driver
 export const getAddressTransactions = Symbol('getAddressTransactions')

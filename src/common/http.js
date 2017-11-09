@@ -9,7 +9,7 @@ const getWithTimeout = ({ url, params, timeout = 200 }) =>
 
 const get = async ({ url, params, tries = 5 }) => {
   let errors = []
-  const date = new Date()
+  // const date = new Date()
   const [res, err] = await to(getReq({ url, params }))
 
   if (err) {
@@ -24,7 +24,7 @@ const get = async ({ url, params, tries = 5 }) => {
     throw new Error(errors)
   }
 
-  console.log((new Date() - date) + 'ms', url, JSON.stringify(params))
+  // console.log((new Date() - date) + 'ms', url, JSON.stringify(params))
   return res
 }
 

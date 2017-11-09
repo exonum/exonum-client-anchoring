@@ -1,6 +1,12 @@
-import { newType, Uint16, Uint32, Uint64, Hash, hash, stringToUint8Array } from 'exonum-client'
+import {
+  newType, Uint16, Uint32, Uint64, Hash,
+  hash, stringToUint8Array, hexadecimalToUint8Array
+} from 'exonum-client'
 
 export const to = promise => promise.then(data => [data, null]).catch(err => [null, err])
+
+export const isObject = (obj) =>
+  (typeof obj === 'object' && !Array.isArray(obj) && obj !== null && !(obj instanceof Date))
 
 export const byteArrayToInt = byteArray => {
   let value = 0
@@ -24,9 +30,7 @@ const Block = newType({
   }
 })
 
-export const blockHash = block => {
-  return hash(Block.serialize(block))
-}
+export const blockHash = block => hash(Block.serialize(block))
 
 export const getEnv = () => {
   if (Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]') {
@@ -37,10 +41,43 @@ export const getEnv = () => {
   return 'unknown'
 }
 
-export const configToHash = config => {
-  let buffer = []
-  for (let node of config.provider.nodes) {
-    buffer = [...buffer, ...stringToUint8Array(node)]
+// @todo put it into exonum-client
+export function merkleRootHash (node) {
+  let hashLeft = ''
+  let hashRight = ''
+  let buffer
+
+  if (node.val !== undefined) return node.val
+
+  if (node.left !== undefined) {
+    if (typeof node.left === 'string') {
+      hashLeft = node.left
+    } else if (isObject(node.left)) {
+      if (node.left.val !== undefined) {
+        hashLeft = node.left.val
+      } else {
+        hashLeft = merkleRootHash(node.left)
+      }
+    }
   }
+
+  if (node.right !== undefined) {
+    if (typeof node.right === 'string') {
+      hashRight = node.right
+    } else if (isObject(node.right)) {
+      if (node.right.val !== undefined) {
+        hashRight = node.right.val
+      } else {
+        hashRight = merkleRootHash(node.right)
+      }
+    }
+
+    buffer = new Uint8Array(64)
+    buffer.set(hexadecimalToUint8Array(hashLeft))
+    buffer.set(hexadecimalToUint8Array(hashRight), 32)
+  } else {
+    buffer = hexadecimalToUint8Array(hashLeft)
+  }
+
   return hash(buffer)
 }

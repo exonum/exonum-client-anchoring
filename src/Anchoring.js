@@ -1,8 +1,8 @@
 import Provider from './Provider'
 import Events from './Events'
 import * as store from './store/'
-import { _, _private, blockHash, to, status, configToHash } from './common/'
-import { verifyBlock } from 'exonum-client'
+import { _, _private, blockHash, to, status, merkleRootHash } from './common/'
+import { verifyBlock, stringToUint8Array, hash } from 'exonum-client'
 
 const LOADED = 'loaded'
 const SYNCHRONIZED = 'synchronized'
@@ -11,22 +11,29 @@ const SYNCHRONIZED = 'synchronized'
 export default class Anchoring extends Events {
   constructor (params) {
     super()
-    const config = Object.assign({}, {}, params)
-    _(this).hash = configToHash(config)
-    const { provider, driver } = config
+    const config = Object.assign({ cache: true }, params)
+    _(this).hash = this[_private.configToHash](config)
+    const { provider, driver, cache } = config
 
     this.provider = new Provider(provider)
     this.driver = driver
 
-    store.load(_(this).hash).then(data => {
-      _(this).anchorTxs = data.anchorTxs || []
-      _(this).anchorHeight = data.anchorHeight || 0
-      _(this).address = data.address || 0
-      _(this).page = data.page || 1
-      _(this).anchorsLoaded = false
+    this[_private.initSync](cache)
+  }
 
-      this[_private.syncAnchorTransaction]()
-    })
+  async [_private.initSync] (cache) {
+    const initParams = { anchorTxs: [], anchorHeight: 0, address: 0, page: 1, anchorsLoaded: false }
+    let data = {}
+    if (cache) data = await store.load(_(this).hash)
+
+    const { anchorTxs, anchorHeight, address, page, anchorsLoaded } = Object.assign(initParams, data)
+    _(this).anchorTxs = anchorTxs
+    _(this).anchorHeight = anchorHeight
+    _(this).address = address
+    _(this).page = page
+    _(this).anchorsLoaded = anchorsLoaded
+
+    this[_private.syncAnchorTransaction]()
   }
 
   async [_private.syncAnchorTransaction] () {
@@ -49,13 +56,16 @@ export default class Anchoring extends Events {
         if (filteredTxs.length > 0) {
           _(this).anchorHeight = Number(filteredTxs[filteredTxs.length - 1][3])
           this[_private.dispatch](LOADED, _(this).anchorHeight)
+
+          if (!hasMore && _(this).address === addresses.length - 1) {
+            this[_private.dispatch](SYNCHRONIZED, _(this).anchorHeight)
+          }
         }
 
         this[_private.safeState]()
         if (!hasMore) break
       }
     }
-    this[_private.dispatch](SYNCHRONIZED, _(this).anchorHeight)
     _(this).anchorsLoaded = new Date()
     _(this).address--
   }
@@ -91,8 +101,9 @@ export default class Anchoring extends Events {
     })
   }
 
-  async blockStatus (height) {
-    height = Number(height)
+  async blockStatus (inHeight) {
+    let height = Number(inHeight)
+    if (isNaN(height)) throw new TypeError(`Height ${inHeight} is invalid number`)
     const { validatorKeys, frequency } = await this.provider.getConfigForBlock(height)
     const block = await this.provider.getBlock(height)
     if (block === null) return status.block(0)
@@ -123,25 +134,36 @@ export default class Anchoring extends Events {
   async txStatus (txHash) {
     const tx = await this.provider.getTx(txHash)
     if (tx.type === 'MemPool') return status.transaction(9, { tx })
-    //@todo check here transaction proof_to_block_merkle_root
+    const rootHash = merkleRootHash(tx.proof_to_block_merkle_root)
 
     const block = await this.blockStatus(tx.location.block_height)
     const proof = { block, tx }
-    // if(here check merkle tree valid){
+
     if (block.status === 0) return status.transaction(0, proof)
     if (block.status === 1) return status.transaction(1, proof)
     if (block.status === 2) return status.transaction(2, proof)
     if (block.status === 3) return status.transaction(3, proof)
     if (block.status === 4) return status.transaction(4, proof)
-    if (block.status === 10) return status.transaction(10, proof)
-    if (block.status === 11) return status.transaction(11, proof)
-    // }
-    // return status.transaction(5, proof)
+
+    if (block.proof.block.block.tx_hash === rootHash) {
+      if (block.status === 10) return status.transaction(10, proof)
+      if (block.status === 11) return status.transaction(11, proof)
+    }
+
+    return status.transaction(5, proof)
   }
 
   [_private.getState] () {
     const { address, page, anchorTxs, anchorHeight } = _(this)
     return { address, page, anchorHeight, anchorTxs, provider: this.provider.getState() }
+  }
+
+  [_private.configToHash] (config) {
+    let buffer = []
+    for (let node of config.provider.nodes) {
+      buffer = [...buffer, ...stringToUint8Array(node)]
+    }
+    return hash(buffer)
   }
 
   async [_private.safeState] () {

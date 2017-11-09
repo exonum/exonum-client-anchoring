@@ -5,12 +5,17 @@ import { Buffer } from 'buffer'
 // @todo implement node change on error response
 export default class Provider {
   constructor (params) {
-    const { nodes, version, port } = Object.assign({}, {
+    const pathParams = Object.assign({
       nodes: ['http://localhost'],
       version: 'v1',
       port: 8000
     }, params)
 
+    this.setPathParams(pathParams)
+    _(this).blocksLoadLimit = 1000
+  }
+
+  setPathParams ({ nodes, version, port }) {
     _(this).path = {
       anchoring: `${nodes[0]}:${port}/api/services/btc_anchoring/${version}`,
       explorer: `${nodes[0]}:${port}/api/explorer/${version}`,
@@ -20,7 +25,6 @@ export default class Provider {
     _(this).nodes = nodes
     _(this).version = version
     _(this).port = port
-    _(this).blocksLoadLimit = 1000
   }
 
   async getConfigsCommited () {
