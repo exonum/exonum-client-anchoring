@@ -53,7 +53,6 @@ export default class Anchoring extends Events {
         const { txs, hasMore } = await this.driver[_private.getAddressTransactions](address, _(this).page)
         const filteredTxs = txs.filter(item => Number(item[3]) > _(this).anchorHeight)
         _(this).anchorTxs = [..._(this).anchorTxs, ...filteredTxs]
-
         if (filteredTxs.length > 0) {
           _(this).anchorHeight = Number(filteredTxs[filteredTxs.length - 1][3])
           this[_private.dispatch](LOADED, _(this).anchorHeight)
@@ -62,7 +61,6 @@ export default class Anchoring extends Events {
             this[_private.dispatch](SYNCHRONIZED, _(this).anchorHeight)
           }
         }
-
         this[_private.safeState]()
         if (!hasMore) break
       }

@@ -30,10 +30,6 @@ export default class Events {
         return true
       }
     }
-    if (_(this).events[event]) {
-      _(this).events[event] = []
-      return true
-    }
     return false
   }
 }
