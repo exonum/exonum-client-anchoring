@@ -48,7 +48,8 @@
     "rollup-plugin-cleanup": "^1.0.1",
     "rollup-plugin-eslint": "^4.0.0",
     "rollup-plugin-local-resolve": "^1.0.7",
-    "rollup-plugin-uglify": "^2.0.1"
+    "rollup-plugin-uglify": "^2.0.1",
+    "sinon": "^4.1.2"
   },
   "dependencies": {
     "axios": "^0.16.2",
