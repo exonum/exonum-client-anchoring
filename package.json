@@ -4,7 +4,7 @@
   "description": "Exonum anchoring check library",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_PATH=./ NODE_ENV=test mocha -r babel-register \"test/**/*.js\"",
+    "test": "NODE_PATH=./ NODE_ENV=test mocha --exit -r babel-register \"test/**/*.js\"",
     "lint": "eslint --ignore-path .gitignore .",
     "lint:fix": "eslint --ignore-path .gitignore . --fix",
     "compile": "cross-env NODE_ENV=rollup rollup -c ./rollup.config.js",

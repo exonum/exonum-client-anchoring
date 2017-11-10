@@ -4,6 +4,7 @@ export const cfg1 = require('./exonum/configs-1.json')
 export const cfg2 = require('./exonum/configs-2.json')
 const blocks = require('./exonum/blocks.json')
 const fullBlocks = require('./exonum/fullBlocks.json')
+const transactions = require('./exonum/transactions.json')
 
 export const getBlocks = (latest, count) => {
   if (count > 1000) count = 1000
@@ -16,3 +17,5 @@ export const getTxs = (limit, page, skip = 0) => ({
 })
 
 export const getFullBlock = height => fullBlocks[height]
+
+export const getExonumTx = hash => transactions[hash]

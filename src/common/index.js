@@ -1,4 +1,4 @@
-import { to, byteArrayToInt, blockHash, getEnv, configToHash, merkleRootHash } from './common'
+import { to, byteArrayToInt, blockHash, getEnv, merkleRootHash } from './common'
 import http from './http'
 import _ from './private'
 import * as status from './status'

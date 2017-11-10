@@ -1,6 +1,6 @@
 import {
   newType, Uint16, Uint32, Uint64, Hash,
-  hash, stringToUint8Array, hexadecimalToUint8Array
+  hash, hexadecimalToUint8Array
 } from 'exonum-client'
 
 export const to = promise => promise.then(data => [data, null]).catch(err => [null, err])

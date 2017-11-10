@@ -1,0 +1,30 @@
+{
+  "b4db78bf1bd164e0417fab25055b1f0e3f7fdad44325a5bf1999d86ab44af2c1": {
+    "content": null,
+    "location": {
+      "block_height": "1688",
+      "position_in_block": "0"
+    },
+    "proof_to_block_merkle_root": {
+      "val": "b4db78bf1bd164e0417fab25055b1f0e3f7fdad44325a5bf1999d86ab44af2c1"
+    },
+    "type": "Committed"
+  },
+  "7cb4a12a3fbbbf610b15c899eb3a5046091d510c0310c6dcd3f505af9946deed": {
+    "content": null,
+    "location": {
+      "block_height": "49002",
+      "position_in_block": "0"
+    },
+    "proof_to_block_merkle_root": {
+      "val": "7cb4a12a3fbbbf610b15c899eb3a5046091d510c0310c6dcd3f505af9946deed"
+    },
+    "type": "Committed"
+  },
+  "c59b07e4bf9c79f487957ee3353dca578495a3284e5145214905c9d6874d393f": {
+    "content": null,
+    "location": null,
+    "proof_to_block_merkle_root": null,
+    "type": "MemPool"
+  }
+}

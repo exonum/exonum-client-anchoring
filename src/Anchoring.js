@@ -45,6 +45,7 @@ export default class Anchoring extends Events {
     const configsCommited = await this.provider.getConfigsCommited()
     const addresses = Object.keys(configsCommited
       .reduce((sum, item) => Object.assign({}, sum, { [item.address]: item.actualFrom }), {}))
+    _(this).anchorsLoaded = false
 
     for (_(this).address; _(this).address < addresses.length; _(this).address++) {
       const address = addresses[_(this).address]
@@ -80,6 +81,7 @@ export default class Anchoring extends Events {
     return new Promise(resolve => {
       const anchor = this[_private.getAnchorTx](height)
       if (anchor) resolve(anchor)
+      if (_(this).anchorsLoaded) resolve(null)
 
       const onLoaded = () => {
         const anchor = this[_private.getAnchorTx](height)
@@ -117,7 +119,6 @@ export default class Anchoring extends Events {
       if (anchorTx[4] !== blockHash(block.block)) return status.block(4, proof)
       return status.block(11, proof)
     }
-
     const { blocks, errors, chainValid } = await this.provider
       .getBlocks(height, anchorTx ? anchorTx[3] : height + frequency, blockHash(block.block))
 
