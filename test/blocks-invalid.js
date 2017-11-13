@@ -5,9 +5,8 @@ const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const exonumAnchoring = require('src')
 const nock = require('nock')
-const { expect } = chai
 
-const { cfg1, getFullBlockInvalid, getBlocks, getTxs } = require('./mocks/')
+const { cfg1, getFullBlockInvalid, getTxs } = require('./mocks/')
 
 chai.use(chaiAsPromised)
 chai.should()
@@ -22,14 +21,12 @@ const config = {
   driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
   provider: { nodes: [provider] }
 }
-
+// @todo need more testcases
 describe('Check anchor blocks invalid', function () {
   beforeEach(() => {
-    for (let i = 0; i < 2; i++) {
-      nock(provWithPort)
-        .get(`/api/services/configuration/v1/configs/committed`)
-        .reply(200, cfg1)
-    }
+    nock(provWithPort)
+      .get(`/api/services/configuration/v1/configs/committed`)
+      .reply(200, cfg1)
   })
   it('when height is not a number', d => {
     const anchoring = new exonumAnchoring.Anchoring(config)

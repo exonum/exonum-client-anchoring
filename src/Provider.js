@@ -1,5 +1,5 @@
 import { script, networks, address, crypto } from 'bitcoinjs-lib'
-import { _, _private, blockHash, http } from './common/'
+import { _, blockHash, http, to } from './common/'
 import { Buffer } from 'buffer'
 
 // @todo implement node change on error response
@@ -13,6 +13,8 @@ export default class Provider {
 
     this.setPathParams(pathParams)
     _(this).blocksLoadLimit = 1000
+
+    this.cfgsCommited = null
   }
 
   setPathParams ({ nodes, version, port }) {
@@ -27,28 +29,42 @@ export default class Provider {
     _(this).port = port
   }
 
-  async getConfigsCommited () {
-    const configsCommited = await http.get({ url: `${_(this).path.configuration}/configs/committed` })
+  getConfigsCommited () {
+    if (this.cfgsCommited && new Date() - this.cfgsCommited.date < 600000) {
+      return this.cfgsCommited.cfgs
+    } else {
+      this.cfgsCommited = { cfgs: this._getConfigsCommited(), date: new Date() }
+      return this.cfgsCommited.cfgs
+    }
+  }
+
+  async _getConfigsCommited () {
+    const [configsCommited, err] = await to(http.get({ url: `${_(this).path.configuration}/configs/committed` }))
+    if (err) {
+      this.cfgsCommited = null
+      throw err
+    }
     return configsCommited.map(({ config }) => ({
       actualFrom: config.actual_from,
       frequency: config.services.btc_anchoring.frequency,
-      address: this[_private.parseConfigAddress](config),
+      address: this.parseConfigAddress(config),
       validatorKeys: config.validator_keys.map(item => item.consensus_key)
     })).sort((a, b) => a.actualFrom > b.actualFrom)
   }
 
-  async getBlocks (from, to, nextCheck) {
-    let count = to - from
+  async getBlocks (from, at, nextCheck) {
+    let count = at - from
     const reqCount = Math.ceil(count / _(this).blocksLoadLimit)
     let blocks = []
     let lastLoaded = from + 1
     for (let i = 1; i <= reqCount; i++) {
       const needCount = count > _(this).blocksLoadLimit ? _(this).blocksLoadLimit : count
       const latest = lastLoaded + needCount
-      const result = await http.get({
+      const [result, err] = await to(http.get({
         url: `${_(this).path.explorer}/blocks`,
         params: { count: needCount, latest }
-      })
+      }))
+      if (err) throw err
       result.sort((a, b) => Number(a.height) - Number(b.height))
       count = count - result.length
       lastLoaded = lastLoaded + result.length
@@ -92,11 +108,12 @@ export default class Provider {
 
   // @todo make it private
   async getConfigForBlock (block) {
-    const configs = await this.getConfigsCommited()
+    const [configs, err] = await to(this.getConfigsCommited())
+    if (err) throw err
     return configs.find(item => Number(block) >= item.actualFrom)
   }
 
-  [_private.parseConfigAddress] ({ services }) {
+  parseConfigAddress ({ services }) {
     const pubKeys = services.btc_anchoring.anchoring_keys.map((hex) => Buffer.from(hex, 'hex'))
     const pubKeysLen = services.btc_anchoring.anchoring_keys.length
     const signCount = pubKeysLen <= 4 ? pubKeysLen : Math.ceil(pubKeysLen * 2 / 3) + 1

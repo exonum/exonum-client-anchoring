@@ -24,11 +24,9 @@ const config = {
 
 describe('Check anchor blocks valid', function () {
   beforeEach(() => {
-    for (let i = 0; i < 2; i++) {
-      nock(provWithPort)
-        .get(`/api/services/configuration/v1/configs/committed`)
-        .reply(200, cfg1)
-    }
+    nock(provWithPort)
+      .get(`/api/services/configuration/v1/configs/committed`)
+      .reply(200, cfg1)
   })
 
   it('when anchor block height provided', d => {

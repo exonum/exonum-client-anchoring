@@ -8,7 +8,7 @@ const nock = require('nock')
 const sinon = require('sinon')
 const { expect } = chai
 
-const { cfg1, getFullBlock, getBlocks, getTxs, getExonumTx } = require('./mocks/')
+const { getTxs, cfg1 } = require('./mocks/')
 
 chai.use(chaiAsPromised)
 chai.should()
@@ -28,11 +28,9 @@ const config = {
 
 describe('Events', function () {
   beforeEach(() => {
-    for (let i = 0; i < 2; i++) {
-      nock(provWithPort)
-        .get(`/api/services/configuration/v1/configs/committed`)
-        .reply(200, cfg1)
-    }
+    nock(provWithPort)
+      .get(`/api/services/configuration/v1/configs/committed`)
+      .reply(200, cfg1)
   })
 
   it('loaded and synchronized events', d => {

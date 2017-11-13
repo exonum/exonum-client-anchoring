@@ -6,6 +6,7 @@ import { verifyBlock, stringToUint8Array, hash } from 'exonum-client'
 
 const LOADED = 'loaded'
 const SYNCHRONIZED = 'synchronized'
+const ERROR = 'error'
 
 // @todo add genesis block in load/save
 export default class Anchoring extends Events {
@@ -15,7 +16,7 @@ export default class Anchoring extends Events {
     _(this).hash = this[_private.configToHash](config)
     const { provider, driver, cache } = config
 
-    this.provider = new Provider(provider)
+    _(this).provider = new Provider(provider)
     this.driver = driver
 
     this[_private.initSync](cache)
@@ -37,12 +38,12 @@ export default class Anchoring extends Events {
   }
 
   async [_private.syncAnchorTransaction] () {
-    await this[_private.getAllAnchorTransaction]()
+    await this[_private.getAllAnchorTransaction]().catch(err => this[_private.dispatch](ERROR, err))
     setTimeout(() => this[_private.syncAnchorTransaction](), 120000)
   }
 
   async [_private.getAllAnchorTransaction] () {
-    const configsCommited = await this.provider.getConfigsCommited()
+    const configsCommited = await _(this).provider.getConfigsCommited()
     const addresses = Object.keys(configsCommited
       .reduce((sum, item) => Object.assign({}, sum, { [item.address]: item.actualFrom }), {}))
     _(this).anchorsLoaded = false
@@ -104,8 +105,8 @@ export default class Anchoring extends Events {
   async blockStatus (inHeight) {
     let height = Number(inHeight)
     if (isNaN(height)) throw new TypeError(`Height ${inHeight} is invalid number`)
-    const { validatorKeys, frequency } = await this.provider.getConfigForBlock(height)
-    const block = await this.provider.getBlock(height)
+    const { validatorKeys, frequency } = await _(this).provider.getConfigForBlock(height)
+    const block = await _(this).provider.getBlock(height)
     if (block === null) return status.block(0)
 
     const blockValid = verifyBlock(block, validatorKeys, block.precommits[0].network_id)
@@ -117,7 +118,7 @@ export default class Anchoring extends Events {
       if (anchorTx[4] !== blockHash(block.block)) return status.block(4, proof)
       return status.block(11, proof)
     }
-    const { blocks, errors, chainValid } = await this.provider
+    const { blocks, errors, chainValid } = await _(this).provider
       .getBlocks(height, anchorTx ? anchorTx[3] : height + frequency, blockHash(block.block))
 
     const proof = { errors, block, blocks, anchorTx }
@@ -131,30 +132,23 @@ export default class Anchoring extends Events {
   }
 
   async txStatus (txHash) {
-    const tx = await this.provider.getTx(txHash)
+    const tx = await _(this).provider.getTx(txHash)
     if (tx.type === 'MemPool') return status.transaction(9, { tx })
     const rootHash = merkleRootHash(tx.proof_to_block_merkle_root)
 
     const block = await this.blockStatus(tx.location.block_height)
     const proof = { block, tx }
 
-    if (block.status === 0) return status.transaction(0, proof)
-    if (block.status === 1) return status.transaction(1, proof)
-    if (block.status === 2) return status.transaction(2, proof)
-    if (block.status === 3) return status.transaction(3, proof)
-    if (block.status === 4) return status.transaction(4, proof)
+    if (block.status <= 4) return status.transaction(block.status, proof)
 
-    if (block.proof.block.block.tx_hash === rootHash) {
-      if (block.status === 10) return status.transaction(10, proof)
-      if (block.status === 11) return status.transaction(11, proof)
-    }
+    if (block.proof.block.block.tx_hash === rootHash) { return status.transaction(block.status, proof) }
 
     return status.transaction(5, proof)
   }
 
   [_private.getState] () {
     const { address, page, anchorTxs, anchorHeight } = _(this)
-    return { address, page, anchorHeight, anchorTxs, provider: this.provider.getState() }
+    return { address, page, anchorHeight, anchorTxs, provider: _(this).provider.getState() }
   }
 
   [_private.configToHash] (config) {

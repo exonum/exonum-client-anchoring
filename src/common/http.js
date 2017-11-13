@@ -8,20 +8,24 @@ const getWithTimeout = ({ url, params, timeout = 200 }) =>
   new Promise((resolve, reject) => setTimeout(() => getReq({ url, params }).then(resolve).catch(reject), timeout))
 
 const get = async ({ url, params, tries = 5 }) => {
-  let errors = []
   // const date = new Date()
   const [res, err] = await to(getReq({ url, params }))
 
   if (err) {
-    for (let i = 0; i < tries - 1; i++) {
-      const [res, err] = await to(getWithTimeout({ url, params }))
-      if (err) {
-        errors = [...errors, err]
-        continue
+    if (!err.response || err.response.status >= 500) {
+      let errors = [err]
+      for (let i = 0; i < tries - 1; i++) {
+        const [res, err] = await to(getWithTimeout({ url, params }))
+        if (err) {
+          errors = [...errors, err]
+          continue
+        }
+        return res
       }
-      return res
+      throw errors
+    } else {
+      throw err
     }
-    throw new Error(errors)
   }
 
   // console.log((new Date() - date) + 'ms', url, JSON.stringify(params))

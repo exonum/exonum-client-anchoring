@@ -9,12 +9,5 @@ export const safeState = Symbol('safeState')
 export const initSync = Symbol('initSync')
 export const configToHash = Symbol('configToHash')
 
-// Driver
-export const getAddressTransactions = Symbol('getAddressTransactions')
-
-// Provider
-export const request = Symbol('request')
-export const parseConfigAddress = Symbol('parseConfigAddress')
-
 // Events
 export const dispatch = Symbol('dispatch')
