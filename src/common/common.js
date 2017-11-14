@@ -32,15 +32,6 @@ const Block = newType({
 
 export const blockHash = block => hash(Block.serialize(block))
 
-export const getEnv = () => {
-  if (Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]') {
-    return 'node'
-  } else if (typeof window === 'object') {
-    return 'browser'
-  }
-  return 'unknown'
-}
-
 // @todo put it into exonum-client
 export function merkleRootHash (node) {
   let hashLeft = ''

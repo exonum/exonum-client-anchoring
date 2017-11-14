@@ -7,7 +7,7 @@
     "test": "NODE_PATH=./ NODE_ENV=test mocha --exit -r babel-register \"test/**/*.js\"",
     "lint": "eslint --ignore-path .gitignore .",
     "lint:fix": "eslint --ignore-path .gitignore . --fix",
-    "compile": "cross-env NODE_ENV=rollup rollup -c ./rollup.config.js",
+    "compile": "NODE_ENV=rollup rollup -c ./rollup.config.js && NODE_ENV=rollup BROWSER=true rollup -c ./rollup.config.js",
     "prepare": "npm run compile",
     "coveralls": "cross-env NODE_ENV=test NODE_PATH=./ nyc mocha --recursive --exit && cat ./coverage/lcov.info | coveralls"
   },
@@ -47,14 +47,18 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-cleanup": "^1.0.1",
     "rollup-plugin-eslint": "^4.0.0",
-    "rollup-plugin-local-resolve": "^1.0.7",
+    "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "sinon": "^4.1.2"
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "babel-polyfill": "^6.26.0",
     "bitcoinjs-lib": "^3.2.1",
     "exonum-client": "^0.2.3"
+  },
+  "browser": {
+    "./src/store/node.js": "./src/store/browser.js"
   },
   "nyc": {
     "require": [

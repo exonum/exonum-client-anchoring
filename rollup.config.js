@@ -4,10 +4,13 @@ import cleanup from 'rollup-plugin-cleanup'
 import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify'
 import eslint from 'rollup-plugin-eslint'
-import localResolve from 'rollup-plugin-local-resolve'
+import resolve from 'rollup-plugin-node-resolve'
 
 const SRC = path.resolve('src')
 const DIST = path.resolve('dist')
+
+const browser = !!process.env.BROWSER
+const output = browser ? 'index.js' : 'node.js'
 
 export default {
   sourceMap: false,
@@ -17,7 +20,7 @@ export default {
 
   input: path.join(SRC, 'index.js'),
   output: {
-    file: path.join(DIST, 'index.js'),
+    file: path.join(DIST, output),
     format: 'umd',
     exports: 'named',
 
@@ -29,7 +32,7 @@ export default {
   },
 
   plugins: [
-    localResolve(),
+    resolve({ browser }),
     eslint(),
     babel(),
     cleanup(),

@@ -2,16 +2,7 @@
   "env": {
     "test": {
       "presets": ["env"],
-      "plugins": [[
-        "transform-runtime",
-        {
-          "polyfill": false,
-          "regenerator": true
-        }
-      ],
-        "transform-async-to-generator",
-        "istanbul"
-      ]
+      "plugins": ["istanbul"]
     },
     "rollup": {
       "presets": [["env", { "modules": false }]],
