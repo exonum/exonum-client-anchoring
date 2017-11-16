@@ -3,7 +3,7 @@
 
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
-const exonumAnchoring = require('src')
+const exonumAnchoring = require('../src')
 
 chai.use(chaiAsPromised)
 chai.should()

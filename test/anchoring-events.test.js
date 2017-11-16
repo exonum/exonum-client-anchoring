@@ -1,19 +1,9 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const chai = require('chai')
-const chaiAsPromised = require('chai-as-promised')
-const exonumAnchoring = require('src')
-const nock = require('nock')
-const sinon = require('sinon')
-const { expect } = chai
-
+const { mock, expect, sinon, exonumAnchoring } = require('./constants').module
 const { getTxs, cfg1 } = require('./mocks/')
-
-chai.use(chaiAsPromised)
-chai.should()
-
-const _ = require('src/common/private').default
+const _ = require('../src/common/private').default
 
 const token = 'token'
 const network = 'BTC'
@@ -28,9 +18,8 @@ const config = {
 
 describe('Events', function () {
   beforeEach(() => {
-    nock(provWithPort)
-      .get(`/api/services/configuration/v1/configs/committed`)
-      .reply(200, cfg1)
+    mock.onGet(`${provWithPort}/api/services/configuration/v1/configs/committed`)
+      .replyOnce(200, cfg1)
   })
 
   it('loaded and synchronized events', d => {
@@ -43,10 +32,9 @@ describe('Events', function () {
     anchoring.on('synchronized', synchronized)
 
     for (let i = 1; i <= count; i++) {
-      nock(blockTrailAPI)
-        .get(`/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`)
-        .query({ api_key: token, limit: 200, page: i, sort_dir: 'asc' })
-        .reply(200, getTxs(i === count ? 199 : 200, i))
+      mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+        params: { api_key: token, limit: 200, page: i, sort_dir: 'asc' }
+      }).replyOnce(200, getTxs(i === count ? 199 : 200, i))
     }
 
     anchoring.on('synchronized', e => {

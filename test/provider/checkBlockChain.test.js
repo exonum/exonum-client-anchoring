@@ -3,10 +3,10 @@
 
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
-const Provider = require('src/Provider').default
+const Provider = require('../../src/Provider').default
 const { expect } = chai
 
-const { cfg1, getFullBlock, getBlocks, getTxs } = require('../mocks/')
+const { getBlocks } = require('../mocks/')
 
 chai.use(chaiAsPromised)
 chai.should()

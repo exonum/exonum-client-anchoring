@@ -11,3 +11,6 @@ export const configToHash = Symbol('configToHash')
 
 // Events
 export const dispatch = Symbol('dispatch')
+
+// Drivers
+export const getAddressTransactions = Symbol('getAddressTransactions')

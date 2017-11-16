@@ -2,7 +2,7 @@
   "env": {
     "test": {
       "presets": ["env"],
-      "plugins": ["istanbul"]
+      "plugins": ["transform-runtime", "istanbul"]
     },
     "rollup": {
       "presets": [["env", { "modules": false }]],

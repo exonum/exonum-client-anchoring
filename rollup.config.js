@@ -5,6 +5,7 @@ import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify'
 import eslint from 'rollup-plugin-eslint'
 import resolve from 'rollup-plugin-node-resolve'
+import builtins from 'rollup-plugin-node-builtins'
 
 const SRC = path.resolve('src')
 const DIST = path.resolve('dist')
@@ -27,11 +28,13 @@ export default {
     globals: {
       'axios': 'axios',
       'exonum-client': 'exonum-client',
-      'bitcoinjs-lib': 'bitcoinjs-lib'
+      'bitcoinjs-lib': 'bitcoinjs-lib',
+      'buffer': 'buffer'
     }
   },
 
   plugins: [
+    builtins(),
     resolve({ browser }),
     eslint(),
     babel(),

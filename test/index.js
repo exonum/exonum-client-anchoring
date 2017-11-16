@@ -1,0 +1,6 @@
+require('./provider/checkBlockChain.test')
+require('./anchoring-events.test')
+require('./blocks-invalid.test')
+require('./blocks-valid.test')
+require('./http.test')
+require('./transactions-valid.test')
