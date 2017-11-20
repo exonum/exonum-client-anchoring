@@ -1,4 +1,5 @@
 require('./provider/checkBlockChain.test')
+require('./store/store.test')
 require('./anchoring-events.test')
 require('./blocks-invalid.test')
 require('./blocks-valid.test')

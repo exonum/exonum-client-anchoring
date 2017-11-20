@@ -57,16 +57,13 @@ export default class Anchoring extends Events {
         if (filteredTxs.length > 0) {
           _(this).anchorHeight = Number(filteredTxs[filteredTxs.length - 1][3])
           this[_private.dispatch](LOADED, _(this).anchorHeight)
-
-          if (!hasMore && _(this).address === addresses.length - 1) {
-            this[_private.dispatch](SYNCHRONIZED, _(this).anchorHeight)
-          }
         }
         this[_private.safeState]()
         if (!hasMore) break
       }
     }
     _(this).anchorsLoaded = new Date()
+    this[_private.dispatch](SYNCHRONIZED, _(this).anchorHeight)
     _(this).address--
   }
 

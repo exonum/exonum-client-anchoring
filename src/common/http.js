@@ -2,14 +2,13 @@ import axios from 'axios'
 import { to } from './common'
 
 // @todo request should be using fetch with Babel
-const getReq = ({ url, params }) => axios.get(url, { params }).then(({ data }) => data)
+const getReq = ({ url, params }) => axios.get(url, { params, timeout: 2000 }).then(({ data }) => data)
 
 const getWithTimeout = ({ url, params, timeout = 200 }) =>
   new Promise((resolve, reject) => setTimeout(() => getReq({ url, params }).then(resolve).catch(reject), timeout))
 
 const get = async ({ url, params, tries = 5 }) => {
   // const date = new Date()
-  // console.log(url, params)
   const [res, err] = await to(getReq({ url, params }))
 
   if (err) {

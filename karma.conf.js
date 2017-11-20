@@ -8,7 +8,7 @@ const customLaunchers = {
   'SL_Firefox': {
     base: 'SauceLabs',
     browserName: 'firefox',
-    version: '50.0',
+    version: '45.0',
     platform: 'Windows 10'
   },
   'SL_InternetExplorer': {

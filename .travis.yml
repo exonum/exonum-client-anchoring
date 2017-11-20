@@ -3,13 +3,15 @@ node_js:
 - 5
 - 8
 env:
-- NODE_PATH=./
+  matrix:
+  - NODE_PATH=./
+  - SAUCE_USERNAME=Exonum
+  - secure: CA9P6/gXp4IEyEhNfVN27O2atF13Bg1pAAJedTDeb3pj6hlygnGAouaX+UTPvJUYLc6lCTN8QGS/mtu2a+OrExFENDsvhGQ+zbBRo5ZKqXRb3/Lat1EYR5HR501pp7GJPJ6mqeBRZUgoWBcumrvC0pzWEHWxwKqHvhSebALTZSjJxZT7ROSeM0G4PDkjypGTo5pmLgUE+coWikRr6rHp7GLlc27kp9WN7qthq+emtEAHaKRqgZDB5pZHjPZeZsCPRAOv7cM37ffRKP4LiLIWUJwa3zVHOmnPoxE6aqPVJBveyuAGZUfDAJxBSkKLUSzRNngIIkgN4QVmMb7ujmS5hWPpCXHyfdjcYyd4dqShYLFzbK/XawqNZl004pt99X1yGbIURWGEtXqjG8zBclKnM6XoKTZzQSQ3/0aOB5GP9F0/bGbPRBI9QeQmi4yH8Vq+DjY+JScbE1oLfr8X3+TOfJbPqeWvIaP9c9Yy4gqeUsePp1QP0kWSARmzrSMyzDdWmOctqAtjs8SxJ5OTfY/5Bi5Q99E3IzpBrBlsW8xuXiCw9r8MNo6cMFJszdHqR3otGNEOJxSw0ua6uym4+9M6e/hakVZTZQAnjFGZersCF7mMRtfInVw/CUlD74DAuVo7iVOpwBqy8Q+P7pRlTXBASrzPColnFjwtd9hlD8ShsAg=
 cache:
   directories:
   - node_modules
 script:
 - npm run compile
 - npm run test
-
 after_success:
 - npm run coveralls
