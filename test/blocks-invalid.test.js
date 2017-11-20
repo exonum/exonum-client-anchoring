@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { mock, exonumAnchoring } = require('./constants').module
-const { cfg1, getFullBlockInvalid, getTxs } = require('./mocks/')
+const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('./mocks/')
 
 const token = 'token'
 const network = 'BTC'
@@ -28,7 +28,22 @@ describe('Check anchor blocks invalid', function () {
       .notify(d)
   })
 
-  it('when wrong data in block data', d => {
+  it('when block is not existed', d => {
+    const anchoring = new exonumAnchoring.Anchoring(config)
+    const block = 999
+
+    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+      .replyOnce(200, null)
+
+    anchoring.blockStatus(block)
+      .then(data => data.status)
+      .should
+      .eventually
+      .equal(0)
+      .notify(d)
+  })
+
+  it('when block is invalid', d => {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 999
 
@@ -44,6 +59,79 @@ describe('Check anchor blocks invalid', function () {
       .should
       .eventually
       .equal(1)
+      .notify(d)
+  })
+
+  it('when block in broken chain', d => {
+    const anchoring = new exonumAnchoring.Anchoring(config)
+    const block = 1688
+
+    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+    }).replyOnce(200, getTxs(100, 1))
+
+    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+      .replyOnce(200, getFullBlock(block))
+
+    mock.onGet(`${provWithPort}/api/explorer/v1/blocks`, {
+      params: { latest: 2001, count: 312 }
+    }).replyOnce(200, [...getBlocks(1989, 299), ...getBlocks(2001, 12)])
+
+    anchoring.blockStatus(block)
+      .then(data => data.status)
+      .should
+      .eventually
+      .equal(2)
+      .notify(d)
+  })
+
+  it('when hash of the anchor block is not equal to the hash in the anchor transaction', d => {
+    const anchoring = new exonumAnchoring.Anchoring(config)
+    const block = 1688
+
+    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+    }).replyOnce(200, getTxs(100, 1))
+
+    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+      .replyOnce(200, getFullBlock(block))
+
+    mock.onGet(`${provWithPort}/api/explorer/v1/blocks`, {
+      params: { latest: 2001, count: 312 }
+    }).replyOnce(200, [...getBlocks(2000, 311), {
+      height: '2000',
+      prev_hash: 'f90a7dff8e6dd43edfb198a5008c87942e656a1862ed668b4f4d1fb11125b5d0',
+      proposer_id: 0,
+      schema_version: 0,
+      state_hash: '19098b0bff42bfaf65c59abf62264c257a78c690d08732361508dd96f3080c9d',
+      tx_count: 0,
+      tx_hash: '0000000000000000000000000000000000000000000000000000000000000000'
+    }])
+
+    anchoring.blockStatus(block)
+      .then(data => data.status)
+      .should
+      .eventually
+      .equal(3)
+      .notify(d)
+  })
+
+  it('when anchor block hash not equal to block hash', d => {
+    const anchoring = new exonumAnchoring.Anchoring(config)
+    const block = 1000
+
+    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+    }).replyOnce(200, getTxs(100, 1))
+
+    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+      .replyOnce(200, getFullBlock(1688))
+
+    anchoring.blockStatus(block)
+      .then(data => data.status)
+      .should
+      .eventually
+      .equal(3)
       .notify(d)
   })
 })

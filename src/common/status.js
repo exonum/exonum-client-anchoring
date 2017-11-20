@@ -26,14 +26,6 @@ export const block = (key, proof) => {
     case 3:
       return {
         status: key,
-        inChain: false,
-        anchored: false,
-        message: `Сhain of blocks is broken, and hash of the anchor block is not equal to hash in anchor transaction`,
-        proof
-      }
-    case 4:
-      return {
-        status: key,
         inChain: true,
         anchored: false,
         message: `The hash of the anchor block is not equal to the hash in the anchor transaction`,
@@ -85,14 +77,6 @@ export const transaction = (key, proof) => {
         proof
       }
     case 3:
-      return {
-        status: key,
-        inChain: false,
-        anchored: false,
-        message: 'Transaction refers on block, which is in broken chain of blocks and wrong anchored',
-        proof
-      }
-    case 4:
       return {
         status: key,
         inChain: true,

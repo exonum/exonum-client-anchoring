@@ -112,19 +112,16 @@ export default class Anchoring extends Events {
     const anchorTx = await this[_private.getAnchorTxAsync](height)
     if (anchorTx && anchorTx[3] === height) {
       const proof = { anchorTx, block }
-      if (anchorTx[4] !== blockHash(block.block)) return status.block(4, proof)
+      if (anchorTx[4] !== blockHash(block.block)) return status.block(3, proof)
       return status.block(11, proof)
     }
     const { blocks, errors, chainValid } = await _(this).provider
       .getBlocks(height, anchorTx ? anchorTx[3] : height + frequency, blockHash(block.block))
-
     const proof = { errors, block, blocks, anchorTx }
-    if (!anchorTx) return chainValid ? status.block(10, proof) : status.block(2, proof)
 
-    if (anchorTx[4] !== blockHash(blocks[blocks.length - 1])) {
-      return chainValid ? status.block(4, proof) : status.block(3, proof)
-    }
-
+    if (!chainValid) return status.block(2, proof)
+    if (!anchorTx) return status.block(10, proof)
+    if (anchorTx[4] !== blockHash(blocks[blocks.length - 1])) return status.block(3, proof)
     return status.block(11, proof)
   }
 
@@ -136,7 +133,7 @@ export default class Anchoring extends Events {
     const block = await this.blockStatus(tx.location.block_height)
     const proof = { block, tx }
 
-    if (block.status <= 4) return status.transaction(block.status, proof)
+    if (block.status <= 3) return status.transaction(block.status, proof)
 
     if (block.proof.block.block.tx_hash === rootHash) { return status.transaction(block.status, proof) }
 
