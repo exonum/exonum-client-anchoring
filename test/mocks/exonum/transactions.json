@@ -10,14 +10,14 @@
     },
     "type": "Committed"
   },
-  "7cb4a12a3fbbbf610b15c899eb3a5046091d510c0310c6dcd3f505af9946deed": {
+  "e68a605aa5ce04b7e8c73b4ea46b5f4e2393d82bd50495d3f808315be4619c89": {
     "content": null,
     "location": {
-      "block_height": "49002",
+      "block_height": "4002",
       "position_in_block": "0"
     },
     "proof_to_block_merkle_root": {
-      "val": "7cb4a12a3fbbbf610b15c899eb3a5046091d510c0310c6dcd3f505af9946deed"
+      "val": "e68a605aa5ce04b7e8c73b4ea46b5f4e2393d82bd50495d3f808315be4619c89"
     },
     "type": "Committed"
   },

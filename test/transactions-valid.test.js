@@ -52,8 +52,8 @@ describe('Check anchor transactions valid', function () {
 
   it('when transaction, in correct block, but not anchored', d => {
     const anchoring = new exonumAnchoring.Anchoring(config)
-    const tx = '7cb4a12a3fbbbf610b15c899eb3a5046091d510c0310c6dcd3f505af9946deed'
-    const block = 49002
+    const tx = 'e68a605aa5ce04b7e8c73b4ea46b5f4e2393d82bd50495d3f808315be4619c89'
+    const block = 4002
 
     mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
@@ -63,8 +63,8 @@ describe('Check anchor transactions valid', function () {
       .replyOnce(200, getFullBlock(block))
 
     mock.onGet(/api\/explorer\/v1\/blocks/, {
-      params: { latest: 50003, count: 1000 }
-    }).replyOnce(200, getBlocks(50003, 1000))
+      params: { latest: 5003, count: 1000 }
+    }).replyOnce(200, getBlocks(5003, 1000))
 
     mock.onGet(`${provWithPort}/api/system/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
