@@ -14,7 +14,7 @@ const config = {
   driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
   provider: { nodes: [provider] }
 }
-// @todo need more testcases
+
 describe('Check anchor blocks invalid', function () {
   beforeEach(() => {
     mock.onGet(`${provWithPort}/api/services/configuration/v1/configs/committed`)

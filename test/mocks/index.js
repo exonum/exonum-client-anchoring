@@ -8,11 +8,15 @@ const transactions = require('./exonum/transactions.json')
 
 const fullBlocksInvalid = require('./exonum/fullBlocks-in.json')
 
+// import fs from 'fs'
+
 export const getBlocks = (latest, count) => {
   if (count > 1000) count = 1000
   const from = latest - count
   return blocks.filter(item => Number(item.height) >= from && Number(item.height) < latest)
 }
+
+// fs.writeFile('blocks.json', JSON.stringify(getBlocks(5001, 5000)))
 
 export const getTxs = (limit, page, skip = 0) => ({
   data: btTxs.slice(skip + limit * (page - 1), skip + limit * page)
