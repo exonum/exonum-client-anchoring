@@ -8,7 +8,6 @@ const getWithTimeout = ({ url, params, timeout = 200 }) =>
   new Promise((resolve, reject) => setTimeout(() => getReq({ url, params }).then(resolve).catch(reject), timeout))
 
 const get = async ({ url, params, tries = 5 }) => {
-  // const date = new Date()
   const [res, err] = await to(getReq({ url, params }))
 
   if (err) {
@@ -28,7 +27,6 @@ const get = async ({ url, params, tries = 5 }) => {
     }
   }
 
-  // console.log((new Date() - date) + 'ms', url, JSON.stringify(params))
   return res
 }
 

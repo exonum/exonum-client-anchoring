@@ -1,0 +1,28 @@
+{
+  "068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95": {
+    "content": null,
+    "location": {
+      "block_height": "1153277",
+      "position_in_block": "0"
+    },
+    "proof_to_block_merkle_root": {
+      "left": {
+        "left": {
+          "left": {
+            "left": {
+              "left": {
+                "val": "168f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95"
+              },
+              "right": "07ffbfb2310b492d6d2e3dea0d73373368ba6bc6a05b1ade60627861e8cfc177"
+            },
+            "right": "fdd007a2d9e198c06301b46a00f8b5c8c0c4350ef05a29e8831cd72e446be3ec"
+          },
+          "right": "9787687e9400a0761b4c892dc6af844578c41e9cc74c63ee1d87a48afb504883"
+        },
+        "right": "5daa63d95c7b72fe6fdba6f545d487d3e52f1f2fd8da5df9fa1b515112e85b6f"
+      },
+      "right": "96045752ce6ac188bd569cf987477879b6f49f20d5776d0aadf4977008001ff2"
+    },
+    "type": "Committed"
+  }
+}

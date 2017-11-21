@@ -2,31 +2,48 @@ import { script, networks, address, crypto } from 'bitcoinjs-lib'
 import { _, blockHash, http, to } from './common/'
 import { Buffer } from 'buffer'
 
-// @todo implement node change on error response
 export default class Provider {
   constructor (params) {
-    const pathParams = Object.assign({
-      nodes: ['http://localhost'],
-      version: 'v1',
-      port: 8000
+    const { nodes, version } = Object.assign({
+      nodes: ['http://localhost:8000'],
+      version: 'v1'
     }, params)
 
-    this.setPathParams(pathParams)
+    this.nodes = nodes
+    this.version = version
+    this.activeNode = 0
+
+    this.setPathParams()
     _(this).blocksLoadLimit = 1000
 
     this.cfgsCommited = null
   }
 
-  setPathParams ({ nodes, version, port }) {
-    _(this).path = {
-      anchoring: `${nodes[0]}:${port}/api/services/btc_anchoring/${version}`,
-      explorer: `${nodes[0]}:${port}/api/explorer/${version}`,
-      configuration: `${nodes[0]}:${port}/api/services/configuration/${version}`,
-      system: `${nodes[0]}:${port}/api/system/${version}`
+  setPathParams () {
+    this.path = {
+      anchoring: `${this.nodes[this.activeNode]}/api/services/btc_anchoring/${this.version}`,
+      explorer: `${this.nodes[this.activeNode]}/api/explorer/${this.version}`,
+      configuration: `${this.nodes[this.activeNode]}/api/services/configuration/${this.version}`,
+      system: `${this.nodes[this.activeNode]}/api/system/${this.version}`
     }
-    _(this).nodes = nodes
-    _(this).version = version
-    _(this).port = port
+  }
+
+  async getFromNode ({ key, url, params }) {
+    const tries = this.nodes.length > 1 ? 2 : 5
+    const [res, err] = await to(http.get({ url: `${this.path[key]}${url}`, tries, params }))
+    if (err) {
+      const errors = this.nodes.length > 1 ? [err] : err
+      for (let i = 1; i < this.nodes.length; i++) {
+        this.activeNode = i
+        this.setPathParams()
+        const [nextRes, nextErr] = await to(http.get({ url: `${this.path[key]}${url}`, tries, params }))
+        if (nextErr) errors.push(nextErr)
+        if (nextRes) return nextRes
+      }
+      this.activeNode = 0
+      throw errors
+    }
+    return res
   }
 
   getConfigsCommited () {
@@ -39,7 +56,7 @@ export default class Provider {
   }
 
   async _getConfigsCommited () {
-    const [configsCommited, err] = await to(http.get({ url: `${_(this).path.configuration}/configs/committed` }))
+    const [configsCommited, err] = await to(this.getFromNode({ key: 'configuration', url: `/configs/committed` }))
     if (err) {
       this.cfgsCommited = null
       throw err
@@ -60,8 +77,9 @@ export default class Provider {
     for (let i = 1; i <= reqCount; i++) {
       const needCount = count > _(this).blocksLoadLimit ? _(this).blocksLoadLimit : count
       const latest = lastLoaded + needCount
-      const [result, err] = await to(http.get({
-        url: `${_(this).path.explorer}/blocks`,
+      const [result, err] = await to(this.getFromNode({
+        key: 'explorer',
+        url: `/blocks`,
         params: { count: needCount, latest }
       }))
       if (err) throw err
@@ -76,11 +94,11 @@ export default class Provider {
   }
 
   getBlock (height) {
-    return http.get({ url: `${_(this).path.explorer}/blocks/${height}` })
+    return this.getFromNode({ key: 'explorer', url: `/blocks/${height}` })
   }
 
   getTx (txHash) {
-    return http.get({ url: `${_(this).path.system}/transactions/${txHash}` })
+    return this.getFromNode({ key: 'system', url: `/transactions/${txHash}` })
   }
 
   checkBlocksChain (blocks, nextCheck) {
@@ -106,7 +124,6 @@ export default class Provider {
     }
   }
 
-  // @todo make it private
   async getConfigForBlock (block) {
     const [configs, err] = await to(this.getConfigsCommited())
     if (err) throw err

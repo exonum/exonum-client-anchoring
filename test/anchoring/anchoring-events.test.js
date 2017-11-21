@@ -1,24 +1,16 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const { mock, expect, sinon, exonumAnchoring } = require('./constants').module
-const { getTxs, cfg1 } = require('./mocks/')
-const _ = require('../src/common/private').default
-
-const token = 'token'
-const network = 'BTC'
-const provider = 'http://node.com'
-const provWithPort = `${provider}:8000`
-const blockTrailAPI = 'https://api.blocktrail.com'
-const config = {
-  cache: false,
-  driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
-  provider: { nodes: [provider] }
-}
+const {
+  mock, expect, sinon, exonumAnchoring,
+  network, config, token, blockTrailAPI, provider
+} = require('../constants').module
+const { getTxs, cfg1 } = require('../mocks/')
+const _ = require('../../src/common/private').default
 
 describe('Events', function () {
   beforeEach(() => {
-    mock.onGet(`${provWithPort}/api/services/configuration/v1/configs/committed`)
+    mock.onGet(`${provider}/api/services/configuration/v1/configs/committed`)
       .replyOnce(200, cfg1)
   })
 
@@ -26,7 +18,7 @@ describe('Events', function () {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const loaded = sinon.spy()
     const synchronized = sinon.spy()
-    const count = 4
+    const count = 2
 
     anchoring.on('loaded', loaded)
     anchoring.on('synchronized', synchronized)
@@ -40,8 +32,8 @@ describe('Events', function () {
     anchoring.on('synchronized', e => {
       expect(loaded.callCount).to.equal(count)
       expect(synchronized.callCount).to.equal(1)
-      expect(loaded.args).to.deep.equal([[198000], [398000], [598000], [794000]])
-      expect(synchronized.args[0][0]).to.equal(loaded.args[3][0])
+      expect(loaded.args).to.deep.equal([[198000], [396000]])
+      expect(synchronized.args[0][0]).to.equal(396000)
       d()
     })
   })
