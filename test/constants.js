@@ -1,3 +1,4 @@
+/* eslint-env node, mocha */
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const exonumAnchoring = require('../src')
@@ -11,4 +12,27 @@ const { expect } = chai
 chai.use(chaiAsPromised)
 chai.should()
 
-exports.module = { mock, expect, sinon, exonumAnchoring }
+const token = 'token'
+const network = 'BTC'
+const provider = 'http://node.com:8000'
+const blockTrailAPI = 'https://api.blocktrail.com'
+const config = {
+  cache: false,
+  driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
+  provider: { nodes: [provider] }
+}
+
+beforeEach(() => mock.reset())
+
+exports.module = {
+  mock,
+  expect,
+  sinon,
+  exonumAnchoring,
+
+  token,
+  network,
+  provider,
+  blockTrailAPI,
+  config
+}

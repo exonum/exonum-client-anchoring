@@ -1,15 +1,9 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const chai = require('chai')
-const chaiAsPromised = require('chai-as-promised')
+const { expect } = require('../constants').module
 const Provider = require('../../src/Provider').default
-const { expect } = chai
-
 const { getBlocks } = require('../mocks/')
-
-chai.use(chaiAsPromised)
-chai.should()
 
 describe('checkBlockChain', function () {
   const provider = new Provider()

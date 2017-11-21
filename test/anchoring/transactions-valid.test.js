@@ -1,25 +1,17 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const { mock, exonumAnchoring } = require('./constants').module
+const {
+  mock, exonumAnchoring, blockTrailAPI,
+  network, config, token, provider
+} = require('../constants').module
 
-const { cfg1, getFullBlock, getBlocks, getTxs, getExonumTx } = require('./mocks/')
-
-const token = 'token'
-const network = 'BTC'
-const provider = 'http://node.com'
-const provWithPort = `${provider}:8000`
-const blockTrailAPI = 'https://api.blocktrail.com'
-const config = {
-  cache: false,
-  driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
-  provider: { nodes: [provider] }
-}
+const { cfg1, getFullBlock, getBlocks, getTxs, getExonumTx } = require('../mocks/')
 
 // @todo need more testcases
 describe('Check anchor transactions valid', function () {
   beforeEach(() => {
-    mock.onGet(`${provWithPort}/api/services/configuration/v1/configs/committed`)
+    mock.onGet(`${provider}/api/services/configuration/v1/configs/committed`)
       .replyOnce(200, cfg1)
   })
 
@@ -32,14 +24,14 @@ describe('Check anchor transactions valid', function () {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(20, 1))
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
     mock.onGet(/api\/explorer\/v1\/blocks/, {
       params: { latest: 2001, count: 312 }
     }).replyOnce(200, getBlocks(2001, 312))
 
-    mock.onGet(`${provWithPort}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
     anchoring.txStatus(tx)
@@ -59,14 +51,14 @@ describe('Check anchor transactions valid', function () {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(5, 1))
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
     mock.onGet(/api\/explorer\/v1\/blocks/, {
       params: { latest: 5003, count: 1000 }
     }).replyOnce(200, getBlocks(5003, 1000))
 
-    mock.onGet(`${provWithPort}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
     anchoring.txStatus(tx)
@@ -81,7 +73,7 @@ describe('Check anchor transactions valid', function () {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const tx = 'c59b07e4bf9c79f487957ee3353dca578495a3284e5145214905c9d6874d393f'
 
-    mock.onGet(`${provWithPort}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
     anchoring.txStatus(tx)

@@ -12,6 +12,6 @@ export const save = async (str, name) => {
 
 export const load = async name => {
   const [res, err] = await to(DB.get(name))
-  if (err) throw err
-  return res
+  if (err) return {}
+  return !res ? {} : res
 }

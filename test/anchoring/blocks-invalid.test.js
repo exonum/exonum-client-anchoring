@@ -1,23 +1,15 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const { mock, exonumAnchoring } = require('./constants').module
-const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('./mocks/')
-
-const token = 'token'
-const network = 'BTC'
-const provider = 'http://node.com'
-const provWithPort = `${provider}:8000`
-const blockTrailAPI = 'https://api.blocktrail.com'
-const config = {
-  cache: false,
-  driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
-  provider: { nodes: [provider] }
-}
+const {
+  mock, exonumAnchoring,
+  network, config, token, blockTrailAPI, provider
+} = require('../constants').module
+const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('../mocks/')
 
 describe('Check anchor blocks invalid', function () {
   beforeEach(() => {
-    mock.onGet(`${provWithPort}/api/services/configuration/v1/configs/committed`)
+    mock.onGet(`${provider}/api/services/configuration/v1/configs/committed`)
       .replyOnce(200, cfg1)
   })
   it('when height is not a number', d => {
@@ -32,7 +24,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 999
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, null)
 
     anchoring.blockStatus(block)
@@ -51,7 +43,7 @@ describe('Check anchor blocks invalid', function () {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlockInvalid(block))
 
     anchoring.blockStatus(block)
@@ -70,10 +62,10 @@ describe('Check anchor blocks invalid', function () {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks`, {
+    mock.onGet(`${provider}/api/explorer/v1/blocks`, {
       params: { latest: 2001, count: 312 }
     }).replyOnce(200, [...getBlocks(1989, 299), ...getBlocks(2001, 12)])
 
@@ -93,10 +85,10 @@ describe('Check anchor blocks invalid', function () {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks`, {
+    mock.onGet(`${provider}/api/explorer/v1/blocks`, {
       params: { latest: 2001, count: 312 }
     }).replyOnce(200, [...getBlocks(2000, 311), {
       height: '2000',
@@ -124,7 +116,7 @@ describe('Check anchor blocks invalid', function () {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
-    mock.onGet(`${provWithPort}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(1688))
 
     anchoring.blockStatus(block)
