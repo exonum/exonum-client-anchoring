@@ -36,10 +36,17 @@ export default {
 
   plugins: [
     builtins(),
-    commonjs(),
     resolve({ browser }),
+    commonjs(),
     eslint(),
-    babel(),
+    babel({
+      plugins: [['transform-runtime', {
+        'helpers': false,
+        'polyfill': false,
+        'regenerator': true
+      }]],
+      runtimeHelpers: true
+    }),
     cleanup(),
     uglify()
   ]

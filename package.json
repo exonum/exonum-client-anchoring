@@ -2,7 +2,7 @@
   "name": "exonum-client-anchoring",
   "version": "0.0.0",
   "description": "Exonum anchoring check library",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha --exit -r babel-register \"test/**/*.test.js\"",
     "test-browser": "karma start localKarma.conf.js",
@@ -39,7 +39,6 @@
     "browserify": "^14.5.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "core.js": "^0.4.2",
     "coveralls": "^3.0.0",
     "cross-env": "^5.1.1",
     "eslint": "^4.11.0",
@@ -72,7 +71,8 @@
     "axios": "^0.16.2",
     "bitcoinjs-lib": "^3.3.0",
     "exonum-client": "^0.2.3",
-    "idb-kv-store": "^4.3.1"
+    "core.js": "^0.4.2",
+    "idb-keyval": "^2.3.0"
   },
   "browser": {
     "./src/store/node.js": "./src/store/browser.js"
