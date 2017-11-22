@@ -3,7 +3,6 @@
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![js-standard-style][codestyle-image]][codestyle-url]
 [![License][license-image]][license-url]
-[![Sauce Test Status][sause-image]][sause-url]
 
 [sause-image]: https://saucelabs.com/browser-matrix/Exonum.svg
 [sause-url]: https://saucelabs.com/u/Exonum
@@ -15,3 +14,13 @@
 [codestyle-url]: http://standardjs.com
 [license-image]: https://img.shields.io/github/license/exonum/exonum-client.svg?style=flat-square
 [license-url]: https://opensource.org/licenses/Apache-2.0
+
+## Browser Support
+[![Sauce Test Status][sause-image]][sause-url]
+
+
+### Big Thanks
+
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homepage]
+
+[homepage]: https://saucelabs.com
