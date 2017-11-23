@@ -13,3 +13,5 @@ export const load = async name => {
   if (err) return {}
   return !res ? {} : res
 }
+
+export const clear = () => idbKeyval.clear()

@@ -32,8 +32,8 @@ describe('Events', function () {
     anchoring.on('synchronized', e => {
       expect(loaded.callCount).to.equal(count)
       expect(synchronized.callCount).to.equal(1)
-      expect(loaded.args).to.deep.equal([[198000], [396000]])
-      expect(synchronized.args[0][0]).to.equal(396000)
+      expect(loaded.args.map(item => item[0].anchorHeight)).to.deep.equal([198000, 396000])
+      expect(synchronized.args[0][0].anchorHeight).to.equal(396000)
       d()
     })
   })
