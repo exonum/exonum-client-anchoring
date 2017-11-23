@@ -4,4 +4,4 @@ import 'core-js/fn/array/find'
 import Anchoring from './Anchoring'
 import drivers from './drivers/'
 
-export { Anchoring, drivers }
+export default { Anchoring, drivers }

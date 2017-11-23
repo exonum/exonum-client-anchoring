@@ -1,7 +1,8 @@
 /* eslint-env node, mocha */
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
-const exonumAnchoring = require('../src')
+const exonumAnchoring = require('../src').default
+const store = require('../src/store/')
 const sinon = require('sinon')
 
 const axios = require('axios')
@@ -22,7 +23,10 @@ const config = {
   provider: { nodes: [provider] }
 }
 
-beforeEach(() => mock.reset())
+beforeEach(() => {
+  mock.reset()
+  store.clear()
+})
 
 exports.module = {
   mock,

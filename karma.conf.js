@@ -59,7 +59,7 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: false,
     browserNoActivityTimeout: 120000,
-    concurrency: 3,
+    concurrency: 2,
 
     sauceLabs: {
       testName: 'Exonum anchoring unit tests'
