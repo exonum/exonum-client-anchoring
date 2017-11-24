@@ -22,14 +22,6 @@ const customLaunchers = {
     browserName: 'safari',
     platform: 'OS X 10.11',
     version: '10.0'
-  },
-  'SL_Android': {
-    base: 'SauceLabs',
-    browserName: 'Browser',
-    platform: 'Android',
-    version: '5.0',
-    deviceName: 'Android GoogleAPI Emulator',
-    deviceOrientation: 'portrait'
   }
 }
 

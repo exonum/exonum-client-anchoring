@@ -1,4 +1,4 @@
-import { to, byteArrayToInt, _, _private } from '../common/'
+import { to, byteArrayToInt, _ } from '../common/'
 import { hexadecimalToUint8Array } from 'exonum-client'
 
 export default class Driver {
@@ -6,7 +6,7 @@ export default class Driver {
     _(this).exonumPrefix = '45584f4e554d'
   }
 
-  async [_private.getAddressTransactions] (address, page) {
+  async _getAddressTransactions (address, page) {
     const [txs, err] = await to(this.getAddressTransactions({ address, limit: this.txLoadLimit, page }))
     if (err) throw err
     let parsedTx = []
@@ -21,7 +21,6 @@ export default class Driver {
     }
   }
 
-  // @todo make it private
   parseOpReturn (opReturn) {
     const anchor = opReturn.split(_(this).exonumPrefix)[1]
     return [

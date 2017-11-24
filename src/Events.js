@@ -1,11 +1,9 @@
-import { _, _private } from './common/'
+import { _ } from './common/'
 
-export default class Events {
-  constructor () {
-    _(this).events = {}
-  }
+export default function Events () {
+  _(this).events = {}
 
-  [_private.dispatch] (event, data) {
+  _(this).dispatch = (event, data) => {
     if (_(this).events[event]) {
       for (let callback of _(this).events[event]) {
         callback(data)
@@ -13,7 +11,7 @@ export default class Events {
     }
   }
 
-  on (event, callback) {
+  this.on = (event, callback) => {
     if (_(this).events[event]) {
       _(this).events[event].push(callback)
     } else {
@@ -22,7 +20,7 @@ export default class Events {
     return true
   }
 
-  off (event, callback) {
+  this.off = (event, callback) => {
     if (callback && _(this).events[event] && _(this).events[event].length > 0) {
       const index = _(this).events[event].indexOf(callback)
       if (index > -1) {
