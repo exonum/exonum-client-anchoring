@@ -44,7 +44,7 @@ describe('check switch node on errors', function () {
       .notify(d)
   })
 
-  it('when only one node make usual requests', d => {
+  it('when only one node, make usual requests', d => {
     const provider = new Provider({ nodes: [nodes[0]] })
     for (let i = 0; i < 5; i++) {
       mock.onGet(`${nodes[0]}/api/services/configuration/v1${request}/test`).replyOnce(500 + i)

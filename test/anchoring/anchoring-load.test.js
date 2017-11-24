@@ -1,13 +1,14 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 const {
-  mock, exonumAnchoring, expect,
+  mock, exonumAnchoring, expect, sinon,
   network, config, token, blockTrailAPI
 } = require('../constants').module
 
 const { cfg1, getTxs } = require('../mocks/')
 const provider = 'http://localhost:8001'
 const configCopy = Object.assign({}, config, { provider: { nodes: [provider] } })
+const configTimeoutCopy = Object.assign({}, configCopy, { syncTimeout: 1 })
 
 describe('check loading intermediate data', function () {
   beforeEach(() => {
@@ -44,5 +45,30 @@ describe('check loading intermediate data', function () {
       })
     })
     anchoring.on('loaded', e => anchoring.syncStop())
+  })
+
+  it('syncTimeout test', d => {
+    const anchoring = new exonumAnchoring.Anchoring(configTimeoutCopy)
+    const synchronized = sinon.spy()
+    anchoring.on('synchronized', synchronized)
+    anchoring.on('synchronized', e => {
+      if (e.anchorHeight === 198000) {
+        expect(synchronized.callCount).to.equal(2)
+        expect(synchronized.args.map(item => item[0].anchorHeight)).to.deep.equal([168000, 198000])
+        d()
+      }
+    })
+
+    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+    }).replyOnce(200, getTxs(170, 1))
+
+    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+    }).replyOnce(200, getTxs(200, 1))
+
+    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+      params: { api_key: token, limit: 200, page: 2, sort_dir: 'asc' }
+    }).replyOnce(200, getTxs(50, 2))
   })
 })
