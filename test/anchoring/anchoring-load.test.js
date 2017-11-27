@@ -23,9 +23,10 @@ describe('check loading intermediate data', function () {
 
     anchoring.syncStop()
     Promise.all([anchoring.txStatus(tx), anchoring.blockStatus(block)])
+      .catch(e => e)
       .should
       .eventually
-      .to.deep.equal([false, false])
+      .eventually.to.be.an('error')
       .notify(d)
   })
   it('instances with same config should load state', d => {

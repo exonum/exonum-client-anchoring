@@ -83,9 +83,10 @@ function Anchoring (params) {
   }
 
   this.blockStatus = async inHeight => {
-    if (!_(this).sync) return false
+    if (!_(this).sync) throw new Error('Anchoring is stopped')
     const height = Number(inHeight)
     if (isNaN(height)) throw new TypeError(`Height ${inHeight} is invalid number`)
+
     const { validatorKeys, frequency } = await _(this).provider.getConfigForBlock(height)
     const block = await _(this).provider.getBlock(height)
     if (block === null) return status.block(0)
@@ -108,8 +109,10 @@ function Anchoring (params) {
     return status.block(11, proof)
   }
 
-  this.txStatus = async (txHash) => {
-    if (!_(this).sync) return false
+  this.txStatus = async txHash => {
+    if (!_(this).sync) throw new Error('Anchoring is stopped')
+    if (!/[A-Za-z0-9]{64}/.test(txHash)) throw new TypeError('Transaction hash is invalid')
+
     const tx = await _(this).provider.getTx(txHash)
     if (tx.type === 'MemPool') return status.transaction(9, { tx })
     const rootHash = merkleRootHash(tx.proof_to_block_merkle_root)

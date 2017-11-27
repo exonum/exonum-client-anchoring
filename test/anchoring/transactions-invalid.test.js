@@ -15,6 +15,16 @@ describe('Check anchor transactions invalid', function () {
       .replyOnce(200, cfg1)
   })
 
+  it('when transaction hash is invalid', d => {
+    const anchoring = new exonumAnchoring.Anchoring(config)
+    const txs = [null, undefined, '06', '6b55ffe594c40c09cfcb6f0e797f22fd34c68992f6c0f6817c8bf5c36853c7a/']
+    Promise.all(txs.map(tx => anchoring.txStatus(tx)))
+      .catch(e => e)
+      .should
+      .eventually.to.be.an('error')
+      .notify(d)
+  })
+
   it('when transaction refers on block, which doesn\'t exist', d => {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
@@ -119,7 +129,7 @@ describe('Check anchor transactions invalid', function () {
       .notify(d)
   })
 
-  it('when merkle tree of transaction is wrong,', d => {
+  it('when merkle tree of transaction is wrong', d => {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
     const block = 1153277
