@@ -50,7 +50,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: false,
-    browserNoActivityTimeout: 120000,
+    browserNoActivityTimeout: 180000,
     concurrency: 2,
 
     sauceLabs: {
