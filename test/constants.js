@@ -25,7 +25,7 @@ const config = {
 
 beforeEach(() => {
   mock.reset()
-  store.clear()
+  return store.clear()
 })
 
 exports.module = {
