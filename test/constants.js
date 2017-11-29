@@ -23,10 +23,7 @@ const config = {
   provider: { nodes: [provider] }
 }
 
-beforeEach(() => {
-  mock.reset()
-  return store.clear()
-})
+beforeEach(() => Promise.all([store.clear(), mock.reset()]))
 
 exports.module = {
   mock,

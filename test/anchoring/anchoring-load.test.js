@@ -9,6 +9,7 @@ const { cfg1, getTxs } = require('../mocks/')
 const provider = 'http://localhost:8001'
 const configCopy = Object.assign({}, config, { provider: { nodes: [provider] } })
 const configTimeoutCopy = Object.assign({}, configCopy, { syncTimeout: 1 })
+const configCacheCopy = Object.assign({}, configCopy, { cache: true })
 
 describe('check loading intermediate data', function () {
   beforeEach(() => {
@@ -30,14 +31,14 @@ describe('check loading intermediate data', function () {
       .notify(d)
   })
   it('instances with same config should load state', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configCopy)
+    const anchoring = new exonumAnchoring.Anchoring(configCacheCopy)
 
     mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(200, 1))
 
     anchoring.on('stopped', stopped => {
-      const anchoring2 = new exonumAnchoring.Anchoring(Object.assign({}, configCopy, { cache: true }))
+      const anchoring2 = new exonumAnchoring.Anchoring(configCacheCopy)
 
       anchoring2.on('initialized', initialized => {
         expect(stopped.anchorHeight).to.equal(initialized.anchorHeight)
