@@ -21,14 +21,15 @@ function Anchoring (params) {
     _(this).driver = driver
     _(this).sync = true
     _(this).syncTimeout = syncTimeout
+    _(this).cache = cache
 
-    initSync(cache)
+    initSync()
   }
 
-  const initSync = async cache => {
+  const initSync = async () => {
     const initParams = { anchorTxs: [], anchorHeight: 0, address: 0, page: 1, anchorsLoaded: false }
     let data = {}
-    if (cache) {
+    if (_(this).cache) {
       let err
       [data, err] = await to(store.load(_(this).hash))
       if (err) _(this).dispatch(ERROR, err)
@@ -140,7 +141,8 @@ function Anchoring (params) {
 
   const getAllAnchorTransaction = async () => {
     const configsCommited = await _(this).provider.getConfigsCommited()
-    const addresses = configsCommited.map(item => item.address)
+    const addresses = Object.keys(configsCommited
+      .reduce((sum, item) => Object.assign({}, sum, { [item.address]: item.actualFrom }), {}))
     _(this).anchorsLoaded = false
     for (_(this).address; _(this).address < addresses.length; _(this).address++) {
       const address = addresses[_(this).address]
@@ -152,14 +154,14 @@ function Anchoring (params) {
           _(this).anchorHeight = Number(filteredTxs[filteredTxs.length - 1][3])
           _(this).dispatch(LOADED, this.getStatus())
         }
-        await safeState()
+        if (_(this).cache) await safeState()
         if (!hasMore || !_(this).sync) break
       }
       if (!_(this).sync) break
     }
     if (_(this).sync) {
-      _(this).dispatch(SYNCHRONIZED, this.getStatus())
       _(this).anchorsLoaded = new Date()
+      _(this).dispatch(SYNCHRONIZED, this.getStatus())
     } else {
       _(this).dispatch(STOPPED, this.getStatus())
     }
