@@ -20,11 +20,11 @@
 
 
 ## Core concepts
-When you initialize new instance of exonum-anchoring, it's automatically start loading anchoring transactions from bitcoin network using driver. When every part of transactions is loaded - `loaded` event is dispatched. When all anchoring transactions is loaded - `synchronized` event is dispatched. After all anchor transactions are loaded, exonum-anchoring checks availability of new transactions at regular intervals.
+When you initialize a new instance of exonum-anchoring, it automatically starts loading anchoring transactions from bitcoin network using driver. When every part of transactions is loaded - `loaded` event is dispatched. When all anchoring transactions are loaded - `synchronized` event is dispatched. After all anchor transactions are loaded, exonum-anchoring checks availability of new transactions at regular intervals.
 #### Driver
-Driver it's a class, which is provide bitcoin transactions([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/)) from HTTP API, to Exonum Anchoring Client. By default implemented two driver for [Blocktrail API](https://blocktrail.com) and [Insight API](https://github.com/bitpay/insight-api). If you need custom Driver for another API, you can implement it, by extending Driver class.
+Driver it's a class, which provides bitcoin transactions([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/)) from HTTP API, to Exonum Anchoring Client. By default implemented two drivers for [Blocktrail API](https://blocktrail.com) and [Insight API](https://github.com/bitpay/insight-api). If you need custom Driver for another API, you can implement it, by extending Driver class.
 #### Provider
-Provider it's a class, which is provide Exonum transactions and blocks from HTTP API, to Exonum Anchoring Client.
+Provider it's a class, which provides Exonum transactions and blocks from HTTP API to Exonum Anchoring Client.
 
 ## Check validity of blocks and transactions
 ```js
@@ -56,24 +56,24 @@ anchoring.txStatus(transactionHash)
 ```
 ## Config
 #### driver - `instance of Driver class`, required
-Instance of Driver class, which is provide anchor transactions from bitcoin blockchain to exonum-anchoring.
+An instance of Driver class, which provides anchor transactions from bitcoin blockchain to exonum-anchoring.
 #### provider - `object`, optional
 Includes set of parameters, about your Exonum blockchain.
 * **nodes - `Array of IPs`, optional**  
-List of IP addresses of your Exonum nodes with port. All nodes in this list should be with HTTP module and CORS enabled.  
+List of IP addresses of your Exonum nodes with a port. All nodes in this list should be with HTTP module and CORS enabled.  
 *Default:* `['http://localhost:8000']`
 * **version - `string`, optional**  
-Version of Exonum api  
+Version of Exonum api.  
 *Default:* `v1`
 #### cache - `boolean`, optional
-If cache is disabled, exonum-anchoring will ignoring the cache, and will begin loading from first transaction.  
+If cache is disabled, exonum-anchoring will ignoring the cache and will begin loading from the first transaction.  
 *Default:* `false`
 #### syncTimeout - `number`, optional
-When all anchor transactions are loaded, exonum-anchoring checks availability of new transactions at regular intervals. syncTimeout set this intervals in seconds.  
+When all anchor transactions are loaded, exonum-anchoring checks availability of new transactions at regular intervals. syncTimeout set these intervals in seconds.  
 *Default:* `120` seconds
 
 ## Events
-During work, exonum-anchoring will dispatching events, to subscribe/unsubscribe on event you can use standard api:
+During work, exonum-anchoring will dispatching events, to subscribe/unsubscribe on event you can use standard API:
 ```js
 const eventHandler = event => {/* work here with event */}
 anchoring.on('loaded', eventHandler) // subscribe
@@ -83,7 +83,7 @@ anchoring.off('loaded', eventHandler) // unsubscribe
 Fires when loaded cache (if cache loading enabled), before anchor transactions synchronization started.
 
 #### `loaded`
-Fires when request of anchor transactions list loaded.
+Fires when a request for anchor transactions list loaded.
 
 #### `stopped`
 Fires when synchronization stopped, after `syncStop` method called. After this event, exonum-anchoring instance deactivated.
@@ -92,7 +92,47 @@ Fires when synchronization stopped, after `syncStop` method called. After this e
 Fires when synchronized all anchor transactions from Provider. Also will fires after every check of new transactions, according to `syncTimeout` config parameter.
 
 #### `error`
-Fires when unexpected error occurred. Such errors include cache boot errors, cache saving errors, network connection errors.
+Fires when an unexpected error occurred. Such errors include cache boot errors, cache saving errors, network connection errors.
+
+## Custom drivers
+To create custom driver you should extend standard Driver class. Your custom driver should have two methods and one parameter inside:
+#### `getAddressTransactions`
+A method which takes an object parameter with three fields `{address, limit, page}`, and returns promise request. Where `address` is a bitcoin address for which need to get a transactions list, `limit` and `page` - pagination data. *Note, transactions must be sorted the oldest to the newest.*
+
+#### `getOpReturnFromTx`
+A method which takes a single transaction and returns `OP_RETURN` from this transaction.
+
+#### `txLoadLimit`
+A number which represents the limit of transactions by a single request.
+
+Here you can see an example of Driver to [blockchain.info API](https://blockchain.info/api/blockchain_api):
+```js
+import { drivers } from 'exonum-client-anchoring'
+import http from 'http' // your HTTP client library
+const Driver = drivers.Driver
+
+class BlockchainInfo extends Driver {
+  constructor (params) {
+    super()
+    this.txLoadLimit = 50
+  }
+
+  getOpReturnFromTx (tx) {
+    return tx.out[1].script // return OP_RETURN
+  }
+
+  getAddressTransactions ({ address, limit, page }) {
+    return http.get({
+      url: `https://blockchain.info/rawaddr/${address}`,
+      params: Object.assign({}, this.params, {
+        limit,
+        offset: page * this.txLoadLimit,
+        sort: 1
+      })
+    }).then(res => res.txs) // return array of transactions from response
+  }
+}
+```
 
 ### Big Thanks
 
