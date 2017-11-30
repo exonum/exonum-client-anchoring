@@ -14,11 +14,14 @@ const DIST = path.resolve('dist')
 const browser = !!process.env.BROWSER
 const output = browser ? 'index.js' : 'node.js'
 
+const external = ['axios', 'exonum-client', 'bitcoinjs-lib']
+const nodeExternals = ['fs', 'buffer']
+
 export default {
   sourceMap: false,
   name: 'exonum-anchoring',
 
-  external: ['axios', 'exonum-client', 'bitcoinjs-lib'],
+  external: external.concat(!browser && nodeExternals),
 
   input: path.join(SRC, 'index.js'),
   output: {
