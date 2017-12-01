@@ -1,6 +1,6 @@
 {
   "name": "exonum-client-anchoring",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Exonum anchoring check library",
   "main": "./dist/index.js",
   "scripts": {
@@ -13,16 +13,26 @@
     "prepare": "npm run compile",
     "coveralls": "NODE_ENV=test nyc mocha \"test/**/*.test.js\" --exit  && cat ./coverage/lcov.info | coveralls"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qvantor/exonum-anchoring.git"
+    "url": "git+https://github.com/exonum/exonum-client-anchoring.git"
   },
   "author": "Exonum Team <exonum@bitfury.com>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/qvantor/exonum-anchoring/issues"
+    "url": "https://github.com/exonum/exonum-client-anchoring/issues"
   },
-  "homepage": "https://github.com/qvantor/exonum-anchoring#readme",
+  "homepage": "https://github.com/exonum/exonum-client-anchoring#readme",
+  "keywords": [
+    "exonum",
+    "blockchain",
+    "transactions",
+    "anchoring"
+  ],
   "devDependencies": {
     "axios-mock-adapter": "^1.10.0",
     "babel-core": "^6.26.0",
