@@ -6,7 +6,7 @@
 
 [sause-image]: https://saucelabs.com/browser-matrix/Exonum.svg
 [sause-url]: https://saucelabs.com/u/Exonum
-[travis-image]: https://img.shields.io/travis/qvantor/exonum-anchoring/master.svg
+[travis-image]: https://travis-ci.org/exonum/exonum-client-anchoring.svg?branch=master
 [travis-url]: https://travis-ci.org/exonum/exonum-client-anchoring
 [coveralls-image]: https://coveralls.io/repos/github/exonum/exonum-client-anchoring/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/exonum/exonum-client-anchoring?branch=master
