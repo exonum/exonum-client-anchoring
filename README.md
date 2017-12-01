@@ -7,9 +7,9 @@
 [sause-image]: https://saucelabs.com/browser-matrix/Exonum.svg
 [sause-url]: https://saucelabs.com/u/Exonum
 [travis-image]: https://img.shields.io/travis/qvantor/exonum-anchoring/master.svg
-[travis-url]: https://travis-ci.org/qvantor/exonum-anchoring
-[coveralls-image]: https://coveralls.io/repos/github/qvantor/exonum-anchoring/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/qvantor/exonum-anchoring?branch=master
+[travis-url]: https://travis-ci.org/exonum/exonum-client-anchoring
+[coveralls-image]: https://coveralls.io/repos/github/exonum/exonum-client-anchoring/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/exonum/exonum-client-anchoring?branch=master
 [codestyle-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg
 [codestyle-url]: http://standardjs.com
 [license-image]: https://img.shields.io/github/license/exonum/exonum-client.svg?style=flat-square
