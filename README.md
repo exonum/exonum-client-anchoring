@@ -139,3 +139,7 @@ class BlockchainInfo extends Driver {
 Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homepage]
 
 [homepage]: https://saucelabs.com
+
+### License
+
+Exonum Anchoring Check library is licensed under the Apache License (Version 2.0). See [LICENSE](LICENSE) for details.
