@@ -20,11 +20,24 @@
 
 
 ## Core concepts
-When you initialize a new instance of exonum-anchoring, it automatically starts loading anchoring transactions from bitcoin network using driver. When every part of transactions is loaded - `loaded` event is dispatched. When all anchoring transactions are loaded - `synchronized` event is dispatched. After all anchor transactions are loaded, exonum-anchoring checks availability of new transactions at regular intervals.
+When you initialize a new instance of exonum-anchoring, it automatically starts
+loading anchoring transactions from the bitcoin network using driver. Loading of
+every part of the transactions causes a `loaded` event to be dispatched. When
+all anchoring transactions are loaded a `synchronized` event is dispatched.
+After all anchoring transactions are loaded, exonum-anchoring checks
+availability of new transactions at regular intervals.
+
 #### Driver
-Driver it's a class, which provides bitcoin transactions([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/)) from HTTP API, to Exonum Anchoring Client. By default implemented two drivers for [Blocktrail API](https://blocktrail.com) and [Insight API](https://github.com/bitpay/insight-api). If you need custom Driver for another API, you can implement it, by extending Driver class.
+Driver is a class, which provides bitcoin transactions
+([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
+from HTTP API to the Exonum Anchoring Client. By default  two drivers are
+implemented - for [Blocktrail API](https://blocktrail.com) and
+[Insight API](https://github.com/bitpay/insight-api). If you need a custom
+driver for another API, you can implement it by extending the Driver class.
+
 #### Provider
-Provider it's a class, which provides Exonum transactions and blocks from HTTP API to Exonum Anchoring Client.
+Provider is a class, which provides Exonum transactions and blocks from HTTP
+API to the Exonum Anchoring Client.
 
 ## Check validity of blocks and transactions
 ```js
@@ -32,7 +45,7 @@ import exonum from 'exonum-client-anchoring'
 
 const config = {
   driver: exonum.drivers.Blocktrail({
-    token: 'TOKEN' // Yours Blocktrail API Token here. Required
+    token: 'TOKEN' // Your Blocktrail API Token here. Required
     network: 'BTC' // BTC for mainnet, tBTC for testnet. Optional
     version: 'v1' // Version of Blocktrail API. Optional
   }),
@@ -47,7 +60,7 @@ const blockHeight = 10000
 anchoring.blockStatus(blockHeight)
   .then(data => /* work here with data object */) // data will contain status of block and proof
   .catch(err => /* error handler */) //err will be returned in case of network or unexpected errors
-  
+
 const transactionHash = 'b0459b712bca9a95bcb09b922f90f8a8bd28270475b169b7bcc281270ab38338'
 anchoring.txStatus(transactionHash)
   .then(data => /* work here with data object */) // data will contain status of transaction and proof
@@ -56,56 +69,74 @@ anchoring.txStatus(transactionHash)
 ```
 ## Config
 #### driver - `instance of Driver class`, required
-An instance of Driver class, which provides anchor transactions from bitcoin blockchain to exonum-anchoring.
+An instance of the Driver class, which provides anchoring transactions from the
+bitcoin blockchain to exonum-anchoring.
 #### provider - `object`, optional
-Includes set of parameters, about your Exonum blockchain.
+Includes a set of parameters about your Exonum blockchain.
 * **nodes - `Array of IPs`, optional**  
-List of IP addresses of your Exonum nodes with a port. All nodes in this list should be with HTTP module and CORS enabled.  
+List of IP addresses of your Exonum nodes with a port. All nodes in this list
+should be with HTTP module and CORS enabled.  
 *Default:* `['http://localhost:8000']`
 * **version - `string`, optional**  
-Version of Exonum api.  
+Exonum API version.  
 *Default:* `v1`
 #### cache - `boolean`, optional
-If cache is disabled, exonum-anchoring will ignoring the cache and will begin loading from the first transaction.  
+If cache is disabled, exonum-anchoring will ignore the cache and begin loading
+from the first transaction.  
 *Default:* `false`
 #### syncTimeout - `number`, optional
-When all anchor transactions are loaded, exonum-anchoring checks availability of new transactions at regular intervals. syncTimeout set these intervals in seconds.  
+When all anchoring transactions are loaded, exonum-anchoring checks availability
+of new transactions at regular intervals. `syncTimeout` sets these intervals in
+seconds.  
 *Default:* `120` seconds
 
 ## Events
-During work, exonum-anchoring will dispatching events, to subscribe/unsubscribe on event you can use standard API:
+During work exonum-anchoring will be dispatching events; to subscribe to/
+unsubscribe from the event you can use standard API:
 ```js
 const eventHandler = event => {/* work here with event */}
 anchoring.on('loaded', eventHandler) // subscribe
 anchoring.off('loaded', eventHandler) // unsubscribe
 ```
 #### `initialized`
-Fires when loaded cache (if cache loading enabled), before anchor transactions synchronization started.
+Fires after cache is loaded (if cache loading is enabled), when anchoring
+transactions synchronization starts.
 
 #### `loaded`
-Fires when a request for anchor transactions list loaded.
+Fires when a list of anchoring transactions according to the request is loaded.
 
 #### `stopped`
-Fires when synchronization stopped, after `syncStop` method called. After this event, exonum-anchoring instance deactivated.
+Fires when synchronization stops after `syncStop` method is called. On
+dispatching this event exonum-anchoring instance deactivates.
 
 #### `synchronized`
-Fires when synchronized all anchor transactions from Provider. Also will fires after every check of new transactions, according to `syncTimeout` config parameter.
+Fires when all anchoring transactions from Provider are synchronized. Also will
+fire after every check for new transactions according to `syncTimeout` config
+parameter.
 
 #### `error`
-Fires when an unexpected error occurred. Such errors include cache boot errors, cache saving errors, network connection errors.
+Fires when an unexpected error occurs. Such errors include cache boot errors,
+cache saving errors, network connection errors.
 
 ## Custom drivers
-To create custom driver you should extend standard Driver class. Your custom driver should have two methods and one parameter inside:
+To create a custom driver you should extend standard Driver class. Your custom
+driver should have two methods and one parameter inside:
 #### `getAddressTransactions`
-A method which takes an object parameter with three fields `{address, limit, page}`, and returns promise request. Where `address` is a bitcoin address for which need to get a transactions list, `limit` and `page` - pagination data. *Note, transactions must be sorted the oldest to the newest.*
+A method which takes an object parameter with three fields
+`{address, limit, page}` and returns a promise, where `address` is a
+bitcoin address from which a transactions list needs to be obtained, `limit`
+and `page` are pagination data. *Note, transactions are sorted from the oldest
+to the newest.*
 
 #### `getOpReturnFromTx`
-A method which takes a single transaction and returns `OP_RETURN` from this transaction.
+A method which takes a single transaction and returns `OP_RETURN` from this
+transaction.
 
 #### `txLoadLimit`
-A number which represents the limit of transactions by a single request.
+A maximum number of transactions that can be obtained by a single request
+according to provider limitations.
 
-Here you can see an example of Driver to [blockchain.info API](https://blockchain.info/api/blockchain_api):
+Here you can see an example of a driver to [blockchain.info API](https://blockchain.info/api/blockchain_api):
 ```js
 import { drivers } from 'exonum-client-anchoring'
 import http from 'http' // your HTTP client library
@@ -136,10 +167,12 @@ class BlockchainInfo extends Driver {
 
 ### Big Thanks
 
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs][homepage]
+Cross-browser Testing Platform and Open Source <3 Provided by
+[Sauce Labs][homepage]
 
 [homepage]: https://saucelabs.com
 
 ### License
 
-Exonum Anchoring Check library is licensed under the Apache License (Version 2.0). See [LICENSE](LICENSE) for details.
+Exonum Anchoring Check library is licensed under the Apache License
+(Version 2.0). See [LICENSE](LICENSE) for details.
