@@ -165,6 +165,23 @@ class BlockchainInfo extends Driver {
 }
 ```
 
+### Instance methods
+#### `blockStatus(blockHeight)`
+Returns the promise with block status, message and proof(if exist), 
+could return an error in case of unexpected troubles.
+#### `txStatus(txHash)`
+Returns the promise with transaction status, message and proof(if exist), 
+could return an error in case of unexpected troubles.
+#### `getStatus()`
+Returns current status of anchoring check.
+#### `syncStop()`
+Stops anchoring synchronization. Dispatches `stopped` event, after stop.
+#### `on(eventName, callback)`
+Adds a new event listener by event name.
+#### `off(eventName, callback)`
+Remove event listener by event name and callback. Returns a boolean status of an operation.
+
+
 ### Big Thanks
 
 Cross-browser Testing Platform and Open Source <3 Provided by
