@@ -25,7 +25,7 @@ describe('Check anchor blocks valid', function () {
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    anchoring.blockStatus(block)
+    anchoring.blockStatus(block, true)
       .then(data => data.status)
       .should
       .eventually
@@ -47,7 +47,7 @@ describe('Check anchor blocks valid', function () {
       params: { latest: 2001, count: 999 }
     }).replyOnce(200, getBlocks(2001, 999))
 
-    anchoring.blockStatus(block)
+    anchoring.blockStatus(block, true)
       .then(data => data.status)
       .should
       .eventually
@@ -69,7 +69,7 @@ describe('Check anchor blocks valid', function () {
       params: { latest: 4877, count: 1000 }
     }).replyOnce(200, getBlocks(4877, 1000))
 
-    anchoring.blockStatus(block)
+    anchoring.blockStatus(block, true)
       .then(data => data.status)
       .should
       .eventually

@@ -23,8 +23,7 @@ export default class Provider {
     this.path = {
       anchoring: `${this.nodes[this.activeNode]}/api/services/btc_anchoring/${this.version}`,
       explorer: `${this.nodes[this.activeNode]}/api/explorer/${this.version}`,
-      configuration: `${this.nodes[this.activeNode]}/api/services/configuration/${this.version}`,
-      system: `${this.nodes[this.activeNode]}/api/system/${this.version}`
+      configuration: `${this.nodes[this.activeNode]}/api/services/configuration/${this.version}`
     }
   }
 
@@ -97,8 +96,12 @@ export default class Provider {
     return this.getFromNode({ key: 'explorer', url: `/blocks/${height}` })
   }
 
+  async getBlockHeaderProof (height) {
+    return this.getFromNode({ key: 'anchoring', url: `/block_header_proof/${height}` })
+  }
+
   getTx (txHash) {
-    return this.getFromNode({ key: 'system', url: `/transactions/${txHash}` })
+    return this.getFromNode({ key: 'explorer', url: `/transactions/${txHash}` })
   }
 
   checkBlocksChain (blocks, nextCheck) {

@@ -14,7 +14,7 @@ describe('Check anchor blocks invalid', function () {
   })
   it('when height is not a number', d => {
     const anchoring = new exonumAnchoring.Anchoring(config)
-    anchoring.blockStatus('text')
+    anchoring.blockStatus('text', true)
       .should.be
       .rejectedWith(TypeError, 'Height text is invalid number')
       .notify(d)
@@ -27,7 +27,7 @@ describe('Check anchor blocks invalid', function () {
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, null)
 
-    anchoring.blockStatus(block)
+    anchoring.blockStatus(block, true)
       .then(data => data.status)
       .should
       .eventually
@@ -46,7 +46,7 @@ describe('Check anchor blocks invalid', function () {
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlockInvalid(block))
 
-    anchoring.blockStatus(block)
+    anchoring.blockStatus(block, true)
       .then(data => data.status)
       .should
       .eventually
@@ -69,7 +69,7 @@ describe('Check anchor blocks invalid', function () {
       params: { latest: 2001, count: 312 }
     }).replyOnce(200, [...getBlocks(1989, 299), ...getBlocks(2001, 12)])
 
-    anchoring.blockStatus(block)
+    anchoring.blockStatus(block, true)
       .then(data => data.status)
       .should
       .eventually
@@ -100,7 +100,7 @@ describe('Check anchor blocks invalid', function () {
       tx_hash: '0000000000000000000000000000000000000000000000000000000000000000'
     }])
 
-    anchoring.blockStatus(block)
+    anchoring.blockStatus(block, true)
       .then(data => data.status)
       .should
       .eventually
@@ -119,7 +119,7 @@ describe('Check anchor blocks invalid', function () {
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(1688))
 
-    anchoring.blockStatus(block)
+    anchoring.blockStatus(block, true)
       .then(data => data.status)
       .should
       .eventually

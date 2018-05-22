@@ -79,9 +79,10 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "big-integer": "^1.6.30",
     "bitcoinjs-lib": "^3.3.0",
-    "exonum-client": "^0.2.3",
     "core.js": "^0.4.2",
+    "exonum-client": "^0.8.2",
     "idb-keyval": "^2.3.0"
   },
   "browser": {

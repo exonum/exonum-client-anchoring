@@ -31,10 +31,10 @@ describe('Check anchor transactions valid', function () {
       params: { latest: 2001, count: 312 }
     }).replyOnce(200, getBlocks(2001, 312))
 
-    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
-    anchoring.txStatus(tx)
+    anchoring.txStatus(tx, true)
       .then(d => d.status)
       .should
       .eventually
@@ -58,10 +58,10 @@ describe('Check anchor transactions valid', function () {
       params: { latest: 5003, count: 1000 }
     }).replyOnce(200, getBlocks(5003, 1000))
 
-    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
-    anchoring.txStatus(tx)
+    anchoring.txStatus(tx, true)
       .then(d => d.status)
       .should
       .eventually
@@ -73,10 +73,10 @@ describe('Check anchor transactions valid', function () {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const tx = 'c59b07e4bf9c79f487957ee3353dca578495a3284e5145214905c9d6874d393f'
 
-    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
-    anchoring.txStatus(tx)
+    anchoring.txStatus(tx, true)
       .then(d => d.status)
       .should
       .eventually
