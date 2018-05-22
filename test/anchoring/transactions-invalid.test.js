@@ -30,13 +30,13 @@ describe('Check anchor transactions invalid', function () {
     const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
     const block = 1153277
 
-    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, null)
 
-    anchoring.txStatus(tx)
+    anchoring.txStatus(tx, true)
       .then(d => d.status)
       .should
       .eventually
@@ -49,13 +49,13 @@ describe('Check anchor transactions invalid', function () {
     const tx = '6b55ffe594c40c09cfcb6f0e797f22fd34c68992f6c0f6817c8bf5c36853c7ee'
     const block = 1153277
 
-    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlockInvalid(block))
 
-    anchoring.txStatus(tx)
+    anchoring.txStatus(tx, true)
       .then(d => d.status)
       .should
       .eventually
@@ -79,14 +79,14 @@ describe('Check anchor transactions invalid', function () {
       params: { latest: 1154278, count: 1000 }
     }).replyOnce(200, [...getBlocks(1154177, 900), ...getBlocks(1154278, 100)])
 
-    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
     mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
       params: { api_key: token, limit: 200, page: 2, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(199, 2))
 
-    anchoring.txStatus(tx)
+    anchoring.txStatus(tx, true)
       .then(d => d.status)
       .should
       .eventually
@@ -118,10 +118,10 @@ describe('Check anchor transactions invalid', function () {
       tx_hash: '0000000000000000000000000000000000000000000000000000000000000000'
     }])
 
-    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
-    anchoring.txStatus(tx)
+    anchoring.txStatus(tx, true)
       .then(d => d.status)
       .should
       .eventually
@@ -145,14 +145,14 @@ describe('Check anchor transactions invalid', function () {
       params: { latest: 1154278, count: 1000 }
     }).replyOnce(200, getBlocks(1154278, 1000))
 
-    mock.onGet(`${provider}/api/system/v1/transactions/${tx}`)
+    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTxInvalid(tx))
 
     mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
       params: { api_key: token, limit: 200, page: 2, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(199, 2))
 
-    anchoring.txStatus(tx)
+    anchoring.txStatus(tx, true)
       .then(d => d.status)
       .should
       .eventually

@@ -23,7 +23,6 @@
           "validator": 0
         },
         "message_id": 4,
-        "network_id": 0,
         "protocol_version": 0,
         "service_id": 0,
         "signature": "fd0dae684071685a3c236740a4d7542f93177f450f08042a4ec2a6194e25352c13b1762d1a25444c3c7c4895b19252373868a23cb2c19c6c7f5ac144ef920c0f"
@@ -55,7 +54,6 @@
           "validator": 0
         },
         "message_id": 4,
-        "network_id": 0,
         "protocol_version": 0,
         "service_id": 0,
         "signature": "4174f354975348e526fbc8e10dd1c52ba060e1cdac8f741a5de84e8c09649debc55993a971fa615768cc692c6b8e51ab6a24fc8dc6f7a9548d27426ca3ca5505"

@@ -23,7 +23,6 @@
           "validator": 0
         },
         "message_id": 4,
-        "network_id": 0,
         "protocol_version": 0,
         "service_id": 0,
         "signature": "1e212aa224c82522dc73d2b781b910ec6591bb7ac1418217bbb13ecca5134281469b961638ca1853e3dee8488ee3debd153bf5ed62c4729fce80138a8543600f"
@@ -55,7 +54,6 @@
           "validator": 0
         },
         "message_id": 4,
-        "network_id": 0,
         "protocol_version": 0,
         "service_id": 0,
         "signature": "bcbe74d45cf1f89549368a7f8a02a197019e6374a03506f7514e52f42c65bca6bbbb6e383bb1deefe92d6b515c98985e06f1c3904049e61000862f2be8649302"
@@ -89,7 +87,6 @@
           "validator": 0
         },
         "message_id": 4,
-        "network_id": 0,
         "protocol_version": 0,
         "service_id": 0,
         "signature": "79f5fb19ead3472b2790b8aea50eaa8eaab84a56b7ced72f694497981d43cc2a1a3337dd3dbfc53e40f5ddef19441e3b654cfed73dacab645a3ab305ac6bd006"
@@ -121,7 +118,6 @@
           "validator": 0
         },
         "message_id": 4,
-        "network_id": 0,
         "protocol_version": 0,
         "service_id": 0,
         "signature": "785eb868d01b4d533c6bc929af3d86e36dba8ec469afef7e04187662078194abcadbab216a635a6ebc1339a820023662195207d2109e1f01cb632cb707a2e30c"
@@ -153,7 +149,6 @@
           "validator": 0
         },
         "message_id": 4,
-        "network_id": 0,
         "protocol_version": 0,
         "service_id": 0,
         "signature": "db508ed4a305b55ba966a8c44d24874cdab37df5fe8c17648aa7ff6c73b2a6738143b49e83a91fbf479cfb561667a5124e10ba4b035d9d442d04c6526bb4e707"
@@ -187,7 +182,6 @@
           "validator": 0
         },
         "message_id": 4,
-        "network_id": 0,
         "protocol_version": 0,
         "service_id": 0,
         "signature": "3174f354975348e526fbc8e10dd1c52ba060e1cdac8f741a5de84e8c09649debc55993a971fa615768cc692c6b8e51ab6a24fc8dc6f7a9548d27426ca3ca5505"
