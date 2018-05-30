@@ -3,6 +3,7 @@ import Events from './Events'
 import * as store from './store/'
 import { _, blockHash, to, status, merkleRootHash } from './common/'
 import { verifyBlock, MapProof, merkleProof, newType, stringToUint8Array, Uint16, Hash, hash } from 'exonum-client'
+import bigInt from 'big-integer'
 
 const INITIALIZED = 'initialized'
 const LOADED = 'loaded'
@@ -101,7 +102,8 @@ function Anchoring (params) {
     const blocksHash = tableProof.entries.get(tableKey)
     if (typeof blocksHash === 'undefined') return false
 
-    const elements = merkleProof(blocksHash, proof.height, proof.to_block_header, [height, height + 1])
+    const count = bigInt(proof.latest_authorized_block.block.height).valueOf()
+    const elements = merkleProof(blocksHash, count, proof.to_block_header, [height, height + 1])
     if (elements.length !== 1) return false
 
     return true
@@ -126,7 +128,7 @@ function Anchoring (params) {
       const latestBlockValid = verifyBlock(blockHeaderProof.latest_authorized_block, validatorKeys)
       if (!latestBlockValid) return status.block(13, { block })
 
-      if (!verifyBlockHeaderProof(height, blockHeaderProof, validatorKeys)) return status.block(13, { block })
+      if (!_(this).provider.verifyBlockHeaderProof(height, blockHeaderProof, validatorKeys)) return status.block(13, { block })
     }
 
     const anchorTx = await getAnchorTxAsync(height)
