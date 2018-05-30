@@ -85,7 +85,7 @@ function Anchoring (params) {
     setTimeout(() => syncAnchorTransaction(), _(this).syncTimeout * 1000)
   }
 
-  this.verifyBlockHeaderProof = (height, proof, validatorKeys) => {
+  this.verifyBlockHeaderProof = (height, proof) => {
     const tableProof = new MapProof(proof.to_table, Hash, Hash)
     if (tableProof.merkleRoot !== proof.latest_authorized_block.block.state_hash) return false
 
@@ -103,7 +103,7 @@ function Anchoring (params) {
     if (typeof blocksHash === 'undefined') return false
 
     const count = bigInt(proof.latest_authorized_block.block.height).valueOf()
-    const elements = merkleProof(blocksHash, count, proof.to_block_header, [height, height + 1])
+    const elements = merkleProof(blocksHash, count, proof.to_block_header, [height, height])
     if (elements.length !== 1) return false
 
     return true
@@ -128,7 +128,7 @@ function Anchoring (params) {
       const latestBlockValid = verifyBlock(blockHeaderProof.latest_authorized_block, validatorKeys)
       if (!latestBlockValid) return status.block(13, { block })
 
-      if (!_(this).provider.verifyBlockHeaderProof(height, blockHeaderProof, validatorKeys)) return status.block(13, { block })
+      if (!_(this).provider.verifyBlockHeaderProof(height, blockHeaderProof)) return status.block(13, { block })
     }
 
     const anchorTx = await getAnchorTxAsync(height)

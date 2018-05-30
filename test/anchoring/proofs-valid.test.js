@@ -15,19 +15,17 @@ describe('Check block header proof', function () {
 
   it('is not anchored', () => {
     const anchoring = new exonumAnchoring.Anchoring(config)
-    const height = 3
-    const proof = proofs[height].proof
-    const keys = proofs[height].keys
+    const height = 0
+    const proof = proofs[height]
 
-    expect(anchoring.verifyBlockHeaderProof(height, proof, keys)).to.equal(true)
+    expect(anchoring.verifyBlockHeaderProof(height, proof)).to.equal(true)
   })
 
   it('is anchored', () => {
     const anchoring = new exonumAnchoring.Anchoring(config)
-    const height = 12
-    const proof = proofs[height].proof
-    const keys = proofs[height].keys
+    const height = 10
+    const proof = proofs[height]
 
-    expect(anchoring.verifyBlockHeaderProof(height, proof, keys)).to.equal(true)
+    expect(anchoring.verifyBlockHeaderProof(height, proof)).to.equal(true)
   })
 })
