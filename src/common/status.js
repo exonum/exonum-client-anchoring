@@ -47,6 +47,22 @@ export const block = (key, proof) => {
         message: `Block ${proof.block.block.height} valid in blockchain, and anchoring correct`,
         proof
       }
+    case 12:
+      return {
+        status: key,
+        inChain: false,
+        anchored: false,
+        message: `Critical error in Exonum blockchain: can not load proof of block ${proof.block.block.height}`,
+        proof
+      }
+    case 13:
+      return {
+        status: key,
+        inChain: false,
+        anchored: false,
+        message: `Critical error in Exonum blockchain: error during checking proof of block ${proof.block.block.height}`,
+        proof
+      }
   }
 }
 

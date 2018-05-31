@@ -18,16 +18,15 @@ export const byteArrayToInt = byteArray => {
 }
 
 const Block = newType({
-  size: 112,
-  fields: {
-    schema_version: { type: Uint16, size: 2, from: 0, to: 2 },
-    proposer_id: { type: Uint16, size: 2, from: 2, to: 4 },
-    height: { type: Uint64, size: 8, from: 4, to: 12 },
-    tx_count: { type: Uint32, size: 4, from: 12, to: 16 },
-    prev_hash: { type: Hash, size: 32, from: 16, to: 48 },
-    tx_hash: { type: Hash, size: 32, from: 48, to: 80 },
-    state_hash: { type: Hash, size: 32, from: 80, to: 112 }
-  }
+  fields: [
+    { name: 'schema_version', type: Uint16 },
+    { name: 'proposer_id', type: Uint16 },
+    { name: 'height', type: Uint64 },
+    { name: 'tx_count', type: Uint32 },
+    { name: 'prev_hash', type: Hash },
+    { name: 'tx_hash', type: Hash },
+    { name: 'state_hash', type: Hash }
+  ]
 })
 
 export const blockHash = block => hash(Block.serialize(block))

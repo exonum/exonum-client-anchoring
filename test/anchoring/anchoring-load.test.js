@@ -23,7 +23,7 @@ describe('check loading intermediate data', function () {
     const tx = 'e518ed4254d2080a7ad9602e05b96cb456395878ba2fcd6cc609792c159b3ec0'
 
     anchoring.syncStop()
-    Promise.all([anchoring.txStatus(tx), anchoring.blockStatus(block)])
+    Promise.all([anchoring.txStatus(tx, true), anchoring.blockStatus(block, true)])
       .catch(e => e)
       .should
       .eventually

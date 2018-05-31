@@ -2,13 +2,15 @@ import Provider from './Provider'
 import Events from './Events'
 import * as store from './store/'
 import { _, blockHash, to, status, merkleRootHash } from './common/'
-import { verifyBlock, stringToUint8Array, hash } from 'exonum-client'
+import { verifyBlock, MapProof, merkleProof, newType, stringToUint8Array, Uint16, Hash, hash } from 'exonum-client'
+import bigInt from 'big-integer'
 
 const INITIALIZED = 'initialized'
 const LOADED = 'loaded'
 const STOPPED = 'stopped'
 const SYNCHRONIZED = 'synchronized'
 const ERROR = 'error'
+const ANCHORING_SERVICE_ID = 3
 
 function Anchoring (params) {
   const constructor = () => {
@@ -83,7 +85,31 @@ function Anchoring (params) {
     setTimeout(() => syncAnchorTransaction(), _(this).syncTimeout * 1000)
   }
 
-  this.blockStatus = async inHeight => {
+  this.verifyBlockHeaderProof = (height, proof) => {
+    const tableProof = new MapProof(proof.to_table, Hash, Hash)
+    if (tableProof.merkleRoot !== proof.latest_authorized_block.block.state_hash) return false
+
+    const TableKey = newType({
+      fields: [
+        { name: 'service_id', type: Uint16 },
+        { name: 'table_index', type: Uint16 }
+      ]
+    })
+    const tableKey = TableKey.hash({
+      service_id: ANCHORING_SERVICE_ID,
+      table_index: 0
+    })
+    const blocksHash = tableProof.entries.get(tableKey)
+    if (typeof blocksHash === 'undefined') return false
+
+    const count = bigInt(proof.latest_authorized_block.block.height).valueOf()
+    const elements = merkleProof(blocksHash, count, proof.to_block_header, [height, height])
+    if (elements.length !== 1) return false
+
+    return true
+  }
+
+  this.blockStatus = async (inHeight, ignoreBlockProof) => {
     if (!_(this).sync) throw new Error('Anchoring is stopped')
     const height = Number(inHeight)
     if (isNaN(height)) throw new TypeError(`Height ${inHeight} is invalid number`)
@@ -92,8 +118,18 @@ function Anchoring (params) {
     const block = await _(this).provider.getBlock(height)
     if (block === null) return status.block(0)
 
-    const blockValid = verifyBlock(block, validatorKeys, block.precommits[0].network_id)
+    const blockValid = verifyBlock(block, validatorKeys)
     if (!blockValid) return status.block(1, { block })
+
+    if (!ignoreBlockProof) {
+      const blockHeaderProof = await _(this).provider.getBlockHeaderProof(height)
+      if (blockHeaderProof === null) return status.block(12, { block })
+
+      const latestBlockValid = verifyBlock(blockHeaderProof.latest_authorized_block, validatorKeys)
+      if (!latestBlockValid) return status.block(13, { block })
+
+      if (!_(this).provider.verifyBlockHeaderProof(height, blockHeaderProof)) return status.block(13, { block })
+    }
 
     const anchorTx = await getAnchorTxAsync(height)
     if (anchorTx && anchorTx[3] === height) {
@@ -110,7 +146,7 @@ function Anchoring (params) {
     return status.block(11, proof)
   }
 
-  this.txStatus = async txHash => {
+  this.txStatus = async (txHash, ignoreBlockProof) => {
     if (!_(this).sync) throw new Error('Anchoring is stopped')
     if (!/[A-Za-z0-9]{64}/.test(txHash)) throw new TypeError('Transaction hash is invalid')
 
@@ -118,7 +154,7 @@ function Anchoring (params) {
     if (tx.type === 'MemPool') return status.transaction(9, { tx })
     const rootHash = merkleRootHash(tx.proof_to_block_merkle_root)
 
-    const block = await this.blockStatus(tx.location.block_height)
+    const block = await this.blockStatus(tx.location.block_height, ignoreBlockProof)
     const proof = { block, tx }
 
     if (block.status <= 3) return status.transaction(block.status, proof)
