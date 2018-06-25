@@ -14,12 +14,11 @@ chai.use(chaiAsPromised)
 chai.should()
 
 const token = 'token'
-const network = 'BTC'
 const provider = 'http://node.com:8000'
 const blockTrailAPI = 'https://chain.api.btc.com'
 const config = {
   cache: false,
-  driver: new exonumAnchoring.drivers.ChainBtc({ token, network }),
+  driver: new exonumAnchoring.drivers.ChainBtc({ token }),
   provider: { nodes: [provider] }
 }
 
@@ -32,7 +31,6 @@ exports.module = {
   exonumAnchoring,
 
   token,
-  network,
   provider,
   blockTrailAPI,
   config

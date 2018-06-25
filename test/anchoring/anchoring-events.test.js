@@ -3,7 +3,7 @@
 
 const {
   mock, expect, sinon, exonumAnchoring,
-  network, config, token, blockTrailAPI, provider
+  config, token, blockTrailAPI, provider
 } = require('../constants').module
 const { getTxs, cfg1 } = require('../mocks/')
 const _ = require('../../src/common/private').default
@@ -25,15 +25,15 @@ describe('Events', function () {
 
     for (let i = 1; i <= count; i++) {
       mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-        params: { api_key: token, pagesize: 200, page: i }
-      }).replyOnce(200, getTxs(i === count ? 199 : 200, i))
+        params: { api_key: token, pagesize: 50, page: i }
+      }).replyOnce(200, getTxs(i === count ? 49 : 50, i))
     }
 
     anchoring.on('synchronized', e => {
       expect(loaded.callCount).to.equal(count)
       expect(synchronized.callCount).to.equal(1)
-      expect(loaded.args.map(item => item[0].anchorHeight)).to.deep.equal([198000, 396000])
-      expect(synchronized.args[0][0].anchorHeight).to.equal(396000)
+      expect(loaded.args.map(item => item[0].anchorHeight)).to.deep.equal([48000, 96000])
+      expect(synchronized.args[0][0].anchorHeight).to.equal(96000)
       d()
     })
   })

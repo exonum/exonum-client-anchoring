@@ -19,8 +19,8 @@ describe('Check anchor blocks valid', function () {
     const block = 1000
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
-    }).replyOnce(200, getTxs(100, 1))
+      params: { api_key: token, pagesize: 50, page: 1 }
+    }).replyOnce(200, getTxs(25, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
@@ -37,8 +37,8 @@ describe('Check anchor blocks valid', function () {
     const block = 1001
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
-    }).replyOnce(200, getTxs(100, 1))
+      params: { api_key: token, pagesize: 50, page: 1 }
+    }).replyOnce(200, getTxs(255, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
@@ -59,7 +59,7 @@ describe('Check anchor blocks valid', function () {
     const block = 3876
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
+      params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(4, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)

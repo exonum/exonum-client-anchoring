@@ -25,21 +25,21 @@ describe('Check correctness of work with config', function () {
     anchoring.on('synchronized', e => {
       expect(loaded.callCount).to.equal(3)
       expect(synchronized.callCount).to.equal(1)
-      expect(loaded.args.map(item => item[0].anchorHeight)).to.deep.equal([98000, 198000, 298000])
-      expect(synchronized.args[0][0].anchorHeight).to.equal(298000)
+      expect(loaded.args.map(item => item[0].anchorHeight)).to.deep.equal([23000, 48000, 73000])
+      expect(synchronized.args[0][0].anchorHeight).to.equal(73000)
       d()
     })
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, page: 1, pagesize: 200 }
-    }).replyOnce(200, getTxs(100, 1))
+      params: { api_key: token, page: 1, pagesize: 50 }
+    }).replyOnce(200, getTxs(25, 1))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ/tx`, {
-      params: { api_key: token, page: 1, pagesize: 200 }
-    }).replyOnce(200, getTxs(100, 2))
+      params: { api_key: token, page: 1, pagesize: 50 }
+    }).replyOnce(200, getTxs(25, 2))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf/tx`, {
-      params: { api_key: token, page: 1, pagesize: 200 }
-    }).replyOnce(200, getTxs(100, 3))
+      params: { api_key: token, page: 1, pagesize: 50 }
+    }).replyOnce(200, getTxs(25, 3))
   })
 })
