@@ -17,9 +17,9 @@ export const getBlocks = (latest, count) => {
   return allBlocks.filter(item => Number(item.height) >= from && Number(item.height) < latest)
 }
 
-export const getTxs = (limit, page, skip = 0) => ({
+export const getTxs = (pagesize, page, skip = 0) => ({
   data: {
-    list: btTxs.slice(skip + limit * (page - 1), skip + limit * page)
+    list: btTxs.slice(skip + pagesize * (page - 1), skip + pagesize * page)
   }
 })
 

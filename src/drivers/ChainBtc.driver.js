@@ -19,13 +19,12 @@ export default class ChainBtc extends Driver {
     return tx.outputs[1] && tx.outputs[1].script_hex
   }
 
-  getAddressTransactions ({ address, limit, page }) {
+  getAddressTransactions ({ address, pagesize, page }) {
     return http.get({
       url: `${this.api}/address/${address}/tx`,
       params: Object.assign({}, this.params, {
-        limit,
         page,
-        sort_dir: 'asc'
+        pagesize
       })
     }).then((data) => data.data.list)
   }

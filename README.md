@@ -66,7 +66,7 @@ availability of new transactions at regular intervals.
 Driver is a class, which provides bitcoin transactions
 ([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
 from HTTP API to the Exonum Anchoring Client. By default  two drivers are
-implemented - for [ChainBtc API](https://chainbtc.com) and
+implemented - for [ChainBtc API](https://chain.api.btc.com/) and
 [Insight API](https://github.com/bitpay/insight-api). If you need a custom
 driver for another API, you can implement it by extending the Driver class.
 
@@ -178,8 +178,8 @@ Your custom driver should have two methods and one parameter inside:
 #### `getAddressTransactions`
 
 A method which takes an object parameter with three fields
-`{address, limit, page}` and returns a promise, where `address` is a
-bitcoin address from which a transactions list needs to be obtained, `limit`
+`{address, pagesize, page}` and returns a promise, where `address` is a
+bitcoin address from which a transactions list needs to be obtained, `pagesize`
 and `page` are pagination data. *Note, transactions are sorted from the oldest
 to the newest.*
 
@@ -193,7 +193,7 @@ transaction.
 A maximum number of transactions that can be obtained by a single request
 according to provider limitations.
 
-Here you can see an example of a driver to [blockchain.info API](https://blockchain.info/api/blockchain_api):
+Here you can see an example of a driver to [Btc.com API](https://btc.com/api-doc#API):
 
 ```js
 import { drivers } from 'exonum-client-anchoring'
@@ -212,11 +212,10 @@ class BlockchainInfo extends Driver {
 
   getAddressTransactions ({ address, limit, page }) {
     return http.get({
-      url: `https://blockchain.info/rawaddr/${address}`,
+      url: `https://chain.api.btc.com/v3/address/${address}`,
       params: Object.assign({}, this.params, {
-        limit,
-        offset: page * this.txLoadLimit,
-        sort: 1
+        page,
+        pagesize
       })
     }).then(res => res.txs) // return array of transactions from response
   }

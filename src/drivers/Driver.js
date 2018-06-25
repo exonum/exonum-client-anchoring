@@ -7,7 +7,7 @@ export default class Driver {
   }
 
   async _getAddressTransactions (address, page) {
-    const [txs, err] = await to(this.getAddressTransactions({ address, limit: this.txLoadLimit, page }))
+    const [txs, err] = await to(this.getAddressTransactions({ address, pagesize: this.txLoadLimit, page }))
     if (err) throw err
     let parsedTx = []
     for (let tx of txs) {

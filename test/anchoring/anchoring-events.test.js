@@ -25,7 +25,7 @@ describe('Events', function () {
 
     for (let i = 1; i <= count; i++) {
       mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-        params: { api_key: token, limit: 200, page: i, sort_dir: 'asc' }
+        params: { api_key: token, pagesize: 200, page: i }
       }).replyOnce(200, getTxs(i === count ? 199 : 200, i))
     }
 
