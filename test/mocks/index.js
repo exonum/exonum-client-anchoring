@@ -1,4 +1,4 @@
-const btTxs = require('./blocktrail/transactions.json')
+const btTxs = require('./chainbtc/transactions.json')
 
 export const cfg1 = require('./exonum/configs-1.json')
 export const cfg2 = require('./exonum/configs-2.json')

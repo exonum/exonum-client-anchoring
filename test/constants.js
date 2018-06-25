@@ -19,7 +19,7 @@ const provider = 'http://node.com:8000'
 const blockTrailAPI = 'https://chain.api.btc.com'
 const config = {
   cache: false,
-  driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),
+  driver: new exonumAnchoring.drivers.ChainBtc({ token, network }),
   provider: { nodes: [provider] }
 }
 

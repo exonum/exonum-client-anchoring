@@ -66,7 +66,7 @@ availability of new transactions at regular intervals.
 Driver is a class, which provides bitcoin transactions
 ([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
 from HTTP API to the Exonum Anchoring Client. By default  two drivers are
-implemented - for [Blocktrail API](https://blocktrail.com) and
+implemented - for [ChainBtc API](https://chainbtc.com) and
 [Insight API](https://github.com/bitpay/insight-api). If you need a custom
 driver for another API, you can implement it by extending the Driver class.
 
@@ -81,10 +81,10 @@ API to the Exonum Anchoring Client.
 import exonum from 'exonum-client-anchoring'
 
 const config = {
-  driver: exonum.drivers.Blocktrail({
-    token: 'TOKEN' // Your Blocktrail API Token here. Required
+  driver: exonum.drivers.ChainBtc({
+    token: 'TOKEN' // Your ChainBtc API Token here. Required
     network: 'BTC' // BTC for mainnet, tBTC for testnet. Optional
-    version: 'v1' // Version of Blocktrail API. Optional
+    version: 'v1' // Version of ChainBtc API. Optional
   }),
   provider: {
     nodes: ['http://192.168.1.1:8000', 'http://192.168.1.2:8000'] // list of IP addresses of Exonum nodes
