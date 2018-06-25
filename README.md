@@ -83,8 +83,7 @@ import exonum from 'exonum-client-anchoring'
 const config = {
   driver: exonum.drivers.BtcDotCom({
     token: 'TOKEN' // Your Btc.com API Token here. Required
-    network: 'BTC' // BTC for mainnet, tBTC for testnet. Optional
-    version: 'v1' // Version of Btc.com API. Optional
+    version: 'v3' // Version of Btc.com API. Optional
   }),
   provider: {
     nodes: ['http://192.168.1.1:8000', 'http://192.168.1.2:8000'] // list of IP addresses of Exonum nodes
