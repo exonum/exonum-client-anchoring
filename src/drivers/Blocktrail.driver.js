@@ -5,14 +5,13 @@ export default class Blocktrail extends Driver {
   constructor (params) {
     super()
 
-    const { network, version, token } = Object.assign({
-      network: 'BTC',
-      version: 'v1',
+    const { version, token } = Object.assign({
+      version: 'v3',
       token: null
     }, params)
 
     this.params = { api_key: token }
-    this.api = `https://api.blocktrail.com/${version}/${network}`
+    this.api = `https://chain.api.btc.com/${version}`
     this.txLoadLimit = 200
   }
 
@@ -22,12 +21,12 @@ export default class Blocktrail extends Driver {
 
   getAddressTransactions ({ address, limit, page }) {
     return http.get({
-      url: `${this.api}/address/${address}/transactions`,
+      url: `${this.api}/address/${address}/tx`,
       params: Object.assign({}, this.params, {
         limit,
         page,
         sort_dir: 'asc'
       })
-    }).then((data) => data.data)
+    }).then((data) => data.data.list)
   }
 }

@@ -68,7 +68,7 @@ describe('Check anchor transactions invalid', function () {
     const tx = 'e518ed4254d2080a7ad9602e05b96cb456395878ba2fcd6cc609792c159b3ec0'
     const block = 1153277
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(200, 1))
 
@@ -82,7 +82,7 @@ describe('Check anchor transactions invalid', function () {
     mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 2, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(199, 2))
 
@@ -99,7 +99,7 @@ describe('Check anchor transactions invalid', function () {
     const tx = 'b4db78bf1bd164e0417fab25055b1f0e3f7fdad44325a5bf1999d86ab44af2c1'
     const block = 1688
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
@@ -134,7 +134,7 @@ describe('Check anchor transactions invalid', function () {
     const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
     const block = 1153277
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(200, 1))
 
@@ -148,7 +148,7 @@ describe('Check anchor transactions invalid', function () {
     mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTxInvalid(tx))
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 2, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(199, 2))
 

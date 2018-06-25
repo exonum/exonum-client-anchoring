@@ -18,7 +18,9 @@ export const getBlocks = (latest, count) => {
 }
 
 export const getTxs = (limit, page, skip = 0) => ({
-  data: btTxs.slice(skip + limit * (page - 1), skip + limit * page)
+  data: {
+    list: btTxs.slice(skip + limit * (page - 1), skip + limit * page)
+  }
 })
 
 export const getFullBlock = height => fullBlocks[height]

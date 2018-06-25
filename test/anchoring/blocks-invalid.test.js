@@ -39,7 +39,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 999
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
@@ -58,7 +58,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 1688
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
@@ -81,7 +81,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 1688
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
@@ -112,7 +112,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(config)
     const block = 1000
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
