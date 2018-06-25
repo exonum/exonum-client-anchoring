@@ -69,7 +69,7 @@ describe('Check anchor transactions invalid', function () {
     const block = 1153277
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
+      params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(200, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
@@ -83,7 +83,7 @@ describe('Check anchor transactions invalid', function () {
       .replyOnce(200, getExonumTx(tx))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 2 }
+      params: { api_key: token, pagesize: 50, page: 2 }
     }).replyOnce(200, getTxs(199, 2))
 
     anchoring.txStatus(tx, true)
@@ -100,7 +100,7 @@ describe('Check anchor transactions invalid', function () {
     const block = 1688
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
+      params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(100, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
@@ -135,7 +135,7 @@ describe('Check anchor transactions invalid', function () {
     const block = 1153277
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
+      params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(200, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
@@ -149,7 +149,7 @@ describe('Check anchor transactions invalid', function () {
       .replyOnce(200, getExonumTxInvalid(tx))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 2 }
+      params: { api_key: token, pagesize: 50, page: 2 }
     }).replyOnce(200, getTxs(199, 2))
 
     anchoring.txStatus(tx, true)

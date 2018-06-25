@@ -12,7 +12,7 @@ export default class ChainBtc extends Driver {
 
     this.params = { api_key: token }
     this.api = `https://chain.api.btc.com/${version}`
-    this.txLoadLimit = 200
+    this.txLoadLimit = 50
   }
 
   getOpReturnFromTx (tx) {

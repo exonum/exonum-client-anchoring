@@ -34,8 +34,8 @@ describe('check loading intermediate data', function () {
     const anchoring = new exonumAnchoring.Anchoring(configCacheCopy)
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
-    }).replyOnce(200, getTxs(200, 1))
+      params: { api_key: token, pagesize: 50, page: 1 }
+    }).replyOnce(200, getTxs(50, 1))
 
     anchoring.on('stopped', stopped => {
       const anchoring2 = new exonumAnchoring.Anchoring(configCacheCopy)
@@ -54,23 +54,23 @@ describe('check loading intermediate data', function () {
     const synchronized = sinon.spy()
     anchoring.on('synchronized', synchronized)
     anchoring.on('synchronized', e => {
-      if (e.anchorHeight === 198000) {
+      if (e.anchorHeight === 28000) {
         expect(synchronized.callCount).to.equal(2)
-        expect(synchronized.args.map(item => item[0].anchorHeight)).to.deep.equal([168000, 198000])
+        expect(synchronized.args.map(item => item[0].anchorHeight)).to.deep.equal([28000, 28000])
         d()
       }
     })
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
-    }).replyOnce(200, getTxs(170, 1))
+      params: { api_key: token, pagesize: 50, page: 1 }
+    }).replyOnce(200, getTxs(30, 1))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 1 }
-    }).replyOnce(200, getTxs(200, 1))
+      params: { api_key: token, pagesize: 50, page: 1 }
+    }).replyOnce(200, getTxs(50, 1))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, pagesize: 200, page: 2 }
-    }).replyOnce(200, getTxs(50, 2))
+      params: { api_key: token, pagesize: 50, page: 2 }
+    }).replyOnce(200, getTxs(25, 2))
   })
 })
