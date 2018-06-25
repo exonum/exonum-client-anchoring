@@ -34,7 +34,7 @@ describe('check loading intermediate data', function () {
     const anchoring = new exonumAnchoring.Anchoring(configCacheCopy)
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+      params: { api_key: token, pagesize: 200, page: 1 }
     }).replyOnce(200, getTxs(200, 1))
 
     anchoring.on('stopped', stopped => {
@@ -62,15 +62,15 @@ describe('check loading intermediate data', function () {
     })
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+      params: { api_key: token, pagesize: 200, page: 1 }
     }).replyOnce(200, getTxs(170, 1))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+      params: { api_key: token, pagesize: 200, page: 1 }
     }).replyOnce(200, getTxs(200, 1))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, limit: 200, page: 2, sort_dir: 'asc' }
+      params: { api_key: token, pagesize: 200, page: 2 }
     }).replyOnce(200, getTxs(50, 2))
   })
 })

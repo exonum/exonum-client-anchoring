@@ -31,15 +31,15 @@ describe('Check correctness of work with config', function () {
     })
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
-      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+      params: { api_key: token, page: 1, pagesize: 200 }
     }).replyOnce(200, getTxs(100, 1))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ/tx`, {
-      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+      params: { api_key: token, page: 1, pagesize: 200 }
     }).replyOnce(200, getTxs(100, 2))
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf/tx`, {
-      params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
+      params: { api_key: token, page: 1, pagesize: 200 }
     }).replyOnce(200, getTxs(100, 3))
   })
 })
