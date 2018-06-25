@@ -16,7 +16,7 @@ chai.should()
 const token = 'token'
 const network = 'BTC'
 const provider = 'http://node.com:8000'
-const blockTrailAPI = 'https://api.blocktrail.com'
+const blockTrailAPI = 'https://chain.api.btc.com'
 const config = {
   cache: false,
   driver: new exonumAnchoring.drivers.Blocktrail({ token, network }),

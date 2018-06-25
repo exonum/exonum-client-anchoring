@@ -30,15 +30,15 @@ describe('Check correctness of work with config', function () {
       d()
     })
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 1))
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 2))
 
-    mock.onGet(`${blockTrailAPI}/v1/${network}/address/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf/transactions`, {
+    mock.onGet(`${blockTrailAPI}/v3/address/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf/tx`, {
       params: { api_key: token, limit: 200, page: 1, sort_dir: 'asc' }
     }).replyOnce(200, getTxs(100, 3))
   })
