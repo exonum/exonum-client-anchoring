@@ -1,5 +1,5 @@
-import ChainBtc from './ChainBtc.driver'
+import BtcDotCom from './BtcDotCom.driver'
 // import Insight from './insight'
 import Driver from './Driver'
 //
-export default { ChainBtc, Driver }
+export default { BtcDotCom, Driver }
