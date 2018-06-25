@@ -1,7 +1,7 @@
 import Driver from './Driver'
 import { http } from '../common/'
 
-export default class ChainBtc extends Driver {
+export default class BtcDotCom extends Driver {
   constructor (params) {
     super()
 
