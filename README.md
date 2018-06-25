@@ -66,7 +66,7 @@ availability of new transactions at regular intervals.
 Driver is a class, which provides bitcoin transactions
 ([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
 from HTTP API to the Exonum Anchoring Client. By default  two drivers are
-implemented - for [BtcDotCom API](https://chain.api.btc.com/) and
+implemented - for [Btc.com API](https://chain.api.btc.com/) and
 [Insight API](https://github.com/bitpay/insight-api). If you need a custom
 driver for another API, you can implement it by extending the Driver class.
 
@@ -82,9 +82,9 @@ import exonum from 'exonum-client-anchoring'
 
 const config = {
   driver: exonum.drivers.BtcDotCom({
-    token: 'TOKEN' // Your BtcDotCom API Token here. Required
+    token: 'TOKEN' // Your Btc.com API Token here. Required
     network: 'BTC' // BTC for mainnet, tBTC for testnet. Optional
-    version: 'v1' // Version of BtcDotCom API. Optional
+    version: 'v1' // Version of Btc.com API. Optional
   }),
   provider: {
     nodes: ['http://192.168.1.1:8000', 'http://192.168.1.2:8000'] // list of IP addresses of Exonum nodes
