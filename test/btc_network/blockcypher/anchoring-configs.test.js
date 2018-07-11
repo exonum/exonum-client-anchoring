@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring, expect, sinon,
-  configBlockCypherDotCom, token, blockCypherAPI, provider
+  configBlockCypher, token, blockCypherAPI, provider
 } = require('../../constants').module
 
 const { cfg2, getCrypherTxs } = require('../../mocks/')
@@ -15,7 +15,7 @@ describe('Check correctness of work with config', function () {
   })
 
   it('get anchor transactions from different addresses', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBlockCypherDotCom)
+    const anchoring = new exonumAnchoring.Anchoring(configBlockCypher)
     const loaded = sinon.spy()
     const synchronized = sinon.spy()
 

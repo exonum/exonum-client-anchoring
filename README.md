@@ -67,8 +67,7 @@ Driver is a class, which provides bitcoin transactions
 ([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
 from HTTP API to the Exonum Anchoring Client. By default  two drivers are
 implemented - for [Btc.com API](https://chain.api.btc.com/) or you can use 
-[Blockcypher.com API](https://www.blockcypher.com/) and
-[Insight API](https://github.com/bitpay/insight-api). If you need a custom
+[Blockcypher.com API](https://www.blockcypher.com/). If you need a custom
 driver for another API, you can implement it by extending the Driver class.
 
 #### Provider
@@ -225,7 +224,7 @@ class BlockchainInfo extends Driver {
 Here you can see an example of a driver to [Blockcypher.com API](https://www.blockcypher.com/dev/bitcoin/#):
 
 ```js
-export default class BlockCypherDotCom extends Driver {
+export default class BlockCypher extends Driver {
   constructor (params) {
     super()
 

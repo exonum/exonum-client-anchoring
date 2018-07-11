@@ -22,9 +22,9 @@ const configBtcDotCom = {
   driver: new exonumAnchoring.drivers.BtcDotCom({ token }),
   provider: { nodes: [provider] }
 }
-const configBlockCypherDotCom = {
+const configBlockCypher = {
   cache: false,
-  driver: new exonumAnchoring.drivers.BlockCypherDotCom({ token }),
+  driver: new exonumAnchoring.drivers.BlockCypher({ token }),
   provider: { nodes: [provider] }
 }
 
@@ -40,6 +40,6 @@ exports.module = {
   provider,
   blockTrailAPI,
   blockCypherAPI,
-  configBlockCypherDotCom,
+  configBlockCypher,
   configBtcDotCom
 }

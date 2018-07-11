@@ -1,7 +1,7 @@
 import Driver from './Driver'
 import { http } from '../common/'
 
-export default class BlockCypherDotCom extends Driver {
+export default class BlockCypher extends Driver {
   constructor (params) {
     super()
 
