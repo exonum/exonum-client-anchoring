@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring,
-  network, config, token, blockTrailAPI, provider
+  network, configBtcDotCom, token, blockTrailAPI, provider
 } = require('../constants').module
 const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('../mocks/')
 
@@ -13,7 +13,7 @@ describe('Check anchor blocks invalid', function () {
       .replyOnce(200, cfg1)
   })
   it('when height is not a number', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     anchoring.blockStatus('text', true)
       .should.be
       .rejectedWith(TypeError, 'Height text is invalid number')
@@ -21,7 +21,7 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when block is not existed', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 999
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
@@ -36,7 +36,7 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when block is invalid', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 999
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
@@ -55,7 +55,7 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when block in broken chain', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1688
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
@@ -78,7 +78,7 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when hash of the anchor block is not equal to the hash in the anchor transaction', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1688
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
@@ -109,7 +109,7 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when anchor block hash not equal to block hash', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1000
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {

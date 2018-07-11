@@ -1,5 +1,5 @@
 import BtcDotCom from './BtcDotCom.driver'
-// import Insight from './insight'
+import BlockCypher from './BlockCypher.driver'
 import Driver from './Driver'
-//
-export default { BtcDotCom, Driver }
+
+export default { BlockCypher, BtcDotCom, Driver }
