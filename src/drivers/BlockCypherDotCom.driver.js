@@ -5,13 +5,14 @@ export default class BlockCypherDotCom extends Driver {
   constructor (params) {
     super()
 
-    const { version, token } = Object.assign({
+    const { version, token, network } = Object.assign({
       version: 'v1',
+      network: 'main',
       token: null
     }, params)
 
     this.params = { api_key: token }
-    this.api = `https://api.blockcypher.com/${version}`
+    this.api = `https://api.blockcypher.com/${version}/btc/${network}`
     this.txLoadLimit = 50
   }
 
@@ -20,9 +21,8 @@ export default class BlockCypherDotCom extends Driver {
   }
 
   getAddressTransactions ({ address, pagesize, page }) {
-    console.log('aaa', `${this.api}/btc/main/addrs/${address}`)
     return http.get({
-      url: `${this.api}/btc/main/addrs/${address}`,
+      url: `${this.api}/addrs/${address}`,
       params: Object.assign({}, this.params, {
         page,
         pagesize
