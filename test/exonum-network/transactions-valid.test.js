@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring, blockTrailAPI,
-  network, config, token, provider
+  configBtcDotCom, token, provider
 } = require('../constants').module
 
 const { cfg1, getFullBlock, getBlocks, getTxs, getExonumTx } = require('../mocks/')
@@ -16,7 +16,7 @@ describe('Check anchor transactions valid', function () {
   })
 
   it('when transaction, in correct block and anchored', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = 'b4db78bf1bd164e0417fab25055b1f0e3f7fdad44325a5bf1999d86ab44af2c1'
     const block = 1688
 
@@ -43,7 +43,7 @@ describe('Check anchor transactions valid', function () {
   })
 
   it('when transaction, in correct block, but not anchored', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = 'e68a605aa5ce04b7e8c73b4ea46b5f4e2393d82bd50495d3f808315be4619c89'
     const block = 4002
 
@@ -70,7 +70,7 @@ describe('Check anchor transactions valid', function () {
   })
 
   it('when transaction not commited yet', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = 'c59b07e4bf9c79f487957ee3353dca578495a3284e5145214905c9d6874d393f'
 
     mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)

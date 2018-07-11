@@ -16,9 +16,15 @@ chai.should()
 const token = 'token'
 const provider = 'http://node.com:8000'
 const blockTrailAPI = 'https://chain.api.btc.com'
-const config = {
+const blockCypherAPI = 'https://api.blockcypher.com/'
+const configBtcDotCom = {
   cache: false,
   driver: new exonumAnchoring.drivers.BtcDotCom({ token }),
+  provider: { nodes: [provider] }
+}
+const configBlockCypherDotCom = {
+  cache: false,
+  driver: new exonumAnchoring.drivers.BlockCypherDotCom({ token }),
   provider: { nodes: [provider] }
 }
 
@@ -33,5 +39,7 @@ exports.module = {
   token,
   provider,
   blockTrailAPI,
-  config
+  blockCypherAPI,
+  configBlockCypherDotCom,
+  configBtcDotCom
 }

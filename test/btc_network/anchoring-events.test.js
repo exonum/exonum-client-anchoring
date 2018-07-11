@@ -3,7 +3,7 @@
 
 const {
   mock, expect, sinon, exonumAnchoring,
-  config, token, blockTrailAPI, provider
+  configBtcDotCom, token, blockTrailAPI, provider
 } = require('../constants').module
 const { getTxs, cfg1 } = require('../mocks/')
 const _ = require('../../src/common/private').default
@@ -15,7 +15,7 @@ describe('Events', function () {
   })
 
   it('loaded and synchronized events', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const loaded = sinon.spy()
     const synchronized = sinon.spy()
     const count = 2
@@ -39,7 +39,7 @@ describe('Events', function () {
   })
 
   it('adding and removing', () => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const loaded = e => e
 
     anchoring.on('loaded', loaded)

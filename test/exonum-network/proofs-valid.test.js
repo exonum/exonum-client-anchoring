@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring, expect,
-  config, provider
+  configBtcDotCom, provider
 } = require('../constants').module
 
 const { cfg1 } = require('../mocks/')
@@ -17,7 +17,7 @@ describe('Check block header proof', function () {
   })
 
   it('is not anchored', () => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const height = 0
     const proof = proofs[height]
 
@@ -25,7 +25,7 @@ describe('Check block header proof', function () {
   })
 
   it('is anchored', () => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const height = 10
     const proof = proofs[height]
 

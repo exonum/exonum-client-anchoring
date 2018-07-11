@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring, expect, sinon,
-  network, config, token, blockTrailAPI, provider
+  network, configBtcDotCom, token, blockTrailAPI, provider
 } = require('../constants').module
 
 const { cfg2, getTxs } = require('../mocks/')
@@ -15,7 +15,7 @@ describe('Check correctness of work with config', function () {
   })
 
   it('get anchor transactions from different addresses', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const loaded = sinon.spy()
     const synchronized = sinon.spy()
 
