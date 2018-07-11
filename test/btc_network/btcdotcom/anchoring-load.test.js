@@ -3,9 +3,9 @@
 const {
   mock, exonumAnchoring, expect, sinon,
   configBtcDotCom, token, blockTrailAPI
-} = require('../constants').module
+} = require('../../constants').module
 
-const { cfg1, getTxs } = require('../mocks/')
+const { cfg1, getTxs } = require('../../mocks/')
 const provider = 'http://localhost:8001'
 const configCopy = Object.assign({}, configBtcDotCom, { provider: { nodes: [provider] } })
 const configTimeoutCopy = Object.assign({}, configCopy, { syncTimeout: 1 })

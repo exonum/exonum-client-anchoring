@@ -20,6 +20,7 @@ export default class BlockCypherDotCom extends Driver {
   }
 
   getAddressTransactions ({ address, pagesize, page }) {
+    console.log('aaa', `${this.api}/btc/main/addrs/${address}`)
     return http.get({
       url: `${this.api}/btc/main/addrs/${address}`,
       params: Object.assign({}, this.params, {
@@ -27,8 +28,7 @@ export default class BlockCypherDotCom extends Driver {
         pagesize
       })
     }).then((data) => {
-      console.log(data)
-      return data
+      return data.txrefs
     })
   }
 }

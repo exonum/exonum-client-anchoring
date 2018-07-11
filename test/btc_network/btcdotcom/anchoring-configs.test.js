@@ -4,9 +4,9 @@
 const {
   mock, exonumAnchoring, expect, sinon,
   network, configBtcDotCom, token, blockTrailAPI, provider
-} = require('../constants').module
+} = require('../../constants').module
 
-const { cfg2, getTxs } = require('../mocks/')
+const { cfg2, getTxs } = require('../../mocks/')
 
 describe('Check correctness of work with config', function () {
   beforeEach(() => {

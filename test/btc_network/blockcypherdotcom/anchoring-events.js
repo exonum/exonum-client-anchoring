@@ -3,10 +3,10 @@
 
 const {
   mock, expect, sinon, exonumAnchoring,
-  configBtcDotCom, token, blockTrailAPI, provider
-} = require('../constants').module
-const { getTxs, cfg1 } = require('../mocks/')
-const _ = require('../../src/common/private').default
+  configBlockCypherDotCom, token, blockCypherAPI, provider
+} = require('../../constants').module
+const { getCrypherTxs, cfg1 } = require('../../mocks/')
+const _ = require('../../../src/common/private').default
 
 describe('Events', function () {
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('Events', function () {
   })
 
   it('loaded and synchronized events', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
+    const anchoring = new exonumAnchoring.Anchoring(configBlockCypherDotCom)
     const loaded = sinon.spy()
     const synchronized = sinon.spy()
     const count = 2
@@ -24,9 +24,9 @@ describe('Events', function () {
     anchoring.on('synchronized', synchronized)
 
     for (let i = 1; i <= count; i++) {
-      mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+      mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6`, {
         params: { api_key: token, pagesize: 50, page: i }
-      }).replyOnce(200, getTxs(i === count ? 49 : 50, i))
+      }).replyOnce(200, getCrypherTxs(i === count ? 49 : 50, i))
     }
 
     anchoring.on('synchronized', e => {
@@ -39,7 +39,7 @@ describe('Events', function () {
   })
 
   it('adding and removing', () => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
+    const anchoring = new exonumAnchoring.Anchoring(configBlockCypherDotCom)
     const loaded = e => e
 
     anchoring.on('loaded', loaded)
