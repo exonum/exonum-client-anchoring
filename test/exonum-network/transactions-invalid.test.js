@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring, blockTrailAPI,
-  network, config, token, provider
+  configBtcDotCom, token, provider
 } = require('../constants').module
 
 const { cfg1, getFullBlock, getFullBlockInvalid, getBlocks, getTxs, getExonumTx, getExonumTxInvalid } = require('../mocks/')
@@ -16,7 +16,7 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction hash is invalid', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const txs = [null, undefined, '06', '6b55ffe594c40c09cfcb6f0e797f22fd34c68992f6c0f6817c8bf5c36853c7a/']
     Promise.all(txs.map(tx => anchoring.txStatus(tx)))
       .catch(e => e)
@@ -26,7 +26,7 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction refers on block, which doesn\'t exist', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
     const block = 1153277
 
@@ -45,7 +45,7 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction refers on block, which is invalid', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = '6b55ffe594c40c09cfcb6f0e797f22fd34c68992f6c0f6817c8bf5c36853c7ee'
     const block = 1153277
 
@@ -64,7 +64,7 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction refers on block, which is in broken chain of blocks', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = 'e518ed4254d2080a7ad9602e05b96cb456395878ba2fcd6cc609792c159b3ec0'
     const block = 1153277
 
@@ -95,7 +95,7 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction refers on block, which is wrong anchored', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = 'b4db78bf1bd164e0417fab25055b1f0e3f7fdad44325a5bf1999d86ab44af2c1'
     const block = 1688
 
@@ -130,7 +130,7 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when merkle tree of transaction is wrong', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
     const block = 1153277
 
