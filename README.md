@@ -66,8 +66,8 @@ availability of new transactions at regular intervals.
 Driver is a class, which provides bitcoin transactions
 ([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
 from HTTP API to the Exonum Anchoring Client. By default  two drivers are
-implemented - for [Btc.com API](https://chain.api.btc.com/) and
-[Insight API](https://github.com/bitpay/insight-api). If you need a custom
+implemented - for [Btc.com API](https://chain.api.btc.com/) or you can use 
+[Blockcypher.com API](https://www.blockcypher.com/). If you need a custom
 driver for another API, you can implement it by extending the Driver class.
 
 #### Provider
@@ -220,6 +220,44 @@ class BlockchainInfo extends Driver {
   }
 }
 ```
+
+Here you can see an example of a driver to [Blockcypher.com API](https://www.blockcypher.com/dev/bitcoin/#):
+
+```js
+export default class BlockCypher extends Driver {
+  constructor (params) {
+    super()
+
+    const { version, token, network } = Object.assign({
+      version: 'v1',
+      network: 'main', // also you can use test3
+      token: null
+    }, params)
+
+    this.params = { api_key: token }
+    this.api = `https://api.blockcypher.com/${version}/btc/${network}`
+    this.txLoadLimit = 50
+  }
+
+  getOpReturnFromTx (tx) {
+    return tx.outputs[1] && tx.outputs[1].script_hex
+  }
+
+  getAddressTransactions ({ address, pagesize, page }) {
+    return http.get({
+      url: `${this.api}/addrs/${address}`,
+      params: Object.assign({}, this.params, {
+        page,
+        pagesize
+      })
+    }).then((data) => {
+      return data.txrefs
+    })
+  }
+}
+
+```
+
 
 ## Instance methods
 

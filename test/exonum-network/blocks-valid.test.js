@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring,
-  network, config, token, blockTrailAPI, provider
+  configBtcDotCom, token, blockTrailAPI, provider
 } = require('../constants').module
 
 const { cfg1, getFullBlock, getBlocks, getTxs } = require('../mocks/')
@@ -15,7 +15,7 @@ describe('Check anchor blocks valid', function () {
   })
 
   it('when anchor block height provided', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1000
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
@@ -33,7 +33,7 @@ describe('Check anchor blocks valid', function () {
       .notify(d)
   })
   it('when provided block height that in chain, and anchored', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1001
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
@@ -55,7 +55,7 @@ describe('Check anchor blocks valid', function () {
       .notify(d)
   })
   it('when provided block that in chain, but not anchored', d => {
-    const anchoring = new exonumAnchoring.Anchoring(config)
+    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 3876
 
     mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
