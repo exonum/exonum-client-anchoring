@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring,
-  network, configBtcDotCom, token, blockTrailAPI, provider
+  configBtcDotCom, token, blockTrailAPI, provider
 } = require('../constants').module
 const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('../mocks/')
 
