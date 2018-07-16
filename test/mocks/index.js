@@ -25,7 +25,7 @@ export const getTxs = (pagesize, page, skip = 0) => ({
 })
 
 export const getCrypherTxs = (pagesize, page, skip = 0) => ({
-  txrefs: btTxs.slice(skip + pagesize * (page - 1), skip + pagesize * page)
+  txs: blockCypherTxs.slice(skip + pagesize * (page - 1), skip + pagesize * page)
 })
 
 export const getFullBlock = height => fullBlocks[height]
