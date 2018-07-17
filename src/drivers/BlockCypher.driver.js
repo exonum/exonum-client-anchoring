@@ -22,7 +22,7 @@ export default class BlockCypher extends Driver {
 
   getAddressTransactions ({ address, pagesize, page }) {
     return http.get({
-      url: `${this.api}/addrs/${address}`,
+      url: `${this.api}/addrs/${address}/full`,
       params: Object.assign({}, this.params, {
         page,
         pagesize
