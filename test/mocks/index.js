@@ -1,5 +1,5 @@
 const btTxs = require('./btcdotcom/transactions.json')
-const blockCypherTxs = require('./blockcrypherdotcom/transactions.json')
+const blockCypherTxs = require('./blockcypher/transactions.json')
 
 export const cfg1 = require('./exonum/configs-1.json')
 export const cfg2 = require('./exonum/configs-2.json')
