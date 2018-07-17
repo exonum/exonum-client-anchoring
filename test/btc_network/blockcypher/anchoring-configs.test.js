@@ -30,15 +30,15 @@ describe('Check correctness of work with config', function () {
       d()
     })
 
-    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6`, {
+    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/full`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getCrypherTxs(25, 1))
 
-    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ`, {
+    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ/full`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getCrypherTxs(25, 2))
 
-    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf`, {
+    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf/full`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getCrypherTxs(25, 3))
   })

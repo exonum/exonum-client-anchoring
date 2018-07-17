@@ -17,18 +17,18 @@ export default class BlockCypher extends Driver {
   }
 
   getOpReturnFromTx (tx) {
-    return tx.outputs[1] && tx.outputs[1].script_hex
+    return tx.outputs[1] && tx.outputs[1].data_hex
   }
 
   getAddressTransactions ({ address, pagesize, page }) {
     return http.get({
-      url: `${this.api}/addrs/${address}`,
+      url: `${this.api}/addrs/${address}/full`,
       params: Object.assign({}, this.params, {
         page,
         pagesize
       })
     }).then((data) => {
-      return data.txrefs
+      return data.txs
     })
   }
 }
