@@ -43,6 +43,7 @@
   - [syncStop](#syncstop)
   - [on](#oneventname-callback)
   - [off](#offeventname-callback)
+- [Driver example](#driver-example)
 - [Big Thanks](#big-thanks)
 - [License](#license)
 
@@ -55,25 +56,30 @@
 ## Core concepts
 
 When you initialize a new instance of exonum-anchoring, it automatically starts
-loading anchoring transactions from the bitcoin network using driver. Loading of
-every part of the transactions causes a `loaded` event to be dispatched. When
-all anchoring transactions are loaded a `synchronized` event is dispatched.
+loading anchoring transactions from the Bitcoin blockchain using driver.
+Loading of every part of the transactions causes a `loaded` event to be dispatched.
+When all anchoring transactions are loaded a `synchronized` event is dispatched.
 After all anchoring transactions are loaded, exonum-anchoring checks
 availability of new transactions at regular intervals.
 
 #### Driver
 
-Driver is a class, which provides bitcoin transactions
+Driver is a class, which provides
 ([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
-from HTTP API to the Exonum Anchoring Client. By default  two drivers are
-implemented - for [Btc.com API](https://chain.api.btc.com/) or you can use 
-[Blockcypher.com API](https://www.blockcypher.com/). If you need a custom
-driver for another API, you can implement it by extending the Driver class.
+from Bitcoin blockchain by using HTTP API.
+
+By default there are two drivers are implemented:
+
+- [BTC.com API](https://chain.api.btc.com/)
+- [BlockCypher API](https://www.blockcypher.com/dev/bitcoin/)
+
+If you need a driver for another HTTP API,
+you can implement it yourself by extending the Driver class. See [example](#driver-example) to get details.
 
 #### Provider
 
-Provider is a class, which provides Exonum transactions and blocks from HTTP
-API to the Exonum Anchoring Client.
+Provider is a class, which transactions and blocks from your Exonum
+blockchain by using HTTP API.
 
 ## Check validity of blocks and transactions
 
@@ -82,8 +88,8 @@ import exonum from 'exonum-client-anchoring'
 
 const config = {
   driver: exonum.drivers.BtcDotCom({
-    token: 'TOKEN' // Your Btc.com API Token here. Required
-    version: 'v3' // Version of Btc.com API. Optional
+    token: 'TOKEN' // Your BTC.com API Token here. Required
+    version: 'v3' // Version of BTC.com API. Optional
   }),
   provider: {
     nodes: ['http://192.168.1.1:8000', 'http://192.168.1.2:8000'] // list of IP addresses of Exonum nodes
@@ -192,72 +198,44 @@ transaction.
 A maximum number of transactions that can be obtained by a single request
 according to provider limitations.
 
-Here you can see an example of a driver to [Btc.com API](https://btc.com/api-doc#API):
+## Driver example
+
+Here you can see an example of a driver to [BTC.com API](https://btc.com/api-doc#API):
 
 ```js
 import { drivers } from 'exonum-client-anchoring'
 import http from 'http' // your HTTP client library
 const Driver = drivers.Driver
 
-class BlockchainInfo extends Driver {
-  constructor (params) {
-    super()
-    this.txLoadLimit = 50
-  }
-
-  getOpReturnFromTx (tx) {
-    return tx.out[1].script // return OP_RETURN
-  }
-
-  getAddressTransactions ({ address, limit, page }) {
-    return http.get({
-      url: `https://chain.api.btc.com/v3/address/${address}`,
-      params: Object.assign({}, this.params, {
-        page,
-        pagesize
-      })
-    }).then(res => res.txs) // return array of transactions from response
-  }
-}
-```
-
-Here you can see an example of a driver to [Blockcypher.com API](https://www.blockcypher.com/dev/bitcoin/#):
-
-```js
-export default class BlockCypher extends Driver {
+class BtcDotCom extends Driver {
   constructor (params) {
     super()
 
-    const { version, token, network } = Object.assign({
-      version: 'v1',
-      network: 'main', // also you can use test3
+    const { version, token } = Object.assign({
+      version: 'v3',
       token: null
     }, params)
 
     this.params = { api_key: token }
-    this.api = `https://api.blockcypher.com/${version}/btc/${network}`
+    this.api = `https://chain.api.btc.com/${version}`
     this.txLoadLimit = 50
   }
 
   getOpReturnFromTx (tx) {
-    return tx.outputs[1] && tx.outputs[1].script_hex
+    return tx.outputs[1] && tx.outputs[1].script_hex // return OP_RETURN
   }
 
-  getAddressTransactions ({ address, pagesize, page }) {
+  getAddressTransactions ({ address, limit, page }) {
     return http.get({
-      url: `${this.api}/addrs/${address}`,
+      url: `${this.api}/address/${address}/tx`,
       params: Object.assign({}, this.params, {
         page,
         pagesize
       })
-    }).then((data) => {
-      return data.txrefs
-    })
+    }).then((data) => data.data.list)
   }
 }
-
 ```
-
 
 ## Instance methods
 

@@ -1,4 +1,4 @@
-require('./provider/checkBlockChain.test')
+require('./provider/checkBlockchain.test')
 require('./provider/switchNodes.test')
 require('./store/store.test')
 require('./common/http.test')
