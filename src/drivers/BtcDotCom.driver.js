@@ -5,13 +5,14 @@ export default class BtcDotCom extends Driver {
   constructor (params) {
     super()
 
-    const { version, token } = Object.assign({
+    const { version, token, network } = Object.assign({
       version: 'v3',
+      network: 'chain',
       token: null
     }, params)
 
     this.params = { api_key: token }
-    this.api = `https://chain.api.btc.com/${version}`
+    this.api = `https://${network}.api.btc.com/${version}`
     this.txLoadLimit = 50
   }
 
