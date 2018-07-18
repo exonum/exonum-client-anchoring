@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring, expect, sinon,
-  configBtcDotCom, token, blockTrailAPI, provider
+  configBtcDotCom, token, btcdotcomAPI, provider
 } = require('../../constants').module
 
 const { cfg2, getTxs } = require('../../mocks/')
@@ -30,15 +30,15 @@ describe('Check correctness of work with config', function () {
       d()
     })
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getTxs(25, 1))
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ/tx`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getTxs(25, 2))
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf/tx`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getTxs(25, 3))
   })

@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring,
-  configBtcDotCom, token, blockTrailAPI, provider
+  configBtcDotCom, token, btcdotcomAPI, provider
 } = require('../constants').module
 const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('../mocks/')
 
@@ -39,7 +39,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 999
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(100, 1))
 
@@ -58,7 +58,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1688
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(100, 1))
 
@@ -81,7 +81,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1688
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(100, 1))
 
@@ -112,7 +112,7 @@ describe('Check anchor blocks invalid', function () {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1000
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(25, 1))
 

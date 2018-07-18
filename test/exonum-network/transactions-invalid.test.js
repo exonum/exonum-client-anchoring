@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 const {
-  mock, exonumAnchoring, blockTrailAPI,
+  mock, exonumAnchoring, btcdotcomAPI,
   configBtcDotCom, token, provider
 } = require('../constants').module
 
@@ -68,21 +68,21 @@ describe('Check anchor transactions invalid', function () {
     const tx = 'e518ed4254d2080a7ad9602e05b96cb456395878ba2fcd6cc609792c159b3ec0'
     const block = 1153277
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(200, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    mock.onGet(/api\/explorer\/v1\/blocks/, {
+    mock.onGet(`${provider}/api/explorer/v1/blocks`, {
       params: { latest: 1154278, count: 1000 }
     }).replyOnce(200, [...getBlocks(1154177, 900), ...getBlocks(1154278, 100)])
 
     mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTx(tx))
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 2 }
     }).replyOnce(200, getTxs(199, 2))
 
@@ -99,7 +99,7 @@ describe('Check anchor transactions invalid', function () {
     const tx = 'b4db78bf1bd164e0417fab25055b1f0e3f7fdad44325a5bf1999d86ab44af2c1'
     const block = 1688
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(100, 1))
 
@@ -134,21 +134,21 @@ describe('Check anchor transactions invalid', function () {
     const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
     const block = 1153277
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(200, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    mock.onGet(/api\/explorer\/v1\/blocks/, {
+    mock.onGet(`${provider}/api/explorer/v1/blocks`, {
       params: { latest: 1154278, count: 1000 }
     }).replyOnce(200, getBlocks(1154278, 1000))
 
     mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
       .replyOnce(200, getExonumTxInvalid(tx))
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 2 }
     }).replyOnce(200, getTxs(199, 2))
 

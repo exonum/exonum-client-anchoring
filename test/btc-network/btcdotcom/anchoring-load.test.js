@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 const {
   mock, exonumAnchoring, expect, sinon,
-  configBtcDotCom, token, blockTrailAPI
+  configBtcDotCom, token, btcdotcomAPI
 } = require('../../constants').module
 
 const { cfg1, getTxs } = require('../../mocks/')
@@ -33,7 +33,7 @@ describe('check loading intermediate data', function () {
   it('instances with same config should load state', d => {
     const anchoring = new exonumAnchoring.Anchoring(configCacheCopy)
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(50, 1))
 
@@ -61,15 +61,15 @@ describe('check loading intermediate data', function () {
       }
     })
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(30, 1))
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(50, 1))
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 2 }
     }).replyOnce(200, getTxs(25, 2))
   })
