@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 const {
-  mock, exonumAnchoring, blockTrailAPI,
+  mock, exonumAnchoring, btcdotcomAPI,
   configBtcDotCom, token, provider
 } = require('../constants').module
 
@@ -20,14 +20,14 @@ describe('Check anchor transactions valid', function () {
     const tx = 'b4db78bf1bd164e0417fab25055b1f0e3f7fdad44325a5bf1999d86ab44af2c1'
     const block = 1688
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(20, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    mock.onGet(/api\/explorer\/v1\/blocks/, {
+    mock.onGet(`${provider}/api/explorer/v1/blocks`, {
       params: { latest: 2001, count: 312 }
     }).replyOnce(200, getBlocks(2001, 312))
 
@@ -47,14 +47,14 @@ describe('Check anchor transactions valid', function () {
     const tx = 'e68a605aa5ce04b7e8c73b4ea46b5f4e2393d82bd50495d3f808315be4619c89'
     const block = 4002
 
-    mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(5, 1))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    mock.onGet(/api\/explorer\/v1\/blocks/, {
+    mock.onGet(`${provider}/api/explorer/v1/blocks`, {
       params: { latest: 5003, count: 1000 }
     }).replyOnce(200, getBlocks(5003, 1000))
 

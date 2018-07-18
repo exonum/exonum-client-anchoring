@@ -15,7 +15,7 @@ chai.should()
 
 const token = 'token'
 const provider = 'http://node.com:8000'
-const blockTrailAPI = 'https://chain.api.btc.com'
+const btcdotcomAPI = 'https://chain.api.btc.com'
 const blockCypherAPI = 'https://api.blockcypher.com'
 const configBtcDotCom = {
   cache: false,
@@ -38,7 +38,7 @@ exports.module = {
 
   token,
   provider,
-  blockTrailAPI,
+  btcdotcomAPI,
   blockCypherAPI,
   configBlockCypher,
   configBtcDotCom

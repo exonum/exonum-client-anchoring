@@ -3,7 +3,7 @@
 
 const {
   mock, expect, sinon, exonumAnchoring,
-  configBtcDotCom, token, blockTrailAPI, provider
+  configBtcDotCom, token, btcdotcomAPI, provider
 } = require('../../constants').module
 const { getTxs, cfg1 } = require('../../mocks/')
 const _ = require('../../../src/common/private').default
@@ -24,7 +24,7 @@ describe('Events', function () {
     anchoring.on('synchronized', synchronized)
 
     for (let i = 1; i <= count; i++) {
-      mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+      mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
         params: { api_key: token, pagesize: 50, page: i }
       }).replyOnce(200, getTxs(i === count ? 49 : 50, i))
     }
