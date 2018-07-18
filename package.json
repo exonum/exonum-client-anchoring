@@ -1,6 +1,6 @@
 {
   "name": "exonum-client-anchoring",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Exonum anchoring check library",
   "main": "./dist/index.js",
   "scripts": {
