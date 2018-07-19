@@ -1,4 +1,4 @@
-import { script, networks, address, crypto, payments } from 'bitcoinjs-lib'
+import { script, networks, address, crypto } from 'bitcoinjs-lib'
 import { _, blockHash, http, to } from './common/'
 import { Buffer } from 'buffer'
 
