@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 const {
-  mock, exonumAnchoring, blockTrailAPI,
+  mock, exonumAnchoring, btcdotcomAPI,
   configBtcDotCom, token, provider
 } = require('../constants').module
 
@@ -75,7 +75,7 @@ describe('Check anchor transactions invalid', function () {
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    mock.onGet(/api\/explorer\/v1\/blocks/, {
+    mock.onGet(`${provider}/api/explorer/v1/blocks`, {
       params: { latest: 1154278, count: 1000 }
     }).replyOnce(200, [...getBlocks(1154177, 900), ...getBlocks(1154278, 100)])
 
@@ -141,7 +141,7 @@ describe('Check anchor transactions invalid', function () {
     mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
       .replyOnce(200, getFullBlock(block))
 
-    mock.onGet(/api\/explorer\/v1\/blocks/, {
+    mock.onGet(`${provider}/api/explorer/v1/blocks`, {
       params: { latest: 1154278, count: 1000 }
     }).replyOnce(200, getBlocks(1154278, 1000))
 

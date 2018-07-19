@@ -9,7 +9,6 @@ const { cfg1, getCrypherTxs } = require('../../mocks/')
 const provider = 'http://localhost:8001'
 const configCopy = Object.assign({}, configBlockCypher, { provider: { nodes: [provider] } })
 const configTimeoutCopy = Object.assign({}, configCopy, { syncTimeout: 1 })
-const configCacheCopy = Object.assign({}, configCopy, { cache: true })
 
 describe('check loading intermediate data', function () {
   beforeEach(() => {

@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring, expect, sinon,
-  configBtcDotCom, token, blockTrailAPI, provider
+  configBtcDotCom, token, btcdotcomAPI, provider
 } = require('../../constants').module
 
 const { cfg2, getTxs } = require('../../mocks/')
@@ -29,7 +29,6 @@ describe('Check correctness of work with config', function () {
       expect(synchronized.args[0][0].anchorHeight).to.equal(73000)
       d()
     })
-
     mock.onGet(`${blockTrailAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getTxs(25, 1))

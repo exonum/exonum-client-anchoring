@@ -3,7 +3,7 @@
 
 const {
   mock, exonumAnchoring,
-  configBtcDotCom, token, blockTrailAPI, provider
+  configBtcDotCom, token, btcdotcomAPI, provider
 } = require('../constants').module
 const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('../mocks/')
 
@@ -38,7 +38,6 @@ describe('Check anchor blocks invalid', function () {
   it('when block is invalid', d => {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 999
-
     mock.onGet(`${blockTrailAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(100, 1))
@@ -57,7 +56,6 @@ describe('Check anchor blocks invalid', function () {
   it('when block in broken chain', d => {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1688
-
     mock.onGet(`${blockTrailAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(100, 1))
@@ -80,7 +78,7 @@ describe('Check anchor blocks invalid', function () {
   it('when hash of the anchor block is not equal to the hash in the anchor transaction', d => {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1688
-
+    
     mock.onGet(`${blockTrailAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(100, 1))
@@ -111,7 +109,7 @@ describe('Check anchor blocks invalid', function () {
   it('when anchor block hash not equal to block hash', d => {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1000
-
+    
     mock.onGet(`${blockTrailAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(25, 1))

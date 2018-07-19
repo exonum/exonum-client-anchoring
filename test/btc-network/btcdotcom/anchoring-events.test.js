@@ -3,7 +3,7 @@
 
 const {
   mock, expect, sinon, exonumAnchoring,
-  configBtcDotCom, token, blockTrailAPI, provider
+  configBtcDotCom, token, btcdotcomAPI, provider
 } = require('../../constants').module
 const { getTxs, cfg1 } = require('../../mocks/')
 const _ = require('../../../src/common/private').default
