@@ -213,7 +213,8 @@ class BtcDotCom extends Driver {
 
     const { version, token } = Object.assign({
       version: 'v3',
-      token: null
+      token: null,
+      network: 'chain' // use chain for main network or tchain to testnet
     }, params)
 
     this.params = { api_key: token }
