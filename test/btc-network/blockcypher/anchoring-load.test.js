@@ -42,15 +42,15 @@ describe('check loading intermediate data', function () {
       }
     })
 
-    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/full`, {
+    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/full`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getCrypherTxs(30, 1))
 
-    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/full`, {
+    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/full`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getCrypherTxs(50, 1))
 
-    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/full`, {
+    mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/full`, {
       params: { api_key: token, pagesize: 50, page: 2 }
     }).replyOnce(200, getCrypherTxs(25, 2))
   })

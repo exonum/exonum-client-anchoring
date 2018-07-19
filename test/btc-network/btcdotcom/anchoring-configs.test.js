@@ -29,16 +29,15 @@ describe('Check correctness of work with config', function () {
       expect(synchronized.args[0][0].anchorHeight).to.equal(73000)
       d()
     })
-
-    mock.onGet(`${btcdotcomAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getTxs(25, 1))
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/2MswUr6HSff6QooGgup4nFVeVWfnrXi83sZ/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q6skggh0sv88xwt7adjre3sdnrdvnfndl0y9pt8xx8dj27r2wrn4syerrg5/tx`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getTxs(25, 2))
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/2NCcdBCgUffRFB5ECWwpXNEDs2sKzcoK7yf/tx`, {
+    mock.onGet(`${btcdotcomAPI}/v3/address/tb1qhaw73t39tjl5d46z5efgwrxchtg22qslr5tm8jeqfkhndquqwseqqznkar/tx`, {
       params: { api_key: token, page: 1, pagesize: 50 }
     }).replyOnce(200, getTxs(25, 3))
   })
