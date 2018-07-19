@@ -24,7 +24,7 @@ describe('Events', function () {
     anchoring.on('synchronized', synchronized)
 
     for (let i = 1; i <= count; i++) {
-      mock.onGet(`${blockTrailAPI}/v3/address/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/tx`, {
+      mock.onGet(`${blockTrailAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
         params: { api_key: token, pagesize: 50, page: i }
       }).replyOnce(200, getTxs(i === count ? 49 : 50, i))
     }

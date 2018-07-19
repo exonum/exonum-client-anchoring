@@ -24,7 +24,7 @@ describe('Events', function () {
     anchoring.on('synchronized', synchronized)
 
     for (let i = 1; i <= count; i++) {
-      mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/2NCtE6CcPiZD2fWHfk24G5UH5YNyoixxEu6/full`, {
+      mock.onGet(`${blockCypherAPI}/v1/btc/main/addrs/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/full`, {
         params: { api_key: token, pagesize: 50, page: i }
       }).replyOnce(200, getCrypherTxs(i === count ? 49 : 50, i))
     }
