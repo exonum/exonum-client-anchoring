@@ -44,6 +44,7 @@
   - [on](#oneventname-callback)
   - [off](#offeventname-callback)
 - [Driver example](#driver-example)
+- [Changelog](#changelog)
 - [Big Thanks](#big-thanks)
 - [License](#license)
 
@@ -266,6 +267,10 @@ Adds a new event listener by the event name.
 
 Removes event listener by the event name and callback.
 Returns a boolean status of an operation.
+
+## Changelog
+
+Detailed changes for each release are documented in the [CHANGELOG](CHANGELOG.md) file.
 
 ## Big Thanks
 
