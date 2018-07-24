@@ -2,15 +2,13 @@ import Provider from './Provider'
 import Events from './Events'
 import * as store from './store/'
 import { _, blockHash, to, status, merkleRootHash } from './common/'
-import { verifyBlock, MapProof, merkleProof, newType, stringToUint8Array, Uint16, Hash, hash } from 'exonum-client'
-import bigInt from 'big-integer'
+import { verifyBlock, stringToUint8Array, hash } from 'exonum-client'
 
 const INITIALIZED = 'initialized'
 const LOADED = 'loaded'
 const STOPPED = 'stopped'
 const SYNCHRONIZED = 'synchronized'
 const ERROR = 'error'
-const ANCHORING_SERVICE_ID = 3
 
 function Anchoring (params) {
   const constructor = () => {
@@ -83,30 +81,6 @@ function Anchoring (params) {
     if (!_(this).sync) return
     await getAllAnchorTransaction().catch(err => _(this).dispatch(ERROR, err))
     setTimeout(() => syncAnchorTransaction(), _(this).syncTimeout * 1000)
-  }
-
-  this.verifyBlockHeaderProof = (height, proof) => {
-    const tableProof = new MapProof(proof.to_table, Hash, Hash)
-    if (tableProof.merkleRoot !== proof.latest_authorized_block.block.state_hash) return false
-
-    const TableKey = newType({
-      fields: [
-        { name: 'service_id', type: Uint16 },
-        { name: 'table_index', type: Uint16 }
-      ]
-    })
-    const tableKey = TableKey.hash({
-      service_id: ANCHORING_SERVICE_ID,
-      table_index: 0
-    })
-    const blocksHash = tableProof.entries.get(tableKey)
-    if (typeof blocksHash === 'undefined') return false
-
-    const count = bigInt(proof.latest_authorized_block.block.height).valueOf()
-    const elements = merkleProof(blocksHash, count, proof.to_block_header, [height, height])
-    if (elements.length !== 1) return false
-
-    return true
   }
 
   this.blockStatus = async (inHeight, ignoreBlockProof) => {

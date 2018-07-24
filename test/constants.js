@@ -5,9 +5,9 @@ const exonumAnchoring = require('../src').default
 const store = require('../src/store/')
 const sinon = require('sinon')
 
-const axios = require('axios')
-const MockAdapter = require('axios-mock-adapter')
-const mock = new MockAdapter(axios)
+// const axios = require('axios')
+// const MockAdapter = require('axios-mock-adapter')
+// const mock = new MockAdapter(axios)
 const { expect } = chai
 
 chai.use(chaiAsPromised)
@@ -28,10 +28,10 @@ const configBlockCypher = {
   provider: { nodes: [provider] }
 }
 
-beforeEach(() => Promise.all([store.clear(), mock.reset()]))
+// beforeEach(() => Promise.all([store.clear(), mock.reset()]))
 
 exports.module = {
-  mock,
+  // mock,
   expect,
   sinon,
   exonumAnchoring,
