@@ -13,7 +13,7 @@ export default class Driver {
     for (let tx of txs) {
       const opReturn = this.getOpReturnFromTx(tx)
       if (!this.checkOpReturn(opReturn)) continue
-      parsedTx.push([tx.hash, ...this.parseOpReturn(opReturn)])
+      parsedTx.push([tx[this.txHashKey || 'hash'], ...this.parseOpReturn(opReturn)])
     }
     return {
       txs: parsedTx,
