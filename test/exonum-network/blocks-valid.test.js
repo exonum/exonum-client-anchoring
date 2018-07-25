@@ -17,7 +17,7 @@ describe('Check anchor blocks valid', function () {
   it('when anchor block height provided', d => {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const block = 1000
-    
+
     mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(25, 1))

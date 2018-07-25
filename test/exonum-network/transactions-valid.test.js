@@ -46,7 +46,7 @@ describe('Check anchor transactions valid', function () {
     const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const tx = 'e68a605aa5ce04b7e8c73b4ea46b5f4e2393d82bd50495d3f808315be4619c89'
     const block = 4002
-    
+
     mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
       params: { api_key: token, pagesize: 50, page: 1 }
     }).replyOnce(200, getTxs(5, 1))
