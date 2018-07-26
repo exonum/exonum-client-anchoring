@@ -126,7 +126,7 @@ function Anchoring (params) {
 
     const tx = await _(this).provider.getTx(txHash)
     if (tx.type === 'MemPool') return status.transaction(9, { tx })
-    const rootHash = merkleRootHash(tx.proof_to_block_merkle_root)
+    const rootHash = merkleRootHash(tx.location_proof)
 
     const block = await this.blockStatus(tx.location.block_height, ignoreBlockProof)
     const proof = { block, tx }

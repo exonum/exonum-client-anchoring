@@ -1,10 +1,7 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const {
-  mock, exonumAnchoring, btcdotcomAPI,
-  configBtcDotCom, token, provider
-} = require('../constants').module
+const { mock, exonumAnchoring, configSmartbit, provider } = require('../constants').module
 
 const { cfg1, getFullBlock, getFullBlockInvalid, getBlocks, getTxs, getExonumTx, getExonumTxInvalid } = require('../mocks/')
 
@@ -16,7 +13,7 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction hash is invalid', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
     const txs = [null, undefined, '06', '6b55ffe594c40c09cfcb6f0e797f22fd34c68992f6c0f6817c8bf5c36853c7a/']
     Promise.all(txs.map(tx => anchoring.txStatus(tx)))
       .catch(e => e)
@@ -26,17 +23,17 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction refers on block, which doesn\'t exist', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
-    const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
+    const hash = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
     const block = 1153277
 
-    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
-      .replyOnce(200, getExonumTx(tx))
+    mock.onGet(`${provider}/api/explorer/v1/transactions`, { hash })
+      .replyOnce(200, getExonumTx(hash))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
       .replyOnce(200, null)
 
-    anchoring.txStatus(tx, true)
+    anchoring.txStatus(hash, true)
       .then(d => d.status)
       .should
       .eventually
@@ -45,17 +42,17 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction refers on block, which is invalid', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
-    const tx = '6b55ffe594c40c09cfcb6f0e797f22fd34c68992f6c0f6817c8bf5c36853c7ee'
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
+    const hash = '6b55ffe594c40c09cfcb6f0e797f22fd34c68992f6c0f6817c8bf5c36853c7ee'
     const block = 1153277
 
-    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
-      .replyOnce(200, getExonumTx(tx))
+    mock.onGet(`${provider}/api/explorer/v1/transactions`, { hash })
+      .replyOnce(200, getExonumTx(hash))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
       .replyOnce(200, getFullBlockInvalid(block))
 
-    anchoring.txStatus(tx, true)
+    anchoring.txStatus(hash, true)
       .then(d => d.status)
       .should
       .eventually
@@ -64,29 +61,25 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction refers on block, which is in broken chain of blocks', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
-    const tx = 'e518ed4254d2080a7ad9602e05b96cb456395878ba2fcd6cc609792c159b3ec0'
-    const block = 1153277
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
+    const hash = 'e327eb66b3a7df8b3822343bd4233af4148d063368e5003f73adb934d945e9ab'
+    const block = 4302
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
-    }).replyOnce(200, getTxs(200, 1))
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
+    }).replyOnce(200, getTxs(33, 1))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
       .replyOnce(200, getFullBlock(block))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks`, {
-      params: { latest: 1154278, count: 1000 }
-    }).replyOnce(200, [...getBlocks(1154177, 900), ...getBlocks(1154278, 100)])
+      params: { latest: 4400, count: 98 }
+    }).replyOnce(200, { blocks: [...getBlocks(4352, 48).blocks, ...getBlocks(4400, 50).blocks] })
 
-    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
-      .replyOnce(200, getExonumTx(tx))
+    mock.onGet(`${provider}/api/explorer/v1/transactions`, { params: { hash } })
+      .replyOnce(200, getExonumTx(hash))
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 2 }
-    }).replyOnce(200, getTxs(199, 2))
-
-    anchoring.txStatus(tx, true)
+    anchoring.txStatus(hash, true)
       .then(d => d.status)
       .should
       .eventually
@@ -95,33 +88,34 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when transaction refers on block, which is wrong anchored', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
-    const tx = 'b4db78bf1bd164e0417fab25055b1f0e3f7fdad44325a5bf1999d86ab44af2c1'
-    const block = 1688
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
+    const hash = 'e327eb66b3a7df8b3822343bd4233af4148d063368e5003f73adb934d945e9ab'
+    const block = 4302
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
-    }).replyOnce(200, getTxs(100, 1))
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
+    }).replyOnce(200, getTxs(33, 1))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
       .replyOnce(200, getFullBlock(block))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks`, {
-      params: { latest: 2001, count: 312 }
-    }).replyOnce(200, [...getBlocks(2000, 311), {
-      height: '2000',
-      prev_hash: 'f90a7dff8e6dd43edfb198a5008c87942e656a1862ed668b4f4d1fb11125b5d0',
-      proposer_id: 0,
-      schema_version: 0,
-      state_hash: '19098b0bff42bfaf65c59abf62264c257a78c690d08732361508dd96f3080c9d',
-      tx_count: 0,
-      tx_hash: '0000000000000000000000000000000000000000000000000000000000000000'
-    }])
+      params: { latest: 4400, count: 98 }
+    }).replyOnce(200, {
+      blocks: [{
+        'height': '4400',
+        'prev_hash': '75656cf255cf11749a82693461ce07fb3961e3506553c2c0c13caaf78df91590',
+        'proposer_id': 0,
+        'state_hash': '14351944cbe24d770c373199853fa55a41046eda40425573f4aad3ac83af723a',
+        'tx_count': 0,
+        'tx_hash': '0000000000000000000000000000000000000000000000000000000000000000'
+      }, ...getBlocks(4400, 97).blocks]
+    })
 
-    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
-      .replyOnce(200, getExonumTx(tx))
+    mock.onGet(`${provider}/api/explorer/v1/transactions`, { params: { hash } })
+      .replyOnce(200, getExonumTx(hash))
 
-    anchoring.txStatus(tx, true)
+    anchoring.txStatus(hash, true)
       .then(d => d.status)
       .should
       .eventually
@@ -130,29 +124,25 @@ describe('Check anchor transactions invalid', function () {
   })
 
   it('when merkle tree of transaction is wrong', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
-    const tx = '068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95'
-    const block = 1153277
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
+    const hash = '10c2ff13b013bbe0543471637385252bb5a40442e0013cf506f505f7a93b28c9'
+    const block = 4902
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
-    }).replyOnce(200, getTxs(200, 1))
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
+    }).replyOnce(200, getTxs(33, 1))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
       .replyOnce(200, getFullBlock(block))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks`, {
-      params: { latest: 1154278, count: 1000 }
-    }).replyOnce(200, getBlocks(1154278, 1000))
+      params: { latest: 5000, count: 98 }
+    }).replyOnce(200, getBlocks(5001, 98))
 
-    mock.onGet(`${provider}/api/explorer/v1/transactions/${tx}`)
-      .replyOnce(200, getExonumTxInvalid(tx))
+    mock.onGet(`${provider}/api/explorer/v1/transactions`, { params: { hash } })
+      .replyOnce(200, getExonumTxInvalid(hash))
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 2 }
-    }).replyOnce(200, getTxs(199, 2))
-
-    anchoring.txStatus(tx, true)
+    anchoring.txStatus(hash, true)
       .then(d => d.status)
       .should
       .eventually

@@ -1,10 +1,7 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const {
-  mock, exonumAnchoring,
-  configBtcDotCom, token, btcdotcomAPI, provider
-} = require('../constants').module
+const { mock, exonumAnchoring, configSmartbit, provider } = require('../constants').module
 const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('../mocks/')
 
 describe('Check anchor blocks invalid', function () {
@@ -13,7 +10,7 @@ describe('Check anchor blocks invalid', function () {
       .replyOnce(200, cfg1)
   })
   it('when height is not a number', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
     anchoring.blockStatus('text', true)
       .should.be
       .rejectedWith(TypeError, 'Height text is invalid number')
@@ -21,10 +18,10 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when block is not existed', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
     const block = 999
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/block`)
       .replyOnce(200, null)
 
     anchoring.blockStatus(block, true)
@@ -36,13 +33,15 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when block is invalid', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
     const block = 999
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
-    }).replyOnce(200, getTxs(100, 1))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock
+      .onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+        params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
+      }).replyOnce(200, getTxs(30, 1))
+
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
       .replyOnce(200, getFullBlockInvalid(block))
 
     anchoring.blockStatus(block, true)
@@ -54,18 +53,18 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when block in broken chain', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
-    const block = 1688
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
-    }).replyOnce(200, getTxs(100, 1))
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
+    const block = 4100
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
+    }).replyOnce(200, getTxs(44, 1))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
       .replyOnce(200, getFullBlock(block))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks`, {
-      params: { latest: 2001, count: 312 }
-    }).replyOnce(200, [...getBlocks(1989, 299), ...getBlocks(2001, 12)])
+      params: { latest: 4200, count: 100 }
+    }).replyOnce(200, { blocks: [...getBlocks(4188, 88).blocks, ...getBlocks(4200, 12).blocks] })
 
     anchoring.blockStatus(block, true)
       .then(data => data.status)
@@ -76,27 +75,28 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when hash of the anchor block is not equal to the hash in the anchor transaction', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
-    const block = 1688
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
+    const block = 4100
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
-    }).replyOnce(200, getTxs(100, 1))
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
+    }).replyOnce(200, getTxs(50, 1))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
       .replyOnce(200, getFullBlock(block))
 
     mock.onGet(`${provider}/api/explorer/v1/blocks`, {
-      params: { latest: 2001, count: 312 }
-    }).replyOnce(200, [...getBlocks(2000, 311), {
-      height: '2000',
-      prev_hash: 'f90a7dff8e6dd43edfb198a5008c87942e656a1862ed668b4f4d1fb11125b5d0',
-      proposer_id: 0,
-      schema_version: 0,
-      state_hash: '19098b0bff42bfaf65c59abf62264c257a78c690d08732361508dd96f3080c9d',
-      tx_count: 0,
-      tx_hash: '0000000000000000000000000000000000000000000000000000000000000000'
-    }])
+      params: { latest: 4200, count: 100 }
+    }).replyOnce(200, {
+      blocks: [...getBlocks(4200, 99).blocks, {
+        height: '2000',
+        prev_hash: 'd94953cf40a01345ff7db2df089b984b426ecde744c9e01200a5c357ac4efb67',
+        proposer_id: 0,
+        state_hash: 'eb990c1cd018bed3896e9eb71b6439b2358968d26a3b350f8af5816be4ef0632',
+        tx_count: 0,
+        tx_hash: '0000000000000000000000000000000000000000000000000000000000000000'
+      }]
+    })
 
     anchoring.blockStatus(block, true)
       .then(data => data.status)
@@ -107,15 +107,15 @@ describe('Check anchor blocks invalid', function () {
   })
 
   it('when anchor block hash not equal to block hash', d => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
-    const block = 1000
+    const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
+    const block = 4200
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
-    }).replyOnce(200, getTxs(25, 1))
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
+    }).replyOnce(200, getTxs(30, 1))
 
-    mock.onGet(`${provider}/api/explorer/v1/blocks/${block}`)
-      .replyOnce(200, getFullBlock(1688))
+    mock.onGet(`${provider}/api/explorer/v1/block`, { params: { height: block } })
+      .replyOnce(200, getFullBlock(4100))
 
     anchoring.blockStatus(block, true)
       .then(data => data.status)

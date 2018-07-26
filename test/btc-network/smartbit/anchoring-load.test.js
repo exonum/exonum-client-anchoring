@@ -1,13 +1,12 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 const {
-  mock, exonumAnchoring, expect, sinon,
-  configBtcDotCom, token, btcdotcomAPI
+  mock, exonumAnchoring, expect, sinon, configSmartbit, token
 } = require('../../constants').module
 
 const { cfg1, getTxs } = require('../../mocks/')
 const provider = 'http://localhost:8001'
-const configCopy = Object.assign({}, configBtcDotCom, { provider: { nodes: [provider] } })
+const configCopy = Object.assign({}, configSmartbit, { provider: { nodes: [provider] } })
 const configTimeoutCopy = Object.assign({}, configCopy, { syncTimeout: 1 })
 const configCacheCopy = Object.assign({}, configCopy, { cache: true })
 
@@ -32,8 +31,8 @@ describe('check loading intermediate data', function () {
   })
   it('instances with same config should load state', d => {
     const anchoring = new exonumAnchoring.Anchoring(configCacheCopy)
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
     }).replyOnce(200, getTxs(50, 1))
 
     anchoring.on('stopped', stopped => {
@@ -47,28 +46,26 @@ describe('check loading intermediate data', function () {
     })
     anchoring.on('loaded', e => anchoring.syncStop())
   })
-
   it('syncTimeout test', d => {
     const anchoring = new exonumAnchoring.Anchoring(configTimeoutCopy)
     const synchronized = sinon.spy()
     anchoring.on('synchronized', synchronized)
     anchoring.on('synchronized', e => {
-      if (e.anchorHeight === 28000) {
-        expect(synchronized.callCount).to.equal(2)
-        expect(synchronized.args.map(item => item[0].anchorHeight)).to.deep.equal([28000, 28000])
-        d()
-      }
+      expect(e.anchorHeight).to.equal(7100)
+      expect(synchronized.callCount).to.equal(2)
+      expect(synchronized.args.map(item => item[0].anchorHeight)).to.deep.equal([7100, 7100])
+      d()
     })
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
     }).replyOnce(200, getTxs(30, 1))
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 1 }
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
     }).replyOnce(200, getTxs(50, 1))
 
-    mock.onGet(`${btcdotcomAPI}/v3/address/tb1q4mg65jafgx2qgq5ssle7m9v62m5t5tmgv2lqdw6ly5nv4tr8kufq4rj8qz/tx`, {
-      params: { api_key: token, pagesize: 50, page: 2 }
-    }).replyOnce(200, getTxs(25, 2))
+    mock.onGet(/address\/tb1qhcacy66m3sry7lwk29auqsu47ftet70ma7slzpldstyjq39fw2eq9xevnx\/op-returns/, {
+      params: { next: null, limit: 50, sort: 'time', dir: 'asc' }
+    }).replyOnce(200, getTxs(25, 'NzI2MDYzMDY'))
   })
 })

@@ -5,9 +5,9 @@ const exonumAnchoring = require('../src').default
 const store = require('../src/store/')
 const sinon = require('sinon')
 
-// const axios = require('axios')
-// const MockAdapter = require('axios-mock-adapter')
-// const mock = new MockAdapter(axios)
+const axios = require('axios')
+const MockAdapter = require('axios-mock-adapter')
+const mock = new MockAdapter(axios)
 const { expect } = chai
 
 chai.use(chaiAsPromised)
@@ -15,31 +15,24 @@ chai.should()
 
 const token = 'token'
 const provider = 'http://node.com:8000'
-const btcdotcomAPI = 'https://chain.api.btc.com'
-const blockCypherAPI = 'https://api.blockcypher.com'
-const configBtcDotCom = {
+const smartbitAPI = 'https://testnet-api.smartbit.com.au'
+
+const configSmartbit = {
   cache: false,
-  driver: new exonumAnchoring.drivers.BtcDotCom({ token }),
-  provider: { nodes: [provider] }
-}
-const configBlockCypher = {
-  cache: false,
-  driver: new exonumAnchoring.drivers.BlockCypher({ token }),
+  driver: new exonumAnchoring.drivers.Smartbit({ network: 'testnet' }),
   provider: { nodes: [provider] }
 }
 
-// beforeEach(() => Promise.all([store.clear(), mock.reset()]))
+beforeEach(() => Promise.all([store.clear(), mock.reset()]))
 
 exports.module = {
-  // mock,
+  mock,
   expect,
   sinon,
   exonumAnchoring,
 
   token,
   provider,
-  btcdotcomAPI,
-  blockCypherAPI,
-  configBlockCypher,
-  configBtcDotCom
+  smartbitAPI,
+  configSmartbit
 }

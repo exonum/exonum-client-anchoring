@@ -1,10 +1,8 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
 
-const {
-  mock, exonumAnchoring, expect,
-  configBtcDotCom, provider
-} = require('../constants').module
+const { mock, expect, configSmartbit, provider } = require('../constants').module
+const Provider = require('../../src/Provider').default
 
 const { cfg1 } = require('../mocks/')
 
@@ -17,18 +15,16 @@ describe('Check block header proof', function () {
   })
 
   it('is not anchored', () => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const height = 0
     const proof = proofs[height]
 
-    expect(anchoring.verifyBlockHeaderProof(height, proof)).to.equal(true)
+    expect(new Provider(configSmartbit.provider).verifyBlockHeaderProof(height, proof)).to.equal(true)
   })
 
   it('is anchored', () => {
-    const anchoring = new exonumAnchoring.Anchoring(configBtcDotCom)
     const height = 10
     const proof = proofs[height]
 
-    expect(anchoring.verifyBlockHeaderProof(height, proof)).to.equal(true)
+    expect(new Provider(configSmartbit.provider).verifyBlockHeaderProof(height, proof)).to.equal(true)
   })
 })
