@@ -1,4 +1,4 @@
-const btTxs = require('./btcdotcom/transactions.json')
+const btTxs = require('./smartbit/transactions.json')
 const blockCypherTxs = require('./blockcypher/transactions.json')
 
 export const cfg1 = require('./exonum/configs-1.json')
@@ -15,14 +15,12 @@ const allBlocks = [...blocks, ...blocksHigh]
 export const getBlocks = (latest, count) => {
   if (count > 1000) count = 1000
   const from = latest - count
-  return allBlocks.filter(item => Number(item.height) >= from && Number(item.height) < latest)
+  return { blocks: allBlocks.filter(item => Number(item.height) >= from && Number(item.height) < latest) }
 }
 
-export const getTxs = (pagesize, page, skip = 0) => ({
-  data: {
-    list: btTxs.slice(skip + pagesize * (page - 1), skip + pagesize * page)
-  }
-})
+export const getTxs = (pagesize, page, offset = 0) => {
+  return { paging: btTxs[page].paging, op_returns: [...btTxs[page].op_returns].splice(offset, pagesize) }
+}
 
 export const getCrypherTxs = (pagesize, page, skip = 0) => ({
   txs: blockCypherTxs.slice(skip + pagesize * (page - 1), skip + pagesize * page)

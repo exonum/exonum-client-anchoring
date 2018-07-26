@@ -69,13 +69,12 @@ Driver is a class, which provides
 ([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
 from Bitcoin blockchain by using HTTP API.
 
-By default there are two drivers are implemented:
+By default there is one driver is implemented:
 
-- [BTC.com API](https://chain.api.btc.com/)
-- [BlockCypher API](https://www.blockcypher.com/dev/bitcoin/)
+- [Smartbit API](https://smartbit.com.au/api)
 
 If you need a driver for another HTTP API,
-you can implement it yourself by extending the Driver class. See [example](#driver-example) to get details.
+you can implement it yourself by extending the Driver class. For this purpose use API with Bech32 addresses support. See [example](#driver-example) to get details.
 
 #### Provider
 
@@ -88,9 +87,9 @@ blockchain by using HTTP API.
 import exonum from 'exonum-client-anchoring'
 
 const config = {
-  driver: exonum.drivers.BtcDotCom({
-    token: 'TOKEN' // Your BTC.com API Token here. Required
-    version: 'v3' // Version of BTC.com API. Optional
+  driver: exonum.drivers.Smartbit({
+    network: 'testnet', // use testnet for testnet, mainnet by default
+    version: 'v1' // Version of smartbit API. Optional
   }),
   provider: {
     nodes: ['http://192.168.1.1:8000', 'http://192.168.1.2:8000'] // list of IP addresses of Exonum nodes
@@ -201,7 +200,8 @@ according to provider limitations.
 
 ## Driver example
 
-Here you can see an example of a driver to [BTC.com API](https://btc.com/api-doc#API):
+Here you can see an example of a driver to [BTC.com API](https://btc.com/api-doc#API).
+This driver is provided for your information only, but non-operating because it doesn't support Bech32 addresses:
 
 ```js
 import { drivers } from 'exonum-client-anchoring'
