@@ -11,11 +11,11 @@ const customLaunchers = {
     version: '45.0',
     platform: 'Windows 10'
   },
-  'SL_InternetExplorer': {
+  'SL_Edge': {
     base: 'SauceLabs',
-    browserName: 'internet explorer',
-    version: '11.0',
-    platform: 'Windows 7'
+    browserName: 'MicrosoftEdge',
+    version: '17.17134',
+    platform: 'Windows 10'
   },
   'SL_Safari': {
     base: 'SauceLabs',

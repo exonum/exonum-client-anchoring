@@ -67,7 +67,7 @@ export default class Provider {
     return configsCommited.map(({ config }) => ({
       actualFrom: config.actual_from,
       frequency: config.services.btc_anchoring.frequency,
-      address: this.parseConfigAddress(config),
+      address: Provider.parseConfigAddress(config),
       validatorKeys: config.validator_keys.map(item => item.consensus_key)
     })).sort((a, b) => a.actualFrom > b.actualFrom)
   }
@@ -161,7 +161,7 @@ export default class Provider {
     return configs.find(item => Number(block) >= item.actualFrom)
   }
 
-  parseConfigAddress ({ services }) {
+  static parseConfigAddress ({ services }) {
     const pubKeys = services.btc_anchoring.anchoring_keys.map((hex) => Buffer.from(hex, 'hex'))
     const pubKeysLen = services.btc_anchoring.anchoring_keys.length
     const signCount = pubKeysLen < 4 ? pubKeysLen : pubKeysLen * 2 / 3 + 1

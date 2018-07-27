@@ -3,5 +3,12 @@ import 'core-js/fn/array/find'
 
 import Anchoring from './Anchoring'
 import drivers from './drivers/'
+import Provider from './Provider'
 
-export default { Anchoring, drivers }
+export default {
+  Anchoring,
+  drivers,
+  helpers: {
+    parseConfigAddress: Provider.parseConfigAddress
+  }
+}

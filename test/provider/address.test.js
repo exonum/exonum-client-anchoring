@@ -5,9 +5,8 @@ const { expect } = require('../constants').module
 const Provider = require('../../src/Provider').default
 
 describe('address', function () {
-  const provider = new Provider()
   it('parsing address with one ancoring key and bitcoin network', () => {
-    const address = provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
         'anchoring_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22'
@@ -24,7 +23,7 @@ describe('address', function () {
   })
 
   it('parsing address with one ancoring key and testnet network', () => {
-    const address = provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
         'anchoring_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22'
@@ -41,7 +40,7 @@ describe('address', function () {
   })
 
   it('parsing address with four ancoring keys and testnet network', () => {
-    const address = provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
         'anchoring_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
@@ -57,7 +56,7 @@ describe('address', function () {
   })
 
   it('parsing address with four ancoring keys and main network', () => {
-    const address = provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
         'anchoring_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
@@ -73,7 +72,7 @@ describe('address', function () {
   })
 
   it('parsing address with 3 ancoring keys and testnet network', () => {
-    const address = provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
         'anchoring_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
@@ -88,7 +87,7 @@ describe('address', function () {
   })
 
   it('parsing address with 3 ancoring keys and main network', () => {
-    const address = provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
         'anchoring_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
