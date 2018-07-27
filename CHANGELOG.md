@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.1 (Jul 27, 2018)
+
+* Added helpers object. #43
+* Added first helper function - parseConfigAddress. #43
+
 ## 0.6.0 (Jul 26, 2018)
 
 * Added Exonum 0.9 support. #42 #35
