@@ -239,6 +239,8 @@ class BtcDotCom extends Driver {
 }
 ```
 
+An example of how to use exonum-client-anchoring can be found [here](https://github.com/exonum/anchoring-client-example)
+
 ## Instance methods
 
 #### `blockStatus(blockHeight)`
