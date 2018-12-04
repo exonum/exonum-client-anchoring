@@ -82,7 +82,7 @@
     "big-integer": "^1.6.36",
     "bitcoinjs-lib": "^3.3.2",
     "core.js": "^0.4.2",
-    "exonum-client": "0.12.1",
+    "exonum-client": "0.13.0",
     "idb-keyval": "^2.3.0"
   },
   "browser": {

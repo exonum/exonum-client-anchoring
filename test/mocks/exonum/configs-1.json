@@ -23,7 +23,7 @@
       "majority_count": null,
       "services": {
         "btc_anchoring": {
-          "anchoring_keys": [
+          "public_keys": [
             "02109c0809a7e7bea5f029966cb107c8998f25781dd19ebc6f6b0b356e0c2ae3cd"
           ],
           "fee": 1000,

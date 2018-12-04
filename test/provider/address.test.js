@@ -8,7 +8,7 @@ describe('address', function () {
   it('parsing address with one ancoring key and bitcoin network', () => {
     const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
-        'anchoring_keys': [
+        'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22'
         ],
         'fee': 20000,
@@ -25,7 +25,7 @@ describe('address', function () {
   it('parsing address with one ancoring key and testnet network', () => {
     const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
-        'anchoring_keys': [
+        'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22'
         ],
         'fee': 20000,
@@ -42,7 +42,7 @@ describe('address', function () {
   it('parsing address with four ancoring keys and testnet network', () => {
     const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
-        'anchoring_keys': [
+        'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
           '028839757bba9bdf46ae553c124479e5c3ded609495f3e93e88ab23c0f559e8be5',
           '035c70ffb21d1b454ec650e511e76f6bd3fe76f49c471522ee187abac8d0131a18',
@@ -58,7 +58,7 @@ describe('address', function () {
   it('parsing address with four ancoring keys and main network', () => {
     const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
-        'anchoring_keys': [
+        'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
           '028839757bba9bdf46ae553c124479e5c3ded609495f3e93e88ab23c0f559e8be5',
           '035c70ffb21d1b454ec650e511e76f6bd3fe76f49c471522ee187abac8d0131a18',
@@ -74,7 +74,7 @@ describe('address', function () {
   it('parsing address with 3 ancoring keys and testnet network', () => {
     const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
-        'anchoring_keys': [
+        'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
           '028839757bba9bdf46ae553c124479e5c3ded609495f3e93e88ab23c0f559e8be5',
           '035c70ffb21d1b454ec650e511e76f6bd3fe76f49c471522ee187abac8d0131a18'
@@ -89,7 +89,7 @@ describe('address', function () {
   it('parsing address with 3 ancoring keys and main network', () => {
     const address = Provider.parseConfigAddress({services: {
       'btc_anchoring': {
-        'anchoring_keys': [
+        'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
           '028839757bba9bdf46ae553c124479e5c3ded609495f3e93e88ab23c0f559e8be5',
           '035c70ffb21d1b454ec650e511e76f6bd3fe76f49c471522ee187abac8d0131a18'
