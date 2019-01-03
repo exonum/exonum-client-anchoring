@@ -15,7 +15,7 @@
       "previous_cfg_hash": "0000000000000000000000000000000000000000000000000000000000000000",
       "services": {
         "btc_anchoring": {
-          "anchoring_keys": [
+          "public_keys": [
             "02473e862a0e90d86a1c97bc838b23b60ad39bf13706a6a88166331f194b87f04a"
           ],
           "fee": 10000,
@@ -51,7 +51,7 @@
       "previous_cfg_hash": "d27ec3bb766c2fcda88832f5e84ac9559d10a2ae702c3dc08871f04a8c5eabe6",
       "services": {
         "btc_anchoring": {
-          "anchoring_keys": [
+          "public_keys": [
             "03d728ad6757d4784effea04d47baafa216cf474866c2d4dc99b1e8e3eb936e730",
             "02d83bba35a8022c247b645eed6f81ac41b7c1580de550e7e82c75ad63ee9ac2fd"
           ],
@@ -88,7 +88,7 @@
       "previous_cfg_hash": "d27ec3bb766c2fcda88832f5e84ac9559d10a2ae702c3dc08871f04a8c5eabe6",
       "services": {
         "btc_anchoring": {
-          "anchoring_keys": [
+          "public_keys": [
             "03d728ad6757d4784effea04d47baafa216cf474866c2d4dc99b1e8e3eb936e730",
             "02d83bba35a8022c247b645eed6f81ac41b7c1580de550e7e82c75ad63ee9ac2fd",
             "03aeb681df5ac19e449a872b9e9347f1db5a0394d2ec5caf2a9c143f86e232b0d9"

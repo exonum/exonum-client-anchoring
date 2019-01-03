@@ -162,8 +162,8 @@ export default class Provider {
   }
 
   static parseConfigAddress ({ services }) {
-    const pubKeys = services.btc_anchoring.anchoring_keys.map((hex) => Buffer.from(hex, 'hex'))
-    const pubKeysLen = services.btc_anchoring.anchoring_keys.length
+    const pubKeys = services.btc_anchoring.public_keys.map((hex) => Buffer.from(hex, 'hex'))
+    const pubKeysLen = services.btc_anchoring.public_keys.length
     const signCount = pubKeysLen < 4 ? pubKeysLen : pubKeysLen * 2 / 3 + 1
     const redeemScript = script.multisig.output.encode(signCount, pubKeys)
     const scriptPubKey = script.witnessScriptHash.output.encode(crypto.sha256(redeemScript))
