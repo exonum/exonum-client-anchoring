@@ -16,3 +16,4 @@ dist
 lib
 .cache
 *.log
+/proto/**/*.js

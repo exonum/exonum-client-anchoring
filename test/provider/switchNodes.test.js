@@ -3,7 +3,7 @@
 
 const { mock } = require('../constants').module
 const Provider = require('../../src/Provider').default
-const { cfg1 } = require('../mocks/')
+const { cfg } = require('../mocks/')
 
 describe('check switch node on errors', function () {
   const nodes = ['http://localhost:8000', 'http://localhost:8001', 'http://localhost:8002']
@@ -25,22 +25,22 @@ describe('check switch node on errors', function () {
   it('when one node responding, return response', d => {
     mock.onGet(`${nodes[0]}/api/services/configuration/v1${request}`).replyOnce(500)
     mock.onGet(`${nodes[1]}/api/services/configuration/v1${request}`).replyOnce(500)
-    mock.onGet(`${nodes[2]}/api/services/configuration/v1${request}`).replyOnce(200, cfg1)
+    mock.onGet(`${nodes[2]}/api/services/configuration/v1${request}`).replyOnce(200, cfg)
     provider.getFromNode({ key: 'configuration', url: request })
       .should
       .eventually
-      .deep.equal(cfg1)
+      .deep.equal(cfg)
       .notify(d)
   })
 
   it('start next request from responding node', d => {
     mock.onGet(`${nodes[0]}/api/services/configuration/v1${request}/test`).replyOnce(200, {})
     mock.onGet(`${nodes[1]}/api/services/configuration/v1${request}/test`).replyOnce(200, {})
-    mock.onGet(`${nodes[2]}/api/services/configuration/v1${request}/test`).replyOnce(200, cfg1)
+    mock.onGet(`${nodes[2]}/api/services/configuration/v1${request}/test`).replyOnce(200, cfg)
     provider.getFromNode({ key: 'configuration', url: request + '/test' })
       .should
       .eventually
-      .deep.equal(cfg1)
+      .deep.equal(cfg)
       .notify(d)
   })
 

@@ -1,5 +1,6 @@
 {
   "068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95": {
+    "type": "committed",
     "content": null,
     "location": {
       "block_height": "1153277",
@@ -22,29 +23,44 @@
         "right": "5daa63d95c7b72fe6fdba6f545d487d3e52f1f2fd8da5df9fa1b515112e85b6f"
       },
       "right": "96045752ce6ac188bd569cf987477879b6f49f20d5776d0aadf4977008001ff2"
-    },
-    "type": "Committed"
+    }
   },
-  "10c2ff13b013bbe0543471637385252bb5a40442e0013cf506f505f7a93b28c9": {
+  "37541696c5652bf7a7c3b6497ac98eddedc45f38fb3e7f359d2f15e5c0284855": {
     "type": "committed",
     "content": {
-      "body": {
-        "from": "c8a61baf9b310352880c9ed3392359131ec4c35fd31bf552aa5e24c5cb272267",
-        "lect_count": "8",
-        "tx": "01000000000101af1eba354006196f6396d0778fa19734c6f5e748f928f7a1d52293eb047f9d3c0000000000ffffffff0200230f0000000000220020be3b826b5b8c064f7dd6517bc04395f25795f9fbefa1f107ed82c92044a972b20000000000000000326a3045584f4e554d01002413000000000000bf19a2e32d4986280a7b979d3e03f61df5ab256fc0ba04f17009e88055cc39c503004730440220748128431323d60e0141cb19e51c77c7c1d252832bc5f8479267c7170ee39558022031ead298467bbf867b2779033974f0b78bc6695ad82a0e113b02810a080e7f300125512102109c0809a7e7bea5f029966cb107c8998f25781dd19ebc6f6b0b356e0c2ae3cd51ae00000000",
-        "validator": 0
+      "debug": {
+        "time": "2019-01-03T12:48:46.035659Z"
       },
-      "message_id": 1,
-      "protocol_version": 0,
-      "service_id": 3,
-      "signature": "2f46c57943a1473385a1d8945e45ce227b701e2c21d82a6c3b34485078997f9c23aa523e18f77268ce46f063997a20524fdd39aa2001f17433f80c4920c76e06"
+      "message": "11a05ad8bb1326bb3b11d627bb84791eb6a9314264bad10a372ae2bac65e6b940000040000000a0b08ae89b8e10510f8b98011a11ce147b22103298031417ca0c0f6aca5cc50d97e4fdcdde8315eb9569b57ba89536c47763336f53be6a773fe1d8d00bfd037b3bb6905096b8eb365a2175b0f"
     },
     "location": {
-      "block_height": "4902",
-      "position_in_block": "0"
+      "block_height": 4202,
+      "position_in_block": 0
     },
     "location_proof": {
-      "val": "20c2ff13b013bbe0543471637385252bb5a40442e0013cf506f505f7a93b28c9"
+      "val": "37541696c5652bf7a7c3b6497ac98eddedc45f38fb3e7f359d2f15e5c0284855"
+    },
+    "status": {
+      "type": "success"
+    }
+  },
+  "eb12c4c3365b532857bab2bac93571db27a20a37fbfecf92457d53d6ba47d185": {
+    "type": "committed",
+    "content": {
+      "debug": {
+        "time": "2019-01-03T12:48:12.817036Z"
+      },
+      "message": "11a05ad8bb1326bb3b11d627bb84791eb6a9314264bad10a372ae2bac65e6b940000040000000a0c088c89b8e10510e0f5cb85030f7cf2431e5479fe2df6f589d9cf5131d4525eebfdfc0fbdb850b4bdf9f27a4999c80f51cb4dd1e1251ebafb3a1a914adf809d3d527522366cea41f72306fe03"
+    },
+    "location": {
+      "block_height": 4040,
+      "position_in_block": 0
+    },
+    "location_proof": {
+      "left": "64e1f22307d465ed1db2ba47cdd2dd85f28420e8ee5590999597ee18f5cfd7b0",
+      "right": {
+        "val": "eb12c4c3365b532857bab2bac93571db27a20a37fbfecf92457d53d6ba47d185"
+      }
     },
     "status": {
       "type": "success"

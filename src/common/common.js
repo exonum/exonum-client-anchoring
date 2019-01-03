@@ -1,7 +1,5 @@
-import {
-  newType, Uint16, Uint32, Uint64, Hash,
-  hash, hexadecimalToUint8Array
-} from 'exonum-client'
+import * as protocol from '../../proto/protocol.js'
+import { hash, hexadecimalToUint8Array } from 'exonum-client'
 
 export const to = promise => promise.then(data => [data, null]).catch(err => [null, err])
 
@@ -17,18 +15,36 @@ export const byteArrayToInt = byteArray => {
   return value
 }
 
-const Block = newType({
-  fields: [
-    { name: 'proposer_id', type: Uint16 },
-    { name: 'height', type: Uint64 },
-    { name: 'tx_count', type: Uint32 },
-    { name: 'prev_hash', type: Hash },
-    { name: 'tx_hash', type: Hash },
-    { name: 'state_hash', type: Hash }
-  ]
-})
+export const blockHash = block => {
+  const blockPrepared = {
+    prev_hash: {
+      data: hexadecimalToUint8Array(block.prev_hash)
+    },
+    tx_hash: {
+      data: hexadecimalToUint8Array(block.tx_hash)
+    },
+    state_hash: {
+      data: hexadecimalToUint8Array(block.state_hash)
+    }
+  }
 
-export const blockHash = block => hash(Block.serialize(block))
+  if (block.proposer_id !== 0) {
+    blockPrepared.proposer_id = block.proposer_id
+  }
+
+  if (block.height !== 0) {
+    blockPrepared.height = block.height
+  }
+
+  if (block.tx_count !== 0) {
+    blockPrepared.tx_count = block.tx_count
+  }
+
+  const message = protocol.exonum.Block.create(blockPrepared)
+  const buffer = new Uint8Array(protocol.exonum.Block.encode(message).finish())
+
+  return hash(buffer)
+}
 
 // @todo put it into exonum-client
 export function merkleRootHash (node) {

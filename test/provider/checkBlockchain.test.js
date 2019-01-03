@@ -11,7 +11,7 @@ describe('checkBlockChain', function () {
   it('check block sequence', () => {
     expect(provider.checkBlocksChain(getBlocks(100, 100).blocks)).to.deep
       .equal({
-        nextCheck: '13a7ea61b8d73135fd87674da6836f1b1ead37db1fb59ce6e84e2b7e2ef196c0',
+        nextCheck: '12c5a6ae852210d5551876014425ccfa542d4cff9504b2111f45e1263f8fb120',
         chainValid: true,
         errors: []
       })
@@ -22,7 +22,7 @@ describe('checkBlockChain', function () {
     const from101to200 = getBlocks(201, 100).blocks
     expect(provider.checkBlocksChain([...from0to99, ...from101to200])).to.deep
       .equal({
-        nextCheck: 'e650d76b51d631764559c7967d468d6df504d242e9e74c5c12e2ea323e7fd413',
+        nextCheck: 'c4107c97e97143aa919d4a15e43842385fd2662208a37239a25c1b7fba56549b',
         chainValid: false,
         errors: [
           { message: 'Chain broken on height 101', block: from101to200[0], prevBlock: from0to99[from0to99.length - 1] }
@@ -32,9 +32,9 @@ describe('checkBlockChain', function () {
 
   it('check block sequence starting with correct prevHash', () => {
     expect(provider.checkBlocksChain(getBlocks(203, 2).blocks,
-      'e650d76b51d631764559c7967d468d6df504d242e9e74c5c12e2ea323e7fd413')).to.deep
+      'c4107c97e97143aa919d4a15e43842385fd2662208a37239a25c1b7fba56549b')).to.deep
       .equal({
-        nextCheck: '6c601db8f1d940724f343a9fb5d410dcd0766e511ab226a8406a8d575ece6595',
+        nextCheck: 'a3d21c104d1f7b626402d68f21e34567e4c4481843670ba1b9cadf23d0af0888',
         chainValid: true,
         errors: []
       })
@@ -45,7 +45,7 @@ describe('checkBlockChain', function () {
     expect(provider.checkBlocksChain(getBlocks(203, 2).blocks,
       'f920a6601cf0641ee740c21c96cb249c5013819e5068a20a675739279ddcb231')).to.deep
       .equal({
-        nextCheck: '6c601db8f1d940724f343a9fb5d410dcd0766e511ab226a8406a8d575ece6595',
+        nextCheck: 'a3d21c104d1f7b626402d68f21e34567e4c4481843670ba1b9cadf23d0af0888',
         chainValid: false,
         errors: [{ message: 'Chain broken on height 201', block: from201to203[0] }]
       })

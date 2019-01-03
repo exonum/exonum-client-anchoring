@@ -1,10 +1,8 @@
 /* eslint-env node, mocha */
 /* eslint-disable no-unused-expressions */
-const {
-  mock, exonumAnchoring, expect, sinon, configSmartbit, token
-} = require('../../constants').module
+const { mock, exonumAnchoring, expect, sinon, configSmartbit } = require('../../constants').module
 
-const { cfg1, getTxs } = require('../../mocks/')
+const { cfg, getTxs } = require('../../mocks/')
 const provider = 'http://localhost:8001'
 const configCopy = Object.assign({}, configSmartbit, { provider: { nodes: [provider] } })
 const configTimeoutCopy = Object.assign({}, configCopy, { syncTimeout: 1 })
@@ -13,7 +11,7 @@ const configCacheCopy = Object.assign({}, configCopy, { cache: true })
 describe('check loading intermediate data', function () {
   beforeEach(() => {
     mock.onGet(`${provider}/api/services/configuration/v1/configs/committed`)
-      .replyOnce(200, cfg1)
+      .replyOnce(200, cfg)
   })
 
   it('syncStop test', d => {

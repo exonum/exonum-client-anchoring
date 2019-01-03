@@ -1,10 +1,9 @@
 const btTxs = require('./smartbit/transactions.json')
 const blockCypherTxs = require('./blockcypher/transactions.json')
 
-export const cfg1 = require('./exonum/configs-1.json')
-export const cfg2 = require('./exonum/configs-2.json')
+export const cfg = require('./exonum/configs.json')
 const blocks = require('./exonum/blocks.json')
-const blocksHigh = require('./exonum/blocks-from1153k.json')
+const blocksHigh = require('./exonum/blocks-from40k.json')
 const fullBlocks = require('./exonum/fullBlocks.json')
 const transactions = require('./exonum/transactions.json')
 

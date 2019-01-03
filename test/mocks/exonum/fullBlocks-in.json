@@ -1,87 +1,53 @@
 {
   "999": {
     "block": {
-      "height": "999",
-      "prev_hash": "6376773b18b346b0b848d52acca27e5bab90ba5e434900e560cfb1276debd0ee",
       "proposer_id": 0,
-      "schema_version": 0,
-      "state_hash": "44686073384178efcc5174721c31aecf7e4989f644c7e047b7e5534da6e31aeb",
+      "height": 999,
       "tx_count": 0,
-      "tx_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      "prev_hash": "b36ad0b78edc3d8131fdd5387ad6f3e8f0cc61633255a9d24fc472edb9b838fc",
+      "tx_hash": "cffa890eeb2e708ff5156595a022de73af8b2e9dbf972b4caea6182316d4d101",
+      "state_hash": "4c0703fd7e8c0cb741d026d69fddb0e12ea96058b4a3b4c17fd795a6c9c63f05"
     },
     "precommits": [
-      {
-        "body": {
-          "block_hash": "35d55920f7f2c673e9bcb7b73df930aeacdf1ffc0cd9337bd911a38c76331133",
-          "height": "999",
-          "propose_hash": "0f2d1606e376f304b2d1a5c99f79e11011a410aea7d7ed9e4a8cf2af30d9a572",
-          "round": 1,
-          "time": {
-            "nanos": 55547710,
-            "secs": "1508245942"
-          },
-          "validator": 0
-        },
-        "message_id": 4,
-        "protocol_version": 0,
-        "service_id": 0,
-        "signature": "fd0dae684071685a3c236740a4d7542f93177f450f08042a4ec2a6194e25352c13b1762d1a25444c3c7c4895b19252373868a23cb2c19c6c7f5ac144ef920c0f"
-      }
-    ],
-    "txs": []
-  },
-  "1153277": {
-    "block": {
-      "height": "1153277",
-      "prev_hash": "93cb18477ce33b3f4caf29dac27e19a08013874e714fee781ffd87cb9449df67",
-      "proposer_id": 0,
-      "schema_version": 0,
-      "state_hash": "002852caa5661f5f927cd2312c6fde8129537c472f30b4293dd6f6838d25495b",
-      "tx_count": 22,
-      "tx_hash": "679ae3098748800f58ecbae6f70773484fa5abf7dc81c6ca788e4d8a9aa4a85b"
-    },
-    "precommits": [
-      {
-        "body": {
-          "block_hash": "a6e071109135fc3eb7d41da5d6b4bf44f8eafd712f3cfda3b4f5ebfd53b67aab",
-          "height": "1153277",
-          "propose_hash": "4adcfec0836194daf2cb5dd0442228da3e190afd82ae22e10e749a510c643e73",
-          "round": 1,
-          "time": {
-            "nanos": 452164813,
-            "secs": "1508937671"
-          },
-          "validator": 0
-        },
-        "message_id": 4,
-        "protocol_version": 0,
-        "service_id": 0,
-        "signature": "4174f354975348e526fbc8e10dd1c52ba060e1cdac8f741a5de84e8c09649debc55993a971fa615768cc692c6b8e51ab6a24fc8dc6f7a9548d27426ca3ca5505"
-      }
+      "3a53b41d042d88dcf5bf1f5959ec82236c6b5a614d007b2c36e6dc3c2e4d3025010010e707180122220a20f2ff16ad355ef5b96efbb27205e6249d164a797eb06c55525e08801b544e755e2a220a203f9e6136743c2b4fbf8d856e2df2667b674c3d9ee061a674dfdc52654e56fb22320b089e84b8e10510f8cfb41998d6aafd79084b5aec73d5927de8e8185f48be631025604d31b2def03bd522779c1c50f63f53c88a4843d0a304afe39bd939ae2f14b4bb1fb3b6775c7e8dbc00"
     ],
     "txs": [
-      "068f75773d8d407f354a4515df158536f7f5a7ae6aaa4b07e221099df072ce95",
-      "07ffbfb2310b492d6d2e3dea0d73373368ba6bc6a05b1ade60627861e8cfc177",
-      "1035a6bddcbb19814a5dca79493fa9566e93f79956d51520886c3d0699356beb",
-      "17ed922bae1e3402399cb914d44d28127a317bf3bf3bac95cc5a39dcfa97bee1",
-      "385347da0e62fa759fa7ecf93d9728e4b55d8f7d95ba20997ab0180155dd7bbf",
-      "479899321534d0ea26066fe75c8947f550d3de56645815d1f8e0fa1a20f6ef02",
-      "50bd2d262dd6caa418a8c10109fd3e7f8a5fe16e192cef6caf8410246c81b91b",
-      "58c9caaaf48cfc999e8f56a93a9a44ce3644487ea3f1e73573629ea602625c0d",
-      "64f6c5ac33d411bfad84ecfafdac1b4b4f09a3ec97f176906f97347fa90093ff",
-      "675c39df932ec7ee0cac283de516aa7c36c6a5f8e879ac9a7124c4342481ecd7",
-      "687483af5bc6b4d512d8514e2a0693806444260b4b3a2b03cc5ef97917a035d9",
-      "6b55ffe594c40c09cfcb6f0e797f22fd34c68992f6c0f6817c8bf5c36853c7ee",
-      "7c1a87e8c2a4db5331ea74773d7642a1a923cfed9177016fd0dd3c52d900f474",
-      "7f8f332ef5ec4feccadb332522c1e77b9f84acf1264f0797a9feb2f5e83046de",
-      "7fe88df9e8aa479fd80669ae8430f8f85679b35b9dea17fb215d5dbbd7701744",
-      "86cd2de28bef4c123b5a82b7b1c27b99211239dcc372e81a77996e9c48851110",
-      "9af80b3346f1d832bcbd3d4f8a4fbd0ba7ce8e0356a033eb853edfa62eeda131",
-      "a6d6c8e28e1e09391c997023e9431625f292f3bf58002c5ea3d23ba78565351d",
-      "aa06b9fa3c21ae547ae37376dd38ff9642fb65655cd2835c37c89151362523af",
-      "b6cea40efe183df5d63045047a7cfeffdefabcb66f83d9e4b9d479f3e0a09d7a",
-      "d79937d7669ee9a87d8d2b2be9064f6fdd0ce0fc3791dec542823a6098ba7441",
-      "e518ed4254d2080a7ad9602e05b96cb456395878ba2fcd6cc609792c159b3ec0"
+      "cffa890eeb2e708ff5156595a022de73af8b2e9dbf972b4caea6182316d4d101"
+    ],
+    "time": "2019-01-03T12:37:50.053291Z"
+  },
+  "4202": {
+    "block": {
+      "proposer_id": 0,
+      "height": 4202,
+      "tx_count": 2,
+      "prev_hash": "c3b716bba7a900f684068feb5a33dfa120b6826f57c780e65f9ff19717bf7164",
+      "tx_hash": "37541696c5652bf7a7c3b6497ac98eddedc45f38fb3e7f359d2f15e5c0284855",
+      "state_hash": "82c44753f1063943e6954a873b4fabfb6799c8dd21cc5965c9797672d66d171c"
+    },
+    "precommits": [
+      "3a53b41d042d88dcf5bf1f5959ec82236c6b5a614d007b2c36e6dc3c2e4d3025010010ea20180122220a20da97ff1000c0d0ddcae1f095253ad5965fcf37befe4adb4a2c467030daa584bc2a220a20f8012ba78fe57832123e052e063b9798390b0a093799367521bf00d963193664320b08ae89b8e10510b8d38d72e295c5e2f7188624bda89f9d73fc49f8cecb1c06651c3a2a79956237661422acd5bf329cd2ed1a77afea223d0e3e83884849488f5007bd043341b5bd6866af0e"
+    ],
+    "txs": [
+      "37541696c5652bf7a7c3b6497ac98eddedc45f38fb3e7f359d2f15e5c0284855"
+    ],
+    "time": "2019-01-03T12:48:46.239299Z"
+  },
+  "67965": {
+    "block": {
+      "proposer_id": 0,
+      "height": 67965,
+      "tx_count": 2,
+      "prev_hash": "4446db416029cee3a22c6c50346dacdbc1a6419a9048c48c48d349de4c0439dd",
+      "tx_hash": "61565f77cdcc22d02d02c924cdc6e902741682a8b900be2ccb0fbfee2968f445",
+      "state_hash": "7ce061417ef7318abd3d7b971f0878ef58876c25e07da85a8ff1dad55a2569fd"
+    },
+    "precommits": [
+      "3a53b41d042d88dcf5bf1f5959ec82236c6b5a614d007b2c36e6dc3c2e4d3025010010fd9204180122220a2011c0597515ad414eecaeb54ead8e035855dbcd96e794cae2cf8ce3094d8d1c4b2a220a20049472eb9a35b68ad981873d99633d04d9c0c9c8eaec0cdfa003887886b7a3af320b08e7b2bde1051090aec233e8155934bca6516333ee92736bb947e5a7ae162e76582d48eccf98468524aca2ad87265ae7816fe323f166185a155140f08c353b659bb6529e63f4e9b803a806"
+    ],
+    "txs": [
+      "4e44e1d9c751a0bbc31dcf60089ebb13f128e5c26bcbd32e3718e327de016733",
+      "aea5ebb49bd0161152166626eeba6a7abad5db79d207579fcbef75062d6d52a2"
     ]
   }
 }
