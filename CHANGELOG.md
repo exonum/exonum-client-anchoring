@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 (Jan 9, 2019)
+
+* Added Exonum 0.10 support. #46
+
 ## 0.6.1 (Jul 27, 2018)
 
 * Added helpers object. #43
