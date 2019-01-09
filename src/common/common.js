@@ -1,5 +1,4 @@
-import * as protocol from '../../proto/protocol.js'
-import { hash, hexadecimalToUint8Array } from 'exonum-client'
+import { protocol, hash, hexadecimalToUint8Array } from 'exonum-client'
 
 export const to = promise => promise.then(data => [data, null]).catch(err => [null, err])
 

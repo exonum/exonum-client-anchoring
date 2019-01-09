@@ -10,14 +10,12 @@
     "lint": "eslint --ignore-path .gitignore .",
     "lint:fix": "eslint --ignore-path .gitignore . --fix",
     "compile": "NODE_ENV=rollup rollup -c ./rollup.config.js && NODE_ENV=rollup BROWSER=true rollup -c ./rollup.config.js",
-    "prepare": "npm run proto && npm run compile",
-    "coveralls": "NODE_ENV=test nyc mocha \"test/**/*.test.js\" --exit  && cat ./coverage/lcov.info | coveralls",
-    "proto": "pbjs --keep-case -t static-module ./proto/protocol.proto -o ./proto/protocol.js"
+    "prepare": "npm run compile",
+    "coveralls": "NODE_ENV=test nyc mocha \"test/**/*.test.js\" --exit  && cat ./coverage/lcov.info | coveralls"
   },
   "files": [
     "dist",
-    "src",
-    "proto/**/*.js"
+    "src"
   ],
   "repository": {
     "type": "git",
@@ -84,9 +82,8 @@
     "big-integer": "^1.6.36",
     "bitcoinjs-lib": "^3.3.2",
     "core.js": "^0.4.2",
-    "exonum-client": "^0.16.4",
-    "idb-keyval": "^2.3.0",
-    "protobufjs": "^6.8.8"
+    "exonum-client": "^0.16.5",
+    "idb-keyval": "^2.3.0"
   },
   "browser": {
     "./src/store/node.js": "./src/store/browser.js"
@@ -99,9 +96,6 @@
       "lcov"
     ],
     "sourceMap": false,
-    "instrument": false,
-    "exclude": [
-      "proto/*.js"
-    ]
+    "instrument": false
   }
 }
