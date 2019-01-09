@@ -3,12 +3,12 @@
 
 const { mock, exonumAnchoring, expect, sinon, provider, configSmartbit } = require('../../constants').module
 
-const { cfg1, getTxs } = require('../../mocks/')
+const { cfg, getTxs } = require('../../mocks/')
 
 describe('Check correctness of work with config - Smartbit', function () {
   beforeEach(() => {
     mock.onGet(`${provider}/api/services/configuration/v1/configs/committed`)
-      .replyOnce(200, cfg1)
+      .replyOnce(200, cfg)
   })
 
   it('get anchor transactions from different addresses', d => {

@@ -4,14 +4,14 @@
 const { mock, expect, configSmartbit, provider } = require('../constants').module
 const Provider = require('../../src/Provider').default
 
-const { cfg1 } = require('../mocks/')
+const { cfg } = require('../mocks/')
 
 const proofs = require('../mocks/exonum/block-proofs.json')
 
 describe('Check block header proof', function () {
   beforeEach(() => {
     mock.onGet(`${provider}/api/services/configuration/v1/configs/committed`)
-      .replyOnce(200, cfg1)
+      .replyOnce(200, cfg)
   })
 
   it('is not anchored', () => {

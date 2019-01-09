@@ -1,7 +1,7 @@
 import { script, networks, address, crypto } from 'bitcoinjs-lib'
 import { _, blockHash, http, to } from './common/'
 import { Buffer } from 'buffer'
-import { Hash, MapProof, merkleProof, newType, Uint16 } from 'exonum-client'
+import { merkleProof, verifyTable } from 'exonum-client'
 import bigInt from 'big-integer/BigInteger'
 
 const ANCHORING_SERVICE_ID = 3
@@ -132,21 +132,7 @@ export default class Provider {
   }
 
   verifyBlockHeaderProof (height, proof) {
-    const tableProof = new MapProof(proof.to_table, Hash, Hash)
-    if (tableProof.merkleRoot !== proof.latest_authorized_block.block.state_hash) return false
-
-    const TableKey = newType({
-      fields: [
-        { name: 'service_id', type: Uint16 },
-        { name: 'table_index', type: Uint16 }
-      ]
-    })
-    const tableKey = TableKey.hash({
-      service_id: ANCHORING_SERVICE_ID,
-      table_index: 0
-    })
-    const blocksHash = tableProof.entries.get(tableKey)
-    if (typeof blocksHash === 'undefined') return false
+    const blocksHash = verifyTable(proof.to_table, proof.latest_authorized_block.block.state_hash, ANCHORING_SERVICE_ID, 0)
 
     const count = bigInt(proof.latest_authorized_block.block.height).valueOf()
     const elements = merkleProof(blocksHash, count, proof.to_block_header, [height, height])

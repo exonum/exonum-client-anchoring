@@ -1,17 +1,17 @@
 [
   {
-    "hash": "5d68fd25a55e05c82f3eb0d0ad1d781c5abd99ae8984bc48954bae41ac9ad95f",
+    "hash": "daa08699d165f8d30c3db442222fe1882451ec28eff3b40684a92bb2ba4d1151",
     "config": {
       "previous_cfg_hash": "0000000000000000000000000000000000000000000000000000000000000000",
       "actual_from": 0,
       "validator_keys": [
         {
-          "consensus_key": "8812980e1204c2bd9f06e491eb0f69f6deda9d2c8e138c3748cd57b6991b45fb",
-          "service_key": "c8a61baf9b310352880c9ed3392359131ec4c35fd31bf552aa5e24c5cb272267"
+          "consensus_key": "3a53b41d042d88dcf5bf1f5959ec82236c6b5a614d007b2c36e6dc3c2e4d3025",
+          "service_key": "11a05ad8bb1326bb3b11d627bb84791eb6a9314264bad10a372ae2bac65e6b94"
         }
       ],
       "consensus": {
-        "round_timeout": 3000,
+        "first_round_timeout": 3000,
         "status_timeout": 5000,
         "peers_timeout": 10000,
         "txs_block_limit": 1000,
@@ -20,8 +20,10 @@
         "max_propose_timeout": 200,
         "propose_timeout_threshold": 500
       },
-      "majority_count": null,
       "services": {
+        "configuration": {
+          "majority_count": null
+        },
         "btc_anchoring": {
           "public_keys": [
             "02109c0809a7e7bea5f029966cb107c8998f25781dd19ebc6f6b0b356e0c2ae3cd"
@@ -31,8 +33,7 @@
           "funding_tx": "02000000000101e804e05c4182da3e652defa959d6a5280383462e6da532c5a04cec5febed1ebe0000000000feffffff02bb0629000000000016001421462d53d612ae67533a7ec07add2c8b2c2a4e5840420f0000000000220020be3b826b5b8c064f7dd6517bc04395f25795f9fbefa1f107ed82c92044a972b2024730440220202eae73bbca5d8546e3e834f3966e4bcaad26a0a2628a6be2fef097a28945920220595a44c3b8764057f395f593f218c27b2f4154b062d10d201f2b3ccb5316e9c0012102bdc3bbdb3a0edddeb2c92ce22b89863bb59698b92a2b80f4bf9be0adbef291a1ecad1400",
           "network": "testnet",
           "utxo_confirmations": 5
-        },
-        "configuration": null
+        }
       }
     },
     "propose": null,

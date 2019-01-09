@@ -92,15 +92,19 @@ function Anchoring (params) {
     const block = await _(this).provider.getBlock(height)
     if (block === null) return status.block(0)
 
-    const blockValid = verifyBlock(block, validatorKeys)
-    if (!blockValid) return status.block(1, { block })
+    // eslint-disable-next-line
+    let data, err
+    [data, err] = await to(verifyBlock(block, validatorKeys))
+    if (err) return status.block(1, { block })
 
     if (!ignoreBlockProof) {
       const blockHeaderProof = await _(this).provider.getBlockHeaderProof(height)
-      if (blockHeaderProof === null) return status.block(12, { block })
+      if (blockHeaderProof === null) {
+        return status.block(12, { block })
+      }
 
-      const latestBlockValid = verifyBlock(blockHeaderProof.latest_authorized_block, validatorKeys)
-      if (!latestBlockValid) return status.block(13, { block })
+      [data, err] = await to(verifyBlock(blockHeaderProof.latest_authorized_block, validatorKeys))
+      if (err) return status.block(13, { block })
 
       if (!_(this).provider.verifyBlockHeaderProof(height, blockHeaderProof)) return status.block(13, { block })
     }
@@ -111,6 +115,7 @@ function Anchoring (params) {
       if (anchorTx[4] !== blockHash(block.block)) return status.block(3, proof)
       return status.block(11, proof)
     }
+
     const { blocks, errors, chainValid } = await _(this).provider.getBlocks(height, anchorTx ? anchorTx[3] : height + frequency, blockHash(block.block))
     const proof = { errors, block, blocks, anchorTx }
 
@@ -125,7 +130,7 @@ function Anchoring (params) {
     if (!/[A-Za-z0-9]{64}/.test(txHash)) throw new TypeError('Transaction hash is invalid')
 
     const tx = await _(this).provider.getTx(txHash)
-    if (tx.type === 'MemPool') return status.transaction(9, { tx })
+    if (tx.type === 'in-pool') return status.transaction(9, { tx })
     const rootHash = merkleRootHash(tx.location_proof)
 
     const block = await this.blockStatus(tx.location.block_height, ignoreBlockProof)

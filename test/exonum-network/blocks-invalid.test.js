@@ -2,13 +2,14 @@
 /* eslint-disable no-unused-expressions */
 
 const { mock, exonumAnchoring, configSmartbit, provider } = require('../constants').module
-const { cfg1, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('../mocks/')
+const { cfg, getFullBlockInvalid, getFullBlock, getTxs, getBlocks } = require('../mocks/')
 
 describe('Check anchor blocks invalid', function () {
   beforeEach(() => {
     mock.onGet(`${provider}/api/services/configuration/v1/configs/committed`)
-      .replyOnce(200, cfg1)
+      .replyOnce(200, cfg)
   })
+
   it('when height is not a number', d => {
     const anchoring = new exonumAnchoring.Anchoring(configSmartbit)
     anchoring.blockStatus('text', true)

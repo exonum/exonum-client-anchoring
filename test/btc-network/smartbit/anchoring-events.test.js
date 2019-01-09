@@ -2,13 +2,13 @@
 /* eslint-disable no-unused-expressions */
 
 const { mock, expect, exonumAnchoring, configSmartbit, provider } = require('../../constants').module
-const { cfg1 } = require('../../mocks/')
+const { cfg } = require('../../mocks/')
 const _ = require('../../../src/common/private').default
 
 describe('Events', function () {
   beforeEach(() => {
     mock.onGet(`${provider}/api/services/configuration/v1/configs/committed`)
-      .replyOnce(200, cfg1)
+      .replyOnce(200, cfg)
   })
 
   it('adding and removing', () => {
