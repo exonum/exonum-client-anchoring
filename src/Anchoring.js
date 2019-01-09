@@ -98,7 +98,9 @@ function Anchoring (params) {
 
     if (!ignoreBlockProof) {
       const blockHeaderProof = await _(this).provider.getBlockHeaderProof(height)
-      if (blockHeaderProof === null) return status.block(12, { block })
+      if (blockHeaderProof === null) {
+        return status.block(12, { block })
+      }
 
       [data, err] = await to(verifyBlock(blockHeaderProof.latest_authorized_block, validatorKeys))
       if (err) return status.block(13, { block })
