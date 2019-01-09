@@ -92,6 +92,7 @@ function Anchoring (params) {
     const block = await _(this).provider.getBlock(height)
     if (block === null) return status.block(0)
 
+    // eslint-disable-next-line
     let data, err
     [data, err] = await to(verifyBlock(block, validatorKeys))
     if (err) return status.block(1, { block })
