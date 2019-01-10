@@ -66,7 +66,7 @@ availability of new transactions at regular intervals.
 #### Driver
 
 Driver is a class, which provides
-([anchoring transactions](https://exonum.com/doc/advanced/bitcoin-anchoring/))
+([anchoring transactions](https://exonum.com/doc/version/latest/advanced/bitcoin-anchoring/))
 from Bitcoin blockchain by using HTTP API.
 
 By default there is one driver is implemented:
