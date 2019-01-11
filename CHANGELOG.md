@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1 (Jan 11, 2019)
+
+* Fix link to Exonum documentation. #47
+
 ## 0.7.0 (Jan 9, 2019)
 
 * Added Exonum 0.10 support. #46
