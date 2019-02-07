@@ -46,7 +46,7 @@
     "babel-preset-es3": "^1.0.1",
     "babel-register": "^6.26.0",
     "babelify": "^8.0.0",
-    "browserify": "^14.5.0",
+    "browserify": "^16.2.3",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.2",
@@ -75,7 +75,7 @@
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-uglify": "^2.0.1",
-    "sinon": "^4.1.2"
+    "sinon": "^7.2.3"
   },
   "dependencies": {
     "axios": "^0.16.2",
