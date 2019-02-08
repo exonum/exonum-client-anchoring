@@ -6,7 +6,7 @@ const Provider = require('../../src/Provider').default
 
 describe('address', function () {
   it('parsing address with one ancoring key and bitcoin network', () => {
-    const address = Provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({ services: {
       'btc_anchoring': {
         'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22'
@@ -18,12 +18,12 @@ describe('address', function () {
         'utxo_confirmations': 5
       },
       'configuration': null
-    }})
+    } })
     expect(address).to.deep.equal('bc1qenu9uhhymgc5tsg0ssfjjve3z2ajq2murl4dvutzfp6y0ylmxx2sfcc7ny')
   })
 
   it('parsing address with one ancoring key and testnet network', () => {
-    const address = Provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({ services: {
       'btc_anchoring': {
         'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22'
@@ -35,12 +35,12 @@ describe('address', function () {
         'utxo_confirmations': 5
       },
       'configuration': null
-    }})
+    } })
     expect(address).to.deep.equal('tb1qenu9uhhymgc5tsg0ssfjjve3z2ajq2murl4dvutzfp6y0ylmxx2s7sw3ft')
   })
 
   it('parsing address with four ancoring keys and testnet network', () => {
-    const address = Provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({ services: {
       'btc_anchoring': {
         'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
@@ -51,12 +51,12 @@ describe('address', function () {
         'network': 'testnet'
       },
       'configuration': null
-    }})
+    } })
     expect(address).to.deep.equal('tb1qn5mmecjkj4us6uhr5tc453k96hrzcwr3l9d8fkc7fg8zwur50y4qfdclp7')
   })
 
   it('parsing address with four ancoring keys and main network', () => {
-    const address = Provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({ services: {
       'btc_anchoring': {
         'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
@@ -67,12 +67,12 @@ describe('address', function () {
         'network': 'main'
       },
       'configuration': null
-    }})
+    } })
     expect(address).to.deep.equal('bc1qn5mmecjkj4us6uhr5tc453k96hrzcwr3l9d8fkc7fg8zwur50y4q79wsm3')
   })
 
   it('parsing address with 3 ancoring keys and testnet network', () => {
-    const address = Provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({ services: {
       'btc_anchoring': {
         'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
@@ -82,12 +82,12 @@ describe('address', function () {
         'network': 'testnet'
       },
       'configuration': null
-    }})
+    } })
     expect(address).to.deep.equal('tb1qgguxfcutp0g7rwmkgeg5am9jvlq3uamlqges00fq5tm65vxhvwlsnyn2v9')
   })
 
   it('parsing address with 3 ancoring keys and main network', () => {
-    const address = Provider.parseConfigAddress({services: {
+    const address = Provider.parseConfigAddress({ services: {
       'btc_anchoring': {
         'public_keys': [
           '031cf96b4fef362af7d86ee6c7159fa89485730dac8e3090163dd0c282dbc84f22',
@@ -97,7 +97,7 @@ describe('address', function () {
         'network': 'main'
       },
       'configuration': null
-    }})
+    } })
     expect(address).to.deep.equal('bc1qgguxfcutp0g7rwmkgeg5am9jvlq3uamlqges00fq5tm65vxhvwlsyv99k2')
   })
 })
