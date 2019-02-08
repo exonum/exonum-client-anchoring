@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.2 (Feb 8, 2019)
+
+* Fix potential security vulnerabilities in dev dependencies. #48
+
 ## 0.7.1 (Jan 11, 2019)
 
 * Fix link to Exonum documentation. #47
