@@ -1,19 +1,26 @@
+dist: bionic
+
+os: linux
+
 language: node_js
 node_js:
-- '8'
+- '12'
+
 env:
   global:
   - SAUCE_USERNAME=Exonum
   - secure: H6/KnkjbexZK1/jV/Z7zEUVI/CG7+0wi46uqgv4VP2RdJNkUN4oDVpUbzBHVW92Eb1JFw1FiQkRoKmvo2y4InuwmrRmc4hwSM5NNdPImmj6734nvkJf+p8c/kPTeYiz68MxqfRFef3tOZsQQM5tZjI2Qi4T+Z53MnFys8WFLkuvvUvKi9f/jj7Qkk2staoGIVIfiSRCkblrNrS27gIobz7lxuAcddS3lejLotE5CKB9V2W4YLqOGSXGBSMy4oStQqp2DllYun9/1Qq6ksrvfPFHHZoYL8dyI7IuiBC72VnF45D+gK83gAPGup9mDz7Q3QXWembXrBotHz+2tIgIijOjZ6cRVxmVM5x1QmSuZb+KdCjCUGZVNJlfLt5arNCBdiLYYdwgXtLHL65l00hmWUKBoV4WNxeI3/5yDruxEtnaKrwzgri44m6is+jvmfxEkM1Nb1gBw0+q+reKS84q+mobnUkLCHrD7+9Esxckr9a6FQBOce/Yvewvs30sS5iO9ynkEE9QpSsexF3D+exbUiHZCCFTCuoLwZGlCY/OGLT41C82C466b+tDkz9Q5hTMs8muOii74Xq7g/chTgSWuVDT/00BfUhaVQCZ/mx9u4xVC0cV3pkchq+LPbb+buWvuZsio9AFcE5h20Absv1LrNAjflec9x5WXreKtMHX9Q64=
-cache:
-  directories:
-  - node_modules
+
+cache: npm
+
 script:
 - npm run compile
 - npm run test
 - npm run test-saucelabs
+
 after_success:
 - npm run coveralls
+
 deploy:
   provider: npm
   email: exonum.bitfury@gmail.com
