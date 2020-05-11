@@ -2,26 +2,26 @@ const customLaunchers = {
   'SL_Chrome': {
     base: 'SauceLabs',
     browserName: 'chrome',
-    version: '47.0',
+    version: '48',
     platform: 'Linux'
   },
   'SL_Firefox': {
     base: 'SauceLabs',
     browserName: 'firefox',
-    version: '45.0',
+    version: '76',
     platform: 'Windows 10'
   },
   'SL_Edge': {
     base: 'SauceLabs',
     browserName: 'MicrosoftEdge',
-    version: '17.17134',
+    version: '79',
     platform: 'Windows 10'
   },
   'SL_Safari': {
     base: 'SauceLabs',
     browserName: 'safari',
-    platform: 'OS X 10.11',
-    version: '10.0'
+    platform: 'macOS 10.14',
+    version: '12.0'
   }
 }
 
@@ -51,7 +51,7 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: false,
     browserNoActivityTimeout: 180000,
-    concurrency: 2,
+    concurrency: 5,
 
     sauceLabs: {
       testName: 'Exonum anchoring unit tests'
